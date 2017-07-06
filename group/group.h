@@ -4,35 +4,32 @@
 #include"operation.h"
 
 #include<boost/hana.hpp>
+#include<iostream>
 
 namespace hana=boost::hana;
 
 namespace group{
 	constexpr auto add_inverses(auto const& set_of_elements, auto const& inverse_operator){
-		auto extended_set_of_elements=set_of_elements;
-		hana::for_each(set_of_elements, [&](auto const& e){
-				hana::insert(extended_set_of_elements, inverse_operator(e));
+		return hana::fold(set_of_elements, set_of_elements, [&](auto&& extended_set, auto const& e){
+			return hana::insert(extended_set, inverse_operator(e));
 		});
-		return extended_set_of_elements;
 	}
 
 	constexpr auto add_procucts(auto const& set_of_elements, auto const& operation){
-		auto extended_set_of_elements=set_of_elements;
-		hana::for_each(set_of_elements, [&](auto const& e1){
-			hana::for_each(set_of_elements, [&](auto const& e2){
-					hana::insert(extended_set_of_elements, operation(e1,e2));
+		return hana::fold(set_of_elements, set_of_elements, [&](auto&& extended_set1, auto const& e1){
+			return hana::fold(set_of_elements, extended_set1, [&](auto&& extended_set2, auto const& e2){
+				return hana::insert(extended_set2, operation(e1,e2));
 			});
 		});
-		return extended_set_of_elements;
 	}
 
 	constexpr auto generate_group(auto const& set_of_elements, auto const& inverse_operator, auto const& operation){
-		auto group=set_of_elements;
-		auto extended_group=add_procucts(add_inverses(group, inverse_operator), operation);
-		hana::while_(hana::fuse([](auto const& a, auto const& b){return a!=b;}), hana::make_pair(group, extended_group), hana::fuse([&](auto&& g, auto&& extended_g){
-				return hana::make_pair(extended_g, add_procucts(add_inverses(extended_g, inverse_operator), operation));
-		}));
-		return extended_group;
+		auto extend=[&](auto&& set){return add_procucts(add_inverses(set, inverse_operator), operation);};
+		return hana::second(hana::while_(
+			  hana::fuse([](auto const& set, auto const& extended_set){return set!=extended_set;})
+			, hana::make_pair(set_of_elements, extend(set_of_elements))
+			, hana::fuse([&](auto&&, auto&& set){return hana::make_pair(set, extend(set));}
+		)));
 	}
 }
 
