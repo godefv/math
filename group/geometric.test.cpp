@@ -1,6 +1,7 @@
 #include"generate.h"
 #include"minus.h"
 #include"geometric.h"
+#include"concept.h"
 #include"../sorted.h"
 
 #include<boost/hana.hpp>
@@ -31,7 +32,7 @@ struct inverse_impl_t<add_impl_t, A>{using type=::minus_t<A>;};
 }
 template<class A, class B> 
 	requires !std::is_same<A,B>::value 
-		  && !Sorted<decltype(hana::to<hana::basic_tuple_tag>(geometric_group_3d)),A,B> 
+		  && !Sorted<decltype(geometric_group_3d),A,B> 
 struct add_impl_t<A,B>{using type=add_t<B,A>;};
 //add functions
 constexpr auto add  =[](auto const& a, auto const& b){return hana::type_c<add_t <typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
@@ -45,6 +46,10 @@ requires group::AbsorbsIdentityElement<T, one_t, mult_t>
 template<class T> void check_add_group_element(T*)
 requires group::AbsorbsIdentityElement<T, zero_t, add_t> 
       && group::HasInverse            <T, zero_t, add_t, minus_t> 
+{}
+
+template<class T> void check_geometric_group(T const&)
+requires group::Group<T, one_t, mult_t, inverse_t> 
 {}
 
 int main(){
@@ -121,6 +126,10 @@ int main(){
 
 	check_add_group_element((e1_t*)nullptr);
 	check_add_group_element((mult_t<e1_t, e2_t>*)nullptr);
+
+	check_geometric_group(geometric_group_2d);
+	check_geometric_group(complex_group);
+	check_geometric_group(geometric_group_3d);
 
 	std::cout<<"geometric_group_2d"<<std::endl;
 	hana::for_each(geometric_group_2d, [](auto const& element){

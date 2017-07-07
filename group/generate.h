@@ -26,11 +26,11 @@ namespace group{
 
 	constexpr auto generate(auto const& set_of_elements, auto const& inverse_operator, auto const& operation){
 		auto extend=[&](auto&& set){return add_procucts(add_inverses(set, inverse_operator), operation);};
-		return hana::second(hana::while_(
+		return hana::to<hana::basic_tuple_tag>(hana::second(hana::while_(
 			  hana::fuse([](auto const& set, auto const& extended_set){return set!=extended_set;})
 			, hana::make_pair(set_of_elements, extend(set_of_elements))
 			, hana::fuse([&](auto&&, auto&& set){return hana::make_pair(set, extend(set));}
-		)));
+		))));
 	}
 }
 
