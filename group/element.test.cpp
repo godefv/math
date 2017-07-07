@@ -1,4 +1,5 @@
 #include"generate.h"
+#include"minus.h"
 
 #include<boost/hana.hpp>
 
@@ -14,25 +15,14 @@ constexpr auto orthogonal_basis=hana::make_tuple(hana::type_c<e1_t>, hana::type_
 template<class A, class B> struct mult_impl_t: group::operation_t<::mult_impl_t,A,B>{};
 template<class A, class B> using mult_t=typename mult_impl_t<A,B>::type;
 template<class A> using mult_inverse_t=group::inverse_t<mult_impl_t, A>;
+template<class A> using minus_t       =group::minus_t  <mult_impl_t, A>;
 using one_t=group::identity_t<mult_impl_t>;
-
-template<class A> struct generated_minus_t{};
-template<class A> struct minus_impl_t{using type=generated_minus_t<A>;};
-template<class A> struct minus_impl_t<generated_minus_t<A>>{using type=A;};
-template<class A> using minus_t=typename minus_impl_t<A>::type;
 
 //mult rules
 namespace group{
 template<> struct inverse_impl_t<mult_impl_t, e1_t>{using type=e1_t;}; 
 template<> struct inverse_impl_t<mult_impl_t, e2_t>{using type=e2_t;}; 
 template<> struct inverse_impl_t<mult_impl_t, e3_t>{using type=e3_t;}; 
-}
-template<> struct mult_impl_t<e2_t,e1_t>{using type=minus_t<mult_t<e1_t,e2_t>>;};
-template<class A, class B> struct mult_impl_t<A,generated_minus_t<B>>{using type=minus_t<mult_t<A,B>>;};
-template<class A, class B> struct mult_impl_t<generated_minus_t<A>,B>{using type=minus_t<mult_t<A,B>>;};
-template<class A, class B> struct mult_impl_t<generated_minus_t<A>,generated_minus_t<B>>{using type=mult_t<A,B>;};
-namespace group{
-template<class A> struct inverse_impl_t<mult_impl_t, generated_minus_t<A>>: minus_impl_t<mult_inverse_t<A>>{};
 }
 
 template<class Order, class A, class B> concept bool Sorted=static_cast<bool>(hana::index_if(Order{}, hana::equal.to(hana::type_c<A>))>hana::index_if(Order{}, hana::equal.to(hana::type_c<B>)));
@@ -57,7 +47,7 @@ using zero_t=group::identity_t<add_impl_t>;
 
 namespace group{
 template<class A> requires !std::is_same<A,zero_t>::value 
-struct inverse_impl_t<add_impl_t, A>{using type=minus_t<A>;}; 
+struct inverse_impl_t<add_impl_t, A>{using type=::minus_t<A>;}; 
 }
 //Sorted{decltype(group),A,B} struct add_impl_t<B,A>{using type=add_t<A,B>;};
 
@@ -67,8 +57,7 @@ requires group::AbsorbsIdentityElement<T, zero_t, add_t>
 {}
 
 int main(){
-	using namespace group;
-
+	using group::identity_t;
 	//inverse
 	static_assert(std::is_same<e1_t
                               ,mult_inverse_t<mult_inverse_t<e1_t>> 

@@ -3,6 +3,7 @@
 
 #include"inverse.h"
 #include"identity.h"
+#include"minus.h"
 
 #include<type_traits>
 
@@ -21,16 +22,29 @@ namespace group{
 	//operations with inverse //inverse_t<B>,B is covered by A=inverse_t<B>
 	template<template<class,class> class BinaryOperator, class A> requires !std::is_same<A,identity_t<BinaryOperator>>::value
 	struct operation_t<BinaryOperator, A,inverse_t<BinaryOperator, A>>{using type=identity_t<BinaryOperator>;};
+	//operations with minus
+	template<template<class,class> class BinaryOperator, class A,class B> 
+		requires !std::is_same<generated_minus_t<BinaryOperator, B>, inverse_t<BinaryOperator, A>>::value
+		      && !std::is_same<A, identity_t<BinaryOperator>>::value
+	struct operation_t<BinaryOperator, A,generated_minus_t<BinaryOperator, B>>{using type=group::minus_t<BinaryOperator, typename BinaryOperator<A,B>::type>;};
+	
+	template<template<class,class> class BinaryOperator, class A,class B> 
+		requires !std::is_same<generated_minus_t<BinaryOperator, B>, inverse_t<BinaryOperator, A>>::value
+		      && !std::is_same<A, identity_t<BinaryOperator>>::value
+			  && !Minus<BinaryOperator,A>
+	struct operation_t<BinaryOperator, generated_minus_t<BinaryOperator, B>,A>{using type=group::minus_t<BinaryOperator, typename BinaryOperator<B,A>::type>;};
 	//associativity	//put everything in normalized from ((AB)C)D...
 	template<template<class,class> class BinaryOperator, class A,class B,class C> 
 		requires !std::is_same<A,identity_t<BinaryOperator>>::value
 		      && !std::is_same<inverse_t<BinaryOperator, A>,generated_element_t<BinaryOperator,B,C>>::value
+			  && !Minus<BinaryOperator,A>
 	struct operation_t<BinaryOperator, A,generated_element_t<BinaryOperator,B,C>>: BinaryOperator<typename BinaryOperator<A,B>::type,C>{};
 	//collapse operations as much as possible
 	template<template<class,class> class BinaryOperator, class A,class B,class C> 
 		requires !Generated<BinaryOperator,B> 
 		      && !Generated<BinaryOperator,C> 
 			  && !Generated<BinaryOperator,typename BinaryOperator<B,C>::type> 
+			  && !Minus    <BinaryOperator,C>
 			  && !std::is_same<C,identity_t<BinaryOperator>>::value
 			  && !std::is_same<C,inverse_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>>>::value
 	struct operation_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>,C>: BinaryOperator<A,typename BinaryOperator<B,C>::type>{};
@@ -46,6 +60,9 @@ namespace group{
 	//inverses
 	template<template<class,class> class BinaryOperator, class A,class B> 
 	struct inverse_impl_t<BinaryOperator, generated_element_t<BinaryOperator, A,B>>: BinaryOperator<inverse_t<BinaryOperator, B>,inverse_t<BinaryOperator, A>>{};
+	//inverse of minus A
+	template<template<class,class> class BinaryOperator, class A> 
+	struct inverse_impl_t<BinaryOperator, generated_minus_t<BinaryOperator, A>>: minus_impl_t<BinaryOperator, inverse_t<BinaryOperator, A>>{};
 
 }
 
