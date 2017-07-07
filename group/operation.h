@@ -7,9 +7,9 @@
 #include<type_traits>
 
 namespace group{
-	template<template<class,class> class BinaryOperator, class A,class B> struct generated_element_t{};
+	template<template<class,class> class BinaryOperator, class,class,class...> struct generated_element_t{};
 	template<template<class,class> class BinaryOperator, class> struct is_generated_element:std::false_type{};
-	template<template<class,class> class BinaryOperator, class A,class B> struct is_generated_element<BinaryOperator, generated_element_t<BinaryOperator,A,B>>:std::true_type{};
+	template<template<class,class> class BinaryOperator, class A,class B,class... C> struct is_generated_element<BinaryOperator, generated_element_t<BinaryOperator,A,B,C...>>:std::true_type{};
 	template<template<class,class> class BinaryOperator, class T> concept bool Generated=is_generated_element<BinaryOperator, T>::value;
 
 	template<template<class,class> class BinaryOperator, class A,class B> struct operation_t{using type=generated_element_t<BinaryOperator,A,B>;};
@@ -34,6 +34,13 @@ namespace group{
 			  && !std::is_same<C,identity_t<BinaryOperator>>::value
 			  && !std::is_same<C,inverse_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>>>::value
 	struct operation_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>,C>: BinaryOperator<A,typename BinaryOperator<B,C>::type>{};
+
+	//template<template<class,class> class BinaryOperator, class A,class B,class C> 
+		//requires !Generated<BinaryOperator,B> 
+			  //&& !Generated<BinaryOperator,C> 
+			  //&&  Generated<BinaryOperator,typename BinaryOperator<B,C>::type> 
+			  //&& !std::is_same<C,identity_t<BinaryOperator>>::value
+	//struct operation_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>,C>{using type=generated_element_t<BinaryOperator,A,B,C>;};
 	
 	
 	//inverses
