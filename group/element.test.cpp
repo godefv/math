@@ -9,17 +9,12 @@
 struct e1_t{};
 struct e2_t{};
 struct e3_t{};
-constexpr auto orthogonal_basis=hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>);
+constexpr auto orthogonal_basis=hana::make_tuple(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>);
 
 template<class A, class B> struct mult_impl_t: group::operation_t<::mult_impl_t,A,B>{};
 template<class A, class B> using mult_t=typename mult_impl_t<A,B>::type;
 template<class A> using mult_inverse_t=group::inverse_t<mult_impl_t, A>;
 using one_t=group::identity_t<mult_impl_t>;
-
-template<class A, class B> struct add_impl_t: group::operation_t<::add_impl_t,A,B>{};
-template<class A, class B> using add_t=typename add_impl_t<A,B>::type;
-template<class A> using add_inverse_t=group::inverse_t<add_impl_t, A>;
-using zero_t=group::identity_t<add_impl_t>;
 
 template<class A> struct generated_minus_t{};
 template<class A> struct minus_impl_t{using type=generated_minus_t<A>;};
@@ -30,16 +25,24 @@ template<class A> using minus_t=typename minus_impl_t<A>::type;
 namespace group{
 template<> struct inverse_impl_t<mult_impl_t, e1_t>{using type=e1_t;}; 
 template<> struct inverse_impl_t<mult_impl_t, e2_t>{using type=e2_t;}; 
+template<> struct inverse_impl_t<mult_impl_t, e3_t>{using type=e3_t;}; 
 }
 template<> struct mult_impl_t<e2_t,e1_t>{using type=minus_t<mult_t<e1_t,e2_t>>;};
 template<class A, class B> struct mult_impl_t<A,generated_minus_t<B>>{using type=minus_t<mult_t<A,B>>;};
 template<class A, class B> struct mult_impl_t<generated_minus_t<A>,B>{using type=minus_t<mult_t<A,B>>;};
 template<class A, class B> struct mult_impl_t<generated_minus_t<A>,generated_minus_t<B>>{using type=mult_t<A,B>;};
 namespace group{
-template<> struct inverse_impl_t<mult_impl_t, mult_t<e2_t,e1_t>>: mult_impl_t<e1_t,e2_t>{};
-template<> struct inverse_impl_t<mult_impl_t, mult_t<e1_t,e2_t>>: mult_impl_t<e2_t,e1_t>{};
 template<class A> struct inverse_impl_t<mult_impl_t, generated_minus_t<A>>: minus_impl_t<mult_inverse_t<A>>{};
 }
+
+template<class Order, class A, class B> concept bool Sorted=static_cast<bool>(hana::index_if(Order{}, hana::equal.to(hana::type_c<A>))>hana::index_if(Order{}, hana::equal.to(hana::type_c<B>)));
+
+template<class A,class B> 
+	requires !std::is_same<A,B>::value 
+		  && (bool)hana::is_just(hana::find(orthogonal_basis, hana::type_c<A>)) 
+		  && (bool)hana::is_just(hana::find(orthogonal_basis, hana::type_c<B>)) 
+		  && !Sorted<decltype(orthogonal_basis),A,B>
+struct mult_impl_t<A,B>{using type=minus_t<mult_t<B,A>>;};
 
 template<class T> void check_mult_group_element(T*)
 requires group::AbsorbsIdentityElement<T, one_t, mult_t> 
@@ -47,12 +50,16 @@ requires group::AbsorbsIdentityElement<T, one_t, mult_t>
 {}
 
 //add rules
+template<class A, class B> struct add_impl_t: group::operation_t<::add_impl_t,A,B>{};
+template<class A, class B> using add_t=typename add_impl_t<A,B>::type;
+template<class A> using add_inverse_t=group::inverse_t<add_impl_t, A>;
+using zero_t=group::identity_t<add_impl_t>;
+
 namespace group{
 template<class A> requires !std::is_same<A,zero_t>::value 
 struct inverse_impl_t<add_impl_t, A>{using type=minus_t<A>;}; 
 }
-//template<class A, class B> concept bool OrderedTypes=&typeid(A)<&typeid(B);
-//OrderedTypes{A,B} struct add_impl_t<B,A>{using type=add_t<A,B>;};
+//Sorted{decltype(group),A,B} struct add_impl_t<B,A>{using type=add_t<A,B>;};
 
 template<class T> void check_add_group_element(T*)
 requires group::AbsorbsIdentityElement<T, zero_t, add_t> 
@@ -89,38 +96,46 @@ int main(){
                               ,e1_t
                               >::value);
 	//commutativity
+	//21
+	static_assert(hana::is_just(hana::find(orthogonal_basis, hana::type_c<e1_t>)));
+	static_assert(hana::is_just(hana::find(orthogonal_basis, hana::type_c<e2_t>)));
+	static_assert(hana::index_if(orthogonal_basis, hana::equal.to(hana::type_c<e2_t>))>hana::index_if(orthogonal_basis, hana::equal.to(hana::type_c<e1_t>)));
+	//std::cout<<typeid(mult_t<e2_t,e1_t>).name()<<std::endl;
+	static_assert(std::is_same<mult_t<e2_t,e1_t>
+	                    	  ,minus_t<mult_t<e1_t,e2_t>>
+	                    	  >::value);
 	//(12)1
 	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,e1_t>
-                              ,minus_t<mult_t<e1_t,mult_t<e1_t,e2_t>>>
-                              >::value);
+	                    	  ,minus_t<mult_t<e1_t,mult_t<e1_t,e2_t>>>
+	                    	  >::value);
 	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,e1_t>
-                              ,minus_t<e2_t>
-                              >::value);
+	                    	  ,minus_t<e2_t>
+	                    	  >::value);
 	//(21)1
 	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,e1_t>
-                              ,minus_t<mult_t<mult_t<e1_t,e2_t>,e1_t>>
-                              >::value);
+	                    	  ,minus_t<mult_t<mult_t<e1_t,e2_t>,e1_t>>
+	                    	  >::value);
 	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,e1_t>
-                              ,e2_t
-                              >::value);
+	                    	  ,e2_t
+	                    	  >::value);
 	//(12)(12)
 	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,mult_t<e1_t,e2_t>>
-                              ,mult_t<mult_t<mult_t<e1_t,e2_t>,e1_t>,e2_t> 
-                              >::value);
+	                    	  ,mult_t<mult_t<mult_t<e1_t,e2_t>,e1_t>,e2_t> 
+	                    	  >::value);
 	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,mult_t<e1_t,e2_t>>
-                              ,minus_t<one_t>
-                              >::value);
+	                    	  ,minus_t<one_t>
+	                    	  >::value);
 	//(21)(21)
 	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,mult_t<e2_t,e1_t>>
-                              ,minus_t<one_t>
-                              >::value);
+	                    	  ,minus_t<one_t>
+	                    	  >::value);
 	//(21)(12)
 	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,mult_t<e1_t,e2_t>>
-                              ,mult_t<mult_t<mult_t<e2_t,e1_t>,e1_t>,e2_t>
-                              >::value);
+	                    	  ,mult_t<mult_t<mult_t<e2_t,e1_t>,e1_t>,e2_t>
+	                    	  >::value);
 	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,mult_t<e1_t,e2_t>>
-                              ,one_t
-                              >::value);
+	                    	  ,one_t
+	                    	  >::value);
 
 	check_mult_group_element((e1_t*)nullptr);
 	check_mult_group_element((mult_t<e1_t, e2_t>*)nullptr);
@@ -144,10 +159,17 @@ int main(){
 		std::cout<<typeid(element).name()<<std::endl;
 	});
 
-	std::cout<<"algebra"<<std::endl;
-	hana::for_each(add_procucts(complex_group, add), [](auto const& element){
+	auto geometric_group_3d=generate_group(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), inverse, mult);
+	//auto geometric_group_3d=add_inverses(add_procucts(add_procucts(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), mult), mult), inverse);
+	std::cout<<"geometric_group_3d"<<std::endl;
+	hana::for_each(geometric_group_3d, [](auto const& element){
 		std::cout<<typeid(element).name()<<std::endl;
 	});
+
+	//std::cout<<"algebra"<<std::endl;
+	//hana::for_each(add_procucts(complex_group, add), [](auto const& element){
+		//std::cout<<typeid(element).name()<<std::endl;
+	//});
 
 	return 0;
 }
