@@ -147,19 +147,19 @@ int main(){
 	auto add    =[](auto const& a, auto const& b){return hana::type_c<add_t <typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
 	auto inverse=[](auto const& a){return hana::type_c<mult_inverse_t<typename std::decay_t<decltype(a)>::type>>;};
 
-	auto geometric_group_2d=generate_group(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>), inverse, mult);
+	auto geometric_group_2d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>), inverse, mult);
 	std::cout<<"geometric_group_2d"<<std::endl;
 	hana::for_each(geometric_group_2d, [](auto const& element){
 		std::cout<<typeid(element).name()<<std::endl;
 	});
 
-	auto complex_group=generate_group(hana::make_set(hana::type_c<mult_t<e1_t,e2_t>>), inverse, mult);
+	auto complex_group=group::generate(hana::make_set(hana::type_c<mult_t<e1_t,e2_t>>), inverse, mult);
 	std::cout<<"complex_group"<<std::endl;
 	hana::for_each(complex_group, [](auto const& element){
 		std::cout<<typeid(element).name()<<std::endl;
 	});
 
-	auto geometric_group_3d=generate_group(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), inverse, mult);
+	auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), inverse, mult);
 	//auto geometric_group_3d=add_inverses(add_procucts(add_procucts(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), mult), mult), inverse);
 	std::cout<<"geometric_group_3d"<<std::endl;
 	hana::for_each(geometric_group_3d, [](auto const& element){
