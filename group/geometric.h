@@ -8,6 +8,8 @@
 #include<type_traits>
 
 namespace group::geometric{
+	namespace hana=boost::hana;
+
 	//basis vectors
 	template<unsigned short> struct direction_positive_t{};
 	template<unsigned short> struct direction_negative_t{};

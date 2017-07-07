@@ -6,9 +6,10 @@
 #include<boost/hana.hpp>
 #include<iostream>
 
-namespace hana=boost::hana;
 
 namespace group{
+	namespace hana=boost::hana;
+
 	constexpr auto add_inverses(auto const& set_of_elements, auto const& inverse_operator){
 		return hana::fold(set_of_elements, set_of_elements, [&](auto&& extended_set, auto const& e){
 			return hana::insert(extended_set, inverse_operator(e));
