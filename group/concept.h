@@ -1,6 +1,9 @@
 #ifndef CONCEPT_H
 #define CONCEPT_H 
 
+#include"identity.h"
+#include"inverse.h"
+
 #include<boost/hana.hpp>
 
 namespace group{
@@ -13,7 +16,7 @@ namespace group{
 
 	template<class GroupT, class ElementT, class IdentityT, template<class,class > class OperatorT, template<class> class InverseT>
 	concept bool GroupElement=
-		group::AbsorbsIdentityElement<ElementT, IdentityT, OperatorT> 
+		   group::AbsorbsIdentityElement<ElementT, IdentityT, OperatorT> 
 		&& group::HasInverse            <ElementT, IdentityT, OperatorT, InverseT> 
 		&& is_in_type_list<GroupT>(hana::type_c<ElementT>)
 		&& is_in_type_list<GroupT>(hana::type_c<InverseT<ElementT>>)
