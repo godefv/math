@@ -8,77 +8,66 @@
 #include<type_traits>
 
 namespace group{
-	template<template<class,class> class BinaryOperator, class A,class B,class...> struct generated_element_t{A first; B second;};
+	template<class Operator, class A,class B,class...> struct generated_element_t{A first; B second;};
 	//is_generated_element
-	template<template<class,class> class BinaryOperator, class> struct is_generated_element:std::false_type{};
-	template<template<class,class> class BinaryOperator, class A,class B,class... C> struct is_generated_element<BinaryOperator, generated_element_t<BinaryOperator,A,B,C...>>:std::true_type{};
-	template<template<class,class> class BinaryOperator, class T> concept bool Generated=is_generated_element<BinaryOperator, T>::value;
+	template<class Operator, class> struct is_generated_element:std::false_type{};
+	template<class Operator, class A,class B,class... C> struct is_generated_element<Operator, generated_element_t<Operator,A,B,C...>>:std::true_type{};
+	template<class Operator, class T> concept bool Generated=is_generated_element<Operator, T>::value;
 
-	template<template<class,class> class BinaryOperator, class A,class B> 
-	constexpr auto operation(A const& a, B const& b){return generated_element_t<BinaryOperator,A,B>{a,b};}
+	template<class Operator, class A,class B> 
+	constexpr auto operation(A const& a, B const& b){return generated_element_t<Operator,A,B>{a,b};}
 
-	template<template<class,class> class BinaryOperator, class A, class B> 
-	constexpr auto apply_operation(A const& a, B const& b){return BinaryOperator<A,B>::apply(a,b);}
+	template<class Operator, class A, class B> 
+	constexpr auto apply_operation(A const& a, B const& b){return Operator::apply(a,b);}
 
 	//operations with identity
-	template<template<class,class> class BinaryOperator, class A> 
-	constexpr auto operation(identity_t<BinaryOperator> const&, A const& a){return a;}
-	template<template<class,class> class BinaryOperator, class A> requires !std::is_same<A,identity_t<BinaryOperator>>::value 
-	constexpr auto operation(A const& a, identity_t<BinaryOperator> const&){return a;}
+	template<class Operator, class A> 
+	constexpr auto operation(identity_t<Operator> const&, A const& a){return a;}
+	template<class Operator, class A> requires !std::is_same<A,identity_t<Operator>>::value 
+	constexpr auto operation(A const& a, identity_t<Operator> const&){return a;}
 	//operations with inverse //inverse_t<B>,B is covered by A=inverse_t<B>
-	template<template<class,class> class BinaryOperator, class A> requires !std::is_same<A,identity_t<BinaryOperator>>::value
-	constexpr auto operation(A const&, inverse_t<BinaryOperator, A> const&){return identity_t<BinaryOperator>{};}
+	template<class Operator, class A> requires !std::is_same<A,identity_t<Operator>>::value
+	constexpr auto operation(A const&, inverse_t<Operator, A> const&){return identity_t<Operator>{};}
 	//operations with minus
-	template<template<class,class> class BinaryOperator, class A,class B> 
-		requires !std::is_same<generated_minus_t<BinaryOperator, B>, inverse_t<BinaryOperator, A>>::value
-		      && !std::is_same<A, identity_t<BinaryOperator>>::value
-	constexpr auto operation(A const&, generated_minus_t<BinaryOperator, B> const&){
-		return group::minus_t<BinaryOperator, decltype(apply_operation<BinaryOperator>(A{},B{}))>{};
+	template<class Operator, class A,class B> 
+		requires !std::is_same<generated_minus_t<Operator, B>, inverse_t<Operator, A>>::value
+		      && !std::is_same<A, identity_t<Operator>>::value
+	constexpr auto operation(A const&, generated_minus_t<Operator, B> const&){
+		return group::minus_t<Operator, decltype(apply_operation<Operator>(A{},B{}))>{};
 	}
-	template<template<class,class> class BinaryOperator, class A,class B> 
-		requires !std::is_same<generated_minus_t<BinaryOperator, B>, inverse_t<BinaryOperator, A>>::value
-		      && !std::is_same<A, identity_t<BinaryOperator>>::value
-			  && !Minus<BinaryOperator,A>
-	constexpr auto operation(generated_minus_t<BinaryOperator, B> const&, A const&){
-		return group::minus_t<BinaryOperator, decltype(apply_operation<BinaryOperator>(B{},A{}))>{};
+	template<class Operator, class A,class B> 
+		requires !std::is_same<generated_minus_t<Operator, B>, inverse_t<Operator, A>>::value
+		      && !std::is_same<A, identity_t<Operator>>::value
+			  && !Minus<Operator,A>
+	constexpr auto operation(generated_minus_t<Operator, B> const&, A const&){
+		return group::minus_t<Operator, decltype(apply_operation<Operator>(B{},A{}))>{};
 	}
 	//associativity	//put everything in normalized from ((AB)C)D...
-	template<template<class,class> class BinaryOperator, class A,class B,class C> 
-		requires !std::is_same<A,identity_t<BinaryOperator>>::value
-		      && !std::is_same<inverse_t<BinaryOperator, A>,generated_element_t<BinaryOperator,B,C>>::value
-			  && !Minus<BinaryOperator,A>
-	constexpr auto operation(A const& a, generated_element_t<BinaryOperator,B,C> const& bc){
-		return apply_operation<BinaryOperator>(apply_operation<BinaryOperator>(a, bc.first), bc.second);
+	template<class Operator, class A,class B,class C> 
+		requires !std::is_same<A,identity_t<Operator>>::value
+		      && !std::is_same<inverse_t<Operator, A>,generated_element_t<Operator,B,C>>::value
+			  && !Minus<Operator,A>
+	constexpr auto operation(A const& a, generated_element_t<Operator,B,C> const& bc){
+		return apply_operation<Operator>(apply_operation<Operator>(a, bc.first), bc.second);
 	}
 	//collapse operations as much as possible
-	template<template<class,class> class BinaryOperator, class A,class B,class C> 
-		requires !Generated<BinaryOperator,B> 
-		      && !Generated<BinaryOperator,C> 
-			  && !Generated<BinaryOperator,decltype(apply_operation<BinaryOperator>(B{},C{}))> 
-			  && !Minus    <BinaryOperator,C>
-			  && !std::is_same<C,identity_t<BinaryOperator>>::value
-			  && !std::is_same<C,inverse_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>>>::value
-	constexpr auto operation(generated_element_t<BinaryOperator,A,B> const& ab, C const& c){
-		return apply_operation<BinaryOperator>(ab.first, apply_operation<BinaryOperator>(ab.second,c));
+	template<class Operator, class A,class B,class C> 
+		requires !Generated<Operator,B> 
+		      && !Generated<Operator,C> 
+			  && !Generated<Operator,decltype(apply_operation<Operator>(B{},C{}))> 
+			  && !Minus    <Operator,C>
+			  && !std::is_same<C,identity_t<Operator>>::value
+			  && !std::is_same<C,inverse_t<Operator, generated_element_t<Operator,A,B>>>::value
+	constexpr auto operation(generated_element_t<Operator,A,B> const& ab, C const& c){
+		return apply_operation<Operator>(ab.first, apply_operation<Operator>(ab.second,c));
 	}
 
-	//operation_t
-	template<template<class,class> class BinaryOperator, class A,class B> struct operation_t{using type=decltype(operation<BinaryOperator>(std::declval<A>(), std::declval<B>()));};
-
-	//template<template<class,class> class BinaryOperator, class A,class B,class C> 
-		//requires !Generated<BinaryOperator,B> 
-			  //&& !Generated<BinaryOperator,C> 
-			  //&&  Generated<BinaryOperator,decltype(apply_operation<BinaryOperator>(B{},C{}))> 
-			  //&& !std::is_same<C,identity_t<BinaryOperator>>::value
-	//struct operation_t<BinaryOperator, generated_element_t<BinaryOperator,A,B>,C>{using type=generated_element_t<BinaryOperator,A,B,C>;};
-	
-	
 	//inverses
-	template<template<class,class> class BinaryOperator, class A,class B> 
-	struct inverse_impl_t<BinaryOperator, generated_element_t<BinaryOperator, A,B>>{using type=decltype(apply_operation<BinaryOperator>(inverse_t<BinaryOperator, B>{},inverse_t<BinaryOperator, A>{}));};
+	template<class Operator, class A,class B> 
+	struct inverse_impl_t<Operator, generated_element_t<Operator, A,B>>{using type=decltype(apply_operation<Operator>(inverse_t<Operator, B>{},inverse_t<Operator, A>{}));};
 	//inverse of minus A
-	template<template<class,class> class BinaryOperator, class A> 
-	struct inverse_impl_t<BinaryOperator, generated_minus_t<BinaryOperator, A>>: minus_impl_t<BinaryOperator, inverse_t<BinaryOperator, A>>{};
+	template<class Operator, class A> 
+	struct inverse_impl_t<Operator, generated_minus_t<Operator, A>>: minus_impl_t<Operator, inverse_t<Operator, A>>{};
 
 }
 

@@ -4,16 +4,16 @@
 #include"inverse.h"
 
 namespace group{
-	//! minus one commutes with every other element and squares to one under BinaryOperator 
-	//! minus_t<BinaryOperator, A> equals minus one times A under BinaryOperator
-	template<template<class,class> class BinaryOperator, class A> struct generated_minus_t{};
-	template<template<class,class> class BinaryOperator, class A> struct minus_impl_t{using type=generated_minus_t<BinaryOperator, A>;};
-	template<template<class,class> class BinaryOperator, class A> struct minus_impl_t<BinaryOperator, generated_minus_t<BinaryOperator, A>>{using type=A;};
-	template<template<class,class> class BinaryOperator, class A> using minus_t=typename minus_impl_t<BinaryOperator, A>::type;
+	//! minus one commutes with every other element and squares to one under Operator 
+	//! minus_t<Operator, A> equals minus one times A under Operator
+	template<class Operator, class A> struct generated_minus_t{A value;};
+	template<class Operator, class A> struct minus_impl_t{using type=generated_minus_t<Operator, A>;};
+	template<class Operator, class A> struct minus_impl_t<Operator, generated_minus_t<Operator, A>>{using type=A;};
+	template<class Operator, class A> using minus_t=typename minus_impl_t<Operator, A>::type;
 
-	template<template<class,class> class BinaryOperator, class> struct is_generated_minus:std::false_type{};
-	template<template<class,class> class BinaryOperator, class A> struct is_generated_minus<BinaryOperator, generated_minus_t<BinaryOperator,A>>:std::true_type{};
-	template<template<class,class> class BinaryOperator, class T> concept bool Minus=is_generated_minus<BinaryOperator, T>::value;
+	template<class Operator, class> struct is_generated_minus:std::false_type{};
+	template<class Operator, class A> struct is_generated_minus<Operator, generated_minus_t<Operator,A>>:std::true_type{};
+	template<class Operator, class T> concept bool Minus=is_generated_minus<Operator, T>::value;
 }
 
 #endif /* MINUS_H */

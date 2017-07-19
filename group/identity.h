@@ -4,11 +4,11 @@
 #include<type_traits>
 
 namespace group{
-	template<template<class A, class B> class BinaryOperator> struct identity_t{};
+	template<class BinaryOperator> struct identity_t{};
 
-	template<class ElementT, class IdentityT, template<class A, class B> class OperatorT>
-	concept bool AbsorbsIdentityElement=std::is_same<OperatorT<ElementT,IdentityT>, ElementT>::value
-	                                 && std::is_same<OperatorT<IdentityT,ElementT>, ElementT>::value
+	template<class ElementT, class IdentityT, class OperatorT>
+	concept bool AbsorbsIdentityElement=std::is_same<decltype(OperatorT::template apply(ElementT{},IdentityT{})), ElementT>::value
+	                                 && std::is_same<decltype(OperatorT::template apply(IdentityT{},ElementT{})), ElementT>::value
 									;
 } 
 

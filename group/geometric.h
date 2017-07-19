@@ -28,8 +28,8 @@ namespace group::geometric{
 	//mult 
 	template<class A,class B> 
 	constexpr auto mult(A const& a, B const& b);
-	template<class A,class B> 
 	struct mult_operation_t{
+		template<class A,class B> 
 		static auto apply(A const& a, B const& b){return mult(a,b);};
 	};
 	template<class A> using inverse_t=group::inverse_t<mult_operation_t, A>;
@@ -48,8 +48,7 @@ namespace group::geometric{
 	constexpr auto mult(A const& a, B const& b){
 		return group::operation<mult_operation_t>(a,b);
 	}
-	template<class A, class B> struct mult_impl_t{using type=decltype(mult(std::declval<A>(), std::declval<B>()));};
-	template<class A, class B> using mult_t=typename mult_impl_t<A,B>::type;
+	template<class A, class B> using mult_t=decltype(mult(A{}, B{}));
 	//mult functions
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
 	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
