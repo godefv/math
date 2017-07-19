@@ -1,6 +1,7 @@
 #ifndef CONCEPT_H
 #define CONCEPT_H 
 
+#include"apply_operation.h"
 #include"identity.h"
 #include"inverse.h"
 
@@ -21,7 +22,7 @@ namespace group{
 		&& is_in_type_list<GroupT>(hana::type_c<ElementT>)
 		&& is_in_type_list<GroupT>(hana::type_c<InverseT<ElementT>>)
 		&& static_cast<bool>(hana::all(hana::transform(GroupT{}, [&](auto const& g){
-				return is_in_type_list<GroupT>(hana::type_c<decltype(OperatorT::template apply(ElementT{},typename std::decay_t<decltype(g)>::type{}))>);
+				return is_in_type_list<GroupT>(hana::type_c<decltype(apply_operation<OperatorT>(ElementT{},typename std::decay_t<decltype(g)>::type{}))>);
 		})))
 	;
 

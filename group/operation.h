@@ -1,6 +1,7 @@
 #ifndef OPERATION_H
 #define OPERATION_H 
 
+#include"apply_operation.h"
 #include"inverse.h"
 #include"identity.h"
 #include"minus.h"
@@ -16,9 +17,6 @@ namespace group{
 
 	template<class Operator, class A,class B> 
 	constexpr auto operation(A const& a, B const& b){return generated_element_t<Operator,A,B>{a,b};}
-
-	template<class Operator, class A, class B> 
-	constexpr auto apply_operation(A const& a, B const& b){return Operator::apply(a,b);}
 
 	//operations with identity
 	template<class Operator, class A> 
