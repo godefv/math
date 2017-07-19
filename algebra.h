@@ -37,46 +37,49 @@ namespace algebra{
 	}
 
 	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
-	auto operator+(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& b){
-		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ElementT, ScalarT>{a.coordinate+b.coordinate};
-	}
-
-	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
 	auto& operator<<(std::ostream& out, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a){
 		return out<<a.coordinate<<" * "<<typeid(ElementT).name();
 	}
 
 
 	//add rules
-	//template<class GroupT, class IdentityT, template<class,class> class OperatorT, template<class> class InverseT, class ScalarT, class A, class B, template<class,class>>
 	TwoBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, A, B}
-	struct add_impl_t;
+	constexpr auto add(A const& a, B const& b);
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
-	struct add_impl_binary_impl_t{
+	struct add_operation_t{
 		template<class A,class B>
-		using type=add_impl_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, A, B>;
+		struct operation_t{
+			static auto apply(A const& a, B const& b){return add<GroupT, IdentityT, OperatorT, InverseT, ScalarT>(a,b);};
+		};
 	};
-	TwoBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, A, B}
-	struct add_impl_t: group::operation_t<
-		add_impl_binary_impl_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>::template type
-		,A,B
-	>{};
-	TwoBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, A, B}
-	using add_t=typename add_impl_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, A, B>::type;
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	using zero_t=group::identity_t<
-		add_impl_binary_impl_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>::template type
+		add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>::template operation_t
 	>;
 
-	//template<class GroupT, class IdentityT, template<class,class> class OperatorT, template<class> class InverseT, class ScalarT, class A, class B>
-		//requires !std::is_same<A,B>::value 
-			  //&& !Sorted<GroupT,A,B> 
-			  //&& TwoBasisElementTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, A, B>
-	//struct add_impl_t<GroupT,IdentityT,OperatorT,InverseT,ScalarT,A,B>:
-		//add_impl_t<GroupT,IdentityT,OperatorT,InverseT,ScalarT,B,A>{};
-	////add functions
-	//constexpr auto add  =[](auto const& a, auto const& b){return hana::type_c<add_t <typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
-	//constexpr auto minus=[](auto const& a){return hana::type_c<minus_t<typename std::decay_t<decltype(a)>::type>>;};
+	//commutations rules
+	template<class GroupT, class IdentityT, template<class,class> class OperatorT, template<class> class InverseT, class ScalarT, class ElementA, class ElementB>
+		requires !std::is_same<ElementA,ElementB>::value 
+			  && TwoBasisElementTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA, ElementB>
+			  && !Sorted<GroupT,ElementA,ElementB> 
+	constexpr auto add(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA> const& a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementB> const& b){
+		return add<GroupT, IdentityT, OperatorT, InverseT, ScalarT>(b,a);
+	}
+	//colinear addition
+	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
+	auto add(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& b){
+		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{a.coordinate+b.coordinate};
+	}
+	//group rules
+	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
+	constexpr auto add(auto const& a, auto const& b){
+		return group::operation<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>::template operation_t>(a,b);
+	}
+
+	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
+	auto& print(std::ostream& out, group::generated_element_t<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>::template operation_t, auto, auto> const& addition){
+		return out<<"("<<addition.first<<") + ("<<addition.second<<")";
+	}
 
 }
 
