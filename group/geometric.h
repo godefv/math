@@ -27,10 +27,10 @@ namespace group::geometric{
 
 	//mult 
 	template<class A,class B> 
-	constexpr auto multiply(A const& a, B const& b);
+	constexpr auto mult(A const& a, B const& b);
 	template<class A,class B> 
 	struct mult_operation_t{
-		static auto apply(A const& a, B const& b){return multiply(a,b);};
+		static auto apply(A const& a, B const& b){return mult(a,b);};
 	};
 	template<class A> using inverse_t=group::inverse_t<mult_operation_t, A>;
 	template<class A> using minus_t  =group::minus_t  <mult_operation_t, A>;
@@ -41,18 +41,18 @@ namespace group::geometric{
 			&& BasisVector<A>
 			&& BasisVector<B>
 			&& !is_sorted(A{},B{})
-	constexpr auto multiply(A const& a, B const& b){
-			return minus_t<decltype(multiply(b,a))>{};
+	constexpr auto mult(A const& a, B const& b){
+			return minus_t<decltype(mult(b,a))>{};
 	}
 	template<class A,class B> 
-	constexpr auto multiply(A const& a, B const& b){
+	constexpr auto mult(A const& a, B const& b){
 		return group::operation<mult_operation_t>(a,b);
 	}
-	template<class A, class B> struct mult_impl_t{using type=decltype(multiply(std::declval<A>(), std::declval<B>()));};
+	template<class A, class B> struct mult_impl_t{using type=decltype(mult(std::declval<A>(), std::declval<B>()));};
 	template<class A, class B> using mult_t=typename mult_impl_t<A,B>::type;
 	//mult functions
-	constexpr auto mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
-	constexpr auto inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
+	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
+	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
 }
 namespace group{
 	//group order of basis vectors
