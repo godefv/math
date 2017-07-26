@@ -31,6 +31,15 @@ namespace algebra{
 		ScalarT coordinate;
 	};
 
+	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
+	auto operator*(ScalarT a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& b){
+		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{a*b.coordinate};
+	}
+	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
+	auto operator*(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a, ScalarT const& b){
+		return b*a;
+	}
+
 	TwoBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA, ElementB}
 	auto operator*(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA> const& a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementB> const& b){
 		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, decltype(OperatorT::apply(ElementA{},ElementB{}))>{a.coordinate*b.coordinate};
@@ -75,6 +84,12 @@ namespace algebra{
 	auto add(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& b){
 		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{a.coordinate+b.coordinate};
 	}
+	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
+	auto add(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a
+	       , basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT
+	                        , group::inverse_t<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>, ElementT>
+	                        > const& b
+	){return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{a.coordinate-b.coordinate};}
 	//group rules
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	constexpr auto add(auto const& a, auto const& b){

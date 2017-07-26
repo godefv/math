@@ -38,6 +38,39 @@ std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_opera
 int main(){
 	geometric_basis_element_t<e1_t> a{2.};
 	geometric_basis_element_t<e2_t> b{3.};
+
+	//colinear
+	static_assert(std::is_same<decltype(a+a)
+							  ,decltype(a)
+							  >::value);
+	static_assert(std::is_same<decltype(-a)
+							  ,decltype(a)
+							  >::value);
+	static_assert(std::is_same<decltype(a-a)
+							  ,decltype(a)
+							  >::value);
+	//product of basis elements
+	static_assert(std::is_same<decltype(a*b)
+							  ,geometric_basis_element_t<mult_t<e1_t,e2_t>>
+							  >::value);
+	//commutation
+	static_assert(Sorted<decltype(geometric_group_3d),e1_t,e2_t>);
+	static_assert(std::is_same<decltype(a+b)
+							  ,group::generated_element_t<add_operation_t, decltype(a), decltype(b)>
+							  >::value);
+	static_assert(std::is_same<decltype(b+a)
+							  ,decltype(a+b)
+							  >::value);
+	static_assert(std::is_same<decltype(a+b+a)
+							  ,decltype(a+b)
+							  >::value);
+	static_assert(std::is_same<decltype(b+a+b)
+							  ,decltype(a+b)
+							  >::value);
+	static_assert(std::is_same<decltype(a+b+a-b)
+							  ,decltype(a+b)
+							  >::value);
+
 	std::cout<<(a*b)<<std::endl;
 	std::cout<<(a+b)<<std::endl;
 	std::cout<<(a+b*a)<<std::endl;
