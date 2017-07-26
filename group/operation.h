@@ -51,8 +51,8 @@ namespace group{
 	template<class Operator, class A,class B,class C> 
 		requires !Generated<Operator,B> 
 		      && !Generated<Operator,C> 
-			  && !Generated<Operator,decltype(Operator::apply(B{},C{}))> 
 			  && !Minus    <Operator,C>
+			  && !std::is_same<decltype(Operator::apply(B{},C{})), generated_element_t<Operator,B,C>>::value 
 			  && !std::is_same<C,identity_t<Operator>>::value
 			  && !std::is_same<C,inverse_t<Operator, generated_element_t<Operator,A,B>>>::value
 	constexpr auto operation(generated_element_t<Operator,A,B> const& ab, C const& c){
