@@ -2,6 +2,7 @@
 #define IDENTITY_H 
 
 #include<type_traits>
+#include<iostream>
 
 namespace group{
 	template<class BinaryOperator> struct identity_t{};
@@ -10,6 +11,11 @@ namespace group{
 	concept bool AbsorbsIdentityElement=std::is_same<decltype(OperatorT::apply(ElementT{},IdentityT{})), ElementT>::value
 	                                 && std::is_same<decltype(OperatorT::apply(IdentityT{},ElementT{})), ElementT>::value
 									;
+
+	template<class BinaryOperator>
+	std::ostream& operator<<(std::ostream& out, identity_t<BinaryOperator> const& a){
+		return out<<"id<"<<typeid(BinaryOperator).name()<<">";
+	}
 } 
 
 #endif /* IDENTITY_H */
