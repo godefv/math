@@ -31,10 +31,15 @@ template<class A, class B> constexpr auto operator-(A const& a, B const& b){
 	return a+(-b);
 }
 
+static constexpr auto e1=1.*e1_t{};
+static constexpr auto e2=1.*e2_t{};
+static constexpr auto e3=1.*e3_t{};
+
 int main(){
-	auto a=2.*e1_t{};
-	auto b=3.*e2_t{};
-	auto c=5.*e3_t{};
+	auto a=2.*e1;
+	auto b=3.*e2;
+	auto c=5.*e3;
+	auto xy=e1*e2;
 
 	//colinear
 	static_assert(std::is_same<decltype(a+a)
@@ -88,6 +93,10 @@ int main(){
 	std::cout<<(a+b*a+a-2.*b*a)<<std::endl;
 	std::cout<<((a+b)*(a+b))<<std::endl;
 	std::cout<<((a+b)*(c+b))<<std::endl;
+
+	std::cout<<"symetry : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
+	std::cout<<"rotation: "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
+
 	return 0;
 }
 
