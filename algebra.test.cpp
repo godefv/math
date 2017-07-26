@@ -30,9 +30,8 @@ template<class ElementT> constexpr auto operator-(geometric_basis_element_t<Elem
 template<class A, class B> constexpr auto operator-(A const& a, B const& b){
 	return a+(-b);
 }
-std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& addition){
-	//return algebra::print<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>(addition);
-	return out<<"("<<addition.first<<") + ("<<addition.second<<")";
+std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& ab){
+	return out<<"("<<ab.first<<") + ("<<ab.second<<")";
 }
 
 int main(){

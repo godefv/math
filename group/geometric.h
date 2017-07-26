@@ -59,6 +59,18 @@ namespace group::geometric{
 	//mult functions
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
 	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
+
+	std::ostream& operator<<(std::ostream& out, group::generated_element_t<mult_operation_t, auto, auto> const& ab){
+		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
+	}
+	template<unsigned short i> 
+	std::ostream& operator<<(std::ostream& out, direction_positive_t<i> const&){
+		return out<<"p"<<i;
+	}
+	template<unsigned short i> 
+	std::ostream& operator<<(std::ostream& out, direction_negative_t<i> const&){
+		return out<<"n"<<i;
+	}
 }
 
 #endif /* MATHS_GROUP_GEOMETRIC_H */

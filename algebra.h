@@ -38,7 +38,7 @@ namespace algebra{
 
 	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
 	auto& operator<<(std::ostream& out, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a){
-		return out<<a.coordinate<<" * "<<typeid(ElementT).name();
+		return out<<a.coordinate<<" * "<<ElementT{};
 	}
 
 
@@ -79,11 +79,6 @@ namespace algebra{
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	constexpr auto add(auto const& a, auto const& b){
 		return group::operation<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>>(a,b);
-	}
-
-	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
-	auto& print(std::ostream& out, group::generated_element_t<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>, auto, auto> const& addition){
-		return out<<"("<<addition.first<<") + ("<<addition.second<<")";
 	}
 
 }
