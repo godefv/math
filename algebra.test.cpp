@@ -17,22 +17,20 @@ constexpr auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1
 template<class ElementT>
 using geometric_basis_element_t=algebra::basis_element_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double, ElementT>;
 
-using add_operation_t=algebra::add_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
+using          add_operation_t=algebra:: add_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
+using algebra_mult_operation_t=algebra::mult_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
 
+template<class A, class B> constexpr auto operator*(A const& a, B const& b){
+	return algebra_mult_operation_t::apply(a,b);
+}
 template<class A, class B> constexpr auto operator+(A const& a, B const& b){
 	return add_operation_t::apply(a,b);
 }
 template<class A> constexpr auto operator-(A const& a){
 	return add_operation_t::inverse(a);
 }
-template<class ElementT> constexpr auto operator-(geometric_basis_element_t<ElementT> const& a){
-	return geometric_basis_element_t<ElementT>{-a.coordinate};
-}
 template<class A, class B> constexpr auto operator-(A const& a, B const& b){
 	return a+(-b);
-}
-std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& ab){
-	return out<<"("<<ab.first<<") + ("<<ab.second<<")";
 }
 
 int main(){
