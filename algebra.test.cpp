@@ -21,9 +21,15 @@ using add_operation_t=algebra::add_operation_t<decltype(geometric_group_3d), one
 template<class A, class B> constexpr auto operator+(A const& a, B const& b){
 	return group::apply_operation<add_operation_t>(a,b);
 }
-//template<class A> constexpr auto operator-(A const& a){
-	//return group::inverse_t<add_operation_t, A>{a};
-//}
+template<class A> constexpr auto operator-(A const& a){
+	return add_operation_t::inverse(a);
+}
+template<class ElementT> constexpr auto operator-(geometric_basis_element_t<ElementT> const& a){
+	return geometric_basis_element_t<ElementT>{-a.coordinate};
+}
+template<class A, class B> constexpr auto operator-(A const& a, B const& b){
+	return a+(-b);
+}
 std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& addition){
 	//return algebra::print<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>(addition);
 	return out<<"("<<addition.first<<") + ("<<addition.second<<")";
@@ -37,6 +43,7 @@ int main(){
 	std::cout<<(a+b*a)<<std::endl;
 	std::cout<<(b*a+a)<<std::endl;
 	std::cout<<(a+b*a+a)<<std::endl;
+	std::cout<<(a+b*a+a-2.*b*a)<<std::endl;
 	return 0;
 }
 

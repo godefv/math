@@ -60,12 +60,16 @@ namespace group{
 		return apply_operation<Operator>(ab.first, apply_operation<Operator>(ab.second,c));
 	}
 
-	//inverses
+	//inverse of product
 	template<class Operator, class A,class B> 
-	struct inverse_impl_t<Operator, generated_element_t<Operator, A,B>>{using type=decltype(apply_operation<Operator>(inverse_t<Operator, B>{},inverse_t<Operator, A>{}));};
+	constexpr auto inverse(generated_element_t<Operator, A,B> const& ab){
+		return apply_operation<Operator>(Operator::inverse(ab.second), Operator::inverse(ab.first));
+	}
 	//inverse of minus A
 	template<class Operator, class A> 
-	struct inverse_impl_t<Operator, generated_minus_t<Operator, A>>: minus_impl_t<Operator, inverse_t<Operator, A>>{};
+	constexpr auto inverse(generated_minus_t<Operator, A> const& a){
+		return minus_t<Operator, decltype(Operator::inverse(a.value))>{};
+	}
 
 }
 

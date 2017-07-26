@@ -49,6 +49,13 @@ namespace algebra{
 	struct add_operation_t{
 		template<class A,class B>
 		static auto apply(A const& a, B const& b){return add<GroupT, IdentityT, OperatorT, InverseT, ScalarT>(a,b);};
+
+		template<class ElementT> requires BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>
+		static auto inverse(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a){
+			return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{-a.coordinate};
+		}
+		template<class A>
+		static auto inverse(A const& a){return group::inverse<add_operation_t>(a);}
 	};
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	using zero_t=group::identity_t<

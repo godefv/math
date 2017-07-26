@@ -31,6 +31,13 @@ namespace group::geometric{
 	struct mult_operation_t{
 		template<class A,class B> 
 		static auto apply(A const& a, B const& b){return mult(a,b);};
+
+		template<class A>
+		static auto inverse(A const& a){return group::inverse<mult_operation_t>(a);}
+
+		//group order of basis vectors
+		template<unsigned short i> static auto inverse(direction_positive_t<i> const& a){return a;}
+		template<unsigned short i> static auto inverse(direction_negative_t<i> const& a){return group::minus_t<mult_operation_t, decltype(a)>{};}
 	};
 	template<class A> using inverse_t=group::inverse_t<mult_operation_t, A>;
 	template<class A> using minus_t  =group::minus_t  <mult_operation_t, A>;
@@ -52,11 +59,6 @@ namespace group::geometric{
 	//mult functions
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
 	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
-}
-namespace group{
-	//group order of basis vectors
-	template<unsigned short i> struct inverse_impl_t<geometric::mult_operation_t, geometric::direction_positive_t<i>>{using type=geometric::direction_positive_t<i>;}; 
-	template<unsigned short i> struct inverse_impl_t<geometric::mult_operation_t, geometric::direction_negative_t<i>>{using type=geometric::minus_t<geometric::direction_negative_t<i>>;}; 
 }
 
 #endif /* MATHS_GROUP_GEOMETRIC_H */

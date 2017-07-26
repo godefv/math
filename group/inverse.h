@@ -17,8 +17,7 @@ namespace group{
 	template<class Operator>
 	constexpr auto inverse(identity_t<Operator> const& a){return a;}
 
-	template<class Operator, class T> struct inverse_impl_t{using type=decltype(inverse<Operator>(T{}));};
-	template<class Operator, class T> using inverse_t=typename inverse_impl_t<Operator, T>::type;
+	template<class Operator, class T> using inverse_t=decltype(Operator::inverse(T{}));
 
 	template<class ElementT, class IdentityT, class OperatorT, template<class A> class InverseT>
 	concept bool HasInverse=std::is_same<InverseT<InverseT<ElementT>>, ElementT>::value
