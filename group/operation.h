@@ -23,18 +23,20 @@ namespace group{
 	template<class Operator, class A> requires !std::is_same<A,identity_t<Operator>>::value 
 	constexpr auto operation(A const& a, identity_t<Operator> const&){return a;}
 	//operations with inverse //inverse_t<B>,B is covered by A=inverse_t<B>
-	template<class Operator, class A> requires !std::is_same<A,identity_t<Operator>>::value
+	template<class Operator, class A> 
+		requires !std::is_same<A,identity_t<Operator>>::value
+		      && !Generated<Operator, A> //without this, we return identity even with non constexpr arguments, regardless of their value
 	constexpr auto operation(A const&, inverse_t<Operator, A> const&){return identity_t<Operator>{};}
 	//operations with minus
 	template<class Operator, class A,class B> 
-		requires !std::is_same<generated_minus_t<Operator, B>, inverse_t<Operator, A>>::value
-		      && !std::is_same<A, identity_t<Operator>>::value
+		requires !std::is_same<A, identity_t<Operator>>::value
+		      && !(std::is_same<generated_minus_t<Operator, B>, inverse_t<Operator, A>>::value && !Generated<Operator, A>)
 	constexpr auto operation(A const&, generated_minus_t<Operator, B> const&){
 		return group::minus_t<Operator, decltype(Operator::apply(A{},B{}))>{};
 	}
 	template<class Operator, class A,class B> 
-		requires !std::is_same<generated_minus_t<Operator, B>, inverse_t<Operator, A>>::value
-		      && !std::is_same<A, identity_t<Operator>>::value
+		requires !std::is_same<A, identity_t<Operator>>::value
+		      && !std::is_same<A, inverse_t<Operator, generated_minus_t<Operator, B>>>::value
 			  && !Minus<Operator,A>
 	constexpr auto operation(generated_minus_t<Operator, B> const&, A const&){
 		return group::minus_t<Operator, decltype(Operator::apply(B{},A{}))>{};
@@ -42,7 +44,7 @@ namespace group{
 	//associativity	//put everything in normalized from ((AB)C)D...
 	template<class Operator, class A,class B,class C> 
 		requires !std::is_same<A,identity_t<Operator>>::value
-		      && !std::is_same<inverse_t<Operator, A>,generated_element_t<Operator,B,C>>::value
+		      && !(std::is_same<generated_element_t<Operator,B,C>, inverse_t<Operator, A>>::value && !Generated<Operator, A>)
 			  && !Minus<Operator,A>
 	constexpr auto operation(A const& a, generated_element_t<Operator,B,C> const& bc){
 		return Operator::apply(Operator::apply(a, bc.first), bc.second);
@@ -54,7 +56,6 @@ namespace group{
 			  && !Minus    <Operator,C>
 			  && !std::is_same<decltype(Operator::apply(B{},C{})), generated_element_t<Operator,B,C>>::value 
 			  && !std::is_same<C,identity_t<Operator>>::value
-			  && !std::is_same<C,inverse_t<Operator, generated_element_t<Operator,A,B>>>::value
 	constexpr auto operation(generated_element_t<Operator,A,B> const& ab, C const& c){
 		return Operator::apply(ab.first, Operator::apply(ab.second,c));
 	}
