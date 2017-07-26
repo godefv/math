@@ -10,8 +10,6 @@ using e3_t=group::geometric::direction_positive_t<3>;
 using namespace group::geometric;
 
 //mult groups, finite order of generators plus commutation rules guarantees that the group is finite
-constexpr auto geometric_group_2d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>), hana_inverse, hana_mult);
-constexpr auto complex_group=group::generate(hana::make_set(hana::type_c<mult_t<e1_t,e2_t>>), hana_inverse, hana_mult);
 constexpr auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), hana_inverse, hana_mult);
 
 template<class ElementT>
@@ -34,9 +32,9 @@ template<class A, class B> constexpr auto operator-(A const& a, B const& b){
 }
 
 int main(){
-	geometric_basis_element_t<e1_t> a{2.};
-	geometric_basis_element_t<e2_t> b{3.};
-	geometric_basis_element_t<e3_t> c{5.};
+	auto a=2.*e1_t{};
+	auto b=3.*e2_t{};
+	auto c=5.*e3_t{};
 
 	//colinear
 	static_assert(std::is_same<decltype(a+a)
@@ -88,12 +86,6 @@ int main(){
 	std::cout<<(b*a+a)<<std::endl;
 	std::cout<<(a+b*a+a)<<std::endl;
 	std::cout<<(a+b*a+a-2.*b*a)<<std::endl;
-	std::cout<<(a*b+b*a)<<std::endl;
-	std::cout<<((a+b)*a)<<std::endl;
-	std::cout<<((a+b)*b)<<std::endl;
-	std::cout<<-((a+b)*a)<<std::endl;
-	std::cout<<-((a+b)*b)<<std::endl;
-	std::cout<<((a+b)*a+(a+b)*b)<<std::endl;
 	std::cout<<((a+b)*(a+b))<<std::endl;
 	std::cout<<((a+b)*(c+b))<<std::endl;
 	return 0;

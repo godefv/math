@@ -86,7 +86,15 @@ namespace algebra{
 			return std::decay_t<decltype(b)>{a*b.coordinate};
 		}
 		static auto apply(basis_element_t<auto> const& a, ScalarT const& b){
-			return std::decay_t<decltype(a)>{a.coordinate*b};
+			return apply(b,a);
+		}
+		template<class ElementT> requires BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>
+		static auto apply(ScalarT const& a, ElementT const& b){
+			return basis_element_t<ElementT>{a};
+		}
+		template<class ElementT> requires BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>
+		static auto apply(ElementT const& a, ScalarT const& b){
+			return apply(b,a);
 		}
 		//operation with basis vectors
 		template<class ElementA, class ElementB> 
