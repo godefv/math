@@ -1,6 +1,7 @@
 #include"algebra.h"
 #include"group/geometric.h"
 #include"group/generate.h"
+#include"print_type.h"
 
 //generators
 using e1_t=group::geometric::direction_positive_t<1>;

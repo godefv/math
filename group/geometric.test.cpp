@@ -3,6 +3,7 @@
 #include"geometric.h"
 #include"concept.h"
 #include"../sorted.h"
+#include"../print_type.h"
 
 #include<boost/hana.hpp>
 
@@ -15,10 +16,6 @@ using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_positive_t<3>;
 using namespace group::geometric;
-
-void print_type(auto const& a){
-	std::cout<<typeid(a).name()<<std::endl;
-}
 
 #define DEBUG_MULT_OPERATION 0
 void test_mult_operations(){
