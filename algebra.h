@@ -29,6 +29,15 @@ namespace algebra{
 		ScalarT coordinate;
 	};
 
+	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
+	auto basis_element(ElementT const& e, ScalarT const& s){
+		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{s};
+	}
+	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
+	auto basis_element(group::generated_minus_t<OperatorT, ElementT> const& a, ScalarT const& s){
+		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{-s};
+	}
+
 	//add operation
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	struct add_operation_t{
@@ -37,14 +46,14 @@ namespace algebra{
 
 		using zero_t=group::identity_t<add_operation_t>;
 
-		//commutations rules
+		//commutation rule
 		template<class ElementA, class ElementB>
 			requires !std::is_same<ElementA,ElementB>::value 
 			      && !Sorted<GroupT,ElementA,ElementB> 
 		static auto apply(basis_element_t<ElementA> const& a, basis_element_t<ElementB> const& b){
 			return apply(b,a);
 		}
-		//colinear addition
+		//colinear rule
 		template<class ElementT>
 		static auto apply(basis_element_t<ElementT> const& a, basis_element_t<ElementT> const& b){
 			return basis_element_t<ElementT>{a.coordinate+b.coordinate};
@@ -66,22 +75,35 @@ namespace algebra{
 	//mult operation
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	struct mult_operation_t{
-		template<class ElementT> requires BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>
-		using basis_element_t=algebra::basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>;
+		using add_operation_t=algebra::add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>;
+		template<class ElementT>
+		using basis_element_t=typename add_operation_t::template basis_element_t<ElementT>;
 
+		static auto basis_element(auto const& e, ScalarT const& s){return algebra::basis_element<GroupT, IdentityT, OperatorT, InverseT>(e,s);}
+
+		//operation with scalar
 		static auto apply(ScalarT const& a, basis_element_t<auto> const& b){
 			return std::decay_t<decltype(b)>{a*b.coordinate};
 		}
 		static auto apply(basis_element_t<auto> const& a, ScalarT const& b){
 			return std::decay_t<decltype(a)>{a.coordinate*b};
 		}
+		//operation with basis vectors
 		template<class ElementA, class ElementB> 
 		static auto apply(basis_element_t<ElementA> const& a, basis_element_t<ElementB> const& b){
-			return basis_element_t<decltype(OperatorT::apply(ElementA{}, ElementB{}))>{a.coordinate*b.coordinate};
+			return basis_element(OperatorT::apply(ElementA{}, ElementB{}),a.coordinate*b.coordinate);
+		}
+		//develop product over addition
+		static auto apply(auto const& a, group::generated_element_t<add_operation_t, auto,auto> const& b){
+			return add_operation_t::apply(apply(a,b.first), apply(a,b.second));
+		}
+		template<class B> requires !group::Generated<add_operation_t, B>
+		static auto apply(group::generated_element_t<add_operation_t, auto,auto> const& a, B const& b){
+			return add_operation_t::apply(apply(a.first,b), apply(a.second,b));
 		}
 
 		template<class ElementT> static auto inverse(basis_element_t<ElementT> const& a){
-			return basis_element_t<decltype(OperatorT::inverse(ElementT{}))>{1/a.coordinate};
+			return basis_element(OperatorT::inverse(ElementT{}),1/a.coordinate);
 		}
 	};
 

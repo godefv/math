@@ -36,6 +36,7 @@ template<class A, class B> constexpr auto operator-(A const& a, B const& b){
 int main(){
 	geometric_basis_element_t<e1_t> a{2.};
 	geometric_basis_element_t<e2_t> b{3.};
+	geometric_basis_element_t<e3_t> c{5.};
 
 	//colinear
 	static_assert(std::is_same<decltype(a+a)
@@ -68,6 +69,18 @@ int main(){
 	static_assert(std::is_same<decltype(a+b+a-b)
 							  ,decltype(a+b)
 							  >::value);
+	static_assert(std::is_same<decltype((a+b)*a)
+							  ,decltype(a*a+b*a)
+							  >::value);
+	static_assert(std::is_same<decltype(a*(a+b))
+							  ,decltype(a*a+a*b)
+							  >::value);
+	static_assert(std::is_same<decltype((a+b)*(c+b))
+							  ,decltype(a*c+a*b+b*c+b*b)
+							  >::value);
+	static_assert(std::is_same<decltype((a+b)*(a+b))
+							  ,decltype(a*a+a*b+b*a+b*b)
+							  >::value);
 
 	std::cout<<(a*b)<<std::endl;
 	std::cout<<(a+b)<<std::endl;
@@ -75,6 +88,14 @@ int main(){
 	std::cout<<(b*a+a)<<std::endl;
 	std::cout<<(a+b*a+a)<<std::endl;
 	std::cout<<(a+b*a+a-2.*b*a)<<std::endl;
+	std::cout<<(a*b+b*a)<<std::endl;
+	std::cout<<((a+b)*a)<<std::endl;
+	std::cout<<((a+b)*b)<<std::endl;
+	std::cout<<-((a+b)*a)<<std::endl;
+	std::cout<<-((a+b)*b)<<std::endl;
+	std::cout<<((a+b)*a+(a+b)*b)<<std::endl;
+	std::cout<<((a+b)*(a+b))<<std::endl;
+	std::cout<<((a+b)*(c+b))<<std::endl;
 	return 0;
 }
 
