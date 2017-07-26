@@ -33,7 +33,7 @@ namespace algebra{
 
 	TwoBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA, ElementB}
 	auto operator*(basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA> const& a, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementB> const& b){
-		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, decltype(OperatorT::template apply(ElementA{},ElementB{}))>{a.coordinate*b.coordinate};
+		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, decltype(OperatorT::apply(ElementA{},ElementB{}))>{a.coordinate*b.coordinate};
 	}
 
 	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}

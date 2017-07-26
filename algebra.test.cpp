@@ -19,7 +19,7 @@ using geometric_basis_element_t=algebra::basis_element_t<decltype(geometric_grou
 using add_operation_t=algebra::add_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
 
 template<class A, class B> constexpr auto operator+(A const& a, B const& b){
-	return group::apply_operation<add_operation_t>(a,b);
+	return add_operation_t::apply(a,b);
 }
 template<class A> constexpr auto operator-(A const& a){
 	return add_operation_t::inverse(a);
