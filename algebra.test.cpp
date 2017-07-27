@@ -1,7 +1,7 @@
 #include"algebra.h"
 #include"group/geometric.h"
 #include"group/generate.h"
-#include"print_type.h"
+#include"unit_test.h"
 
 //generators
 using e1_t=group::geometric::direction_positive_t<1>;
@@ -42,57 +42,22 @@ int main(){
 	auto xy=e1*e2;
 
 	//colinear
-	static_assert(std::is_same<decltype(a+a)
-							  ,decltype(a)
-							  >::value);
-	static_assert(std::is_same<decltype(-a)
-							  ,decltype(a)
-							  >::value);
-	static_assert(std::is_same<decltype(a-a)
-							  ,decltype(a)
-							  >::value);
+	check_equal(a+a, 2.*a);
+	check_equal(-a, -1.*a);
+	check_equal(a-a, 0.*a);
 	//product of basis elements
-	static_assert(std::is_same<decltype(a*b)
-							  ,geometric_basis_element_t<mult_t<e1_t,e2_t>>
-							  >::value);
+	check_equal(a*b, geometric_basis_element_t<mult_t<e1_t,e2_t>>{a.coordinate*b.coordinate});
 	//commutation
 	static_assert(Sorted<decltype(geometric_group_3d),e1_t,e2_t>);
-	static_assert(std::is_same<decltype(a+b)
-							  ,group::generated_element_t<add_operation_t, decltype(a), decltype(b)>
-							  >::value);
-	static_assert(std::is_same<decltype(b+a)
-							  ,decltype(a+b)
-							  >::value);
-	static_assert(std::is_same<decltype(a+b+a)
-							  ,decltype(a+b)
-							  >::value);
-	static_assert(std::is_same<decltype(b+a+b)
-							  ,decltype(a+b)
-							  >::value);
-	static_assert(std::is_same<decltype(a+b+a-b)
-							  ,decltype(a+b)
-							  >::value);
-	static_assert(std::is_same<decltype((a+b)*a)
-							  ,decltype(a*a+b*a)
-							  >::value);
-	static_assert(std::is_same<decltype(a*(a+b))
-							  ,decltype(a*a+a*b)
-							  >::value);
-	static_assert(std::is_same<decltype((a+b)*(c+b))
-							  ,decltype(a*c+a*b+b*c+b*b)
-							  >::value);
-	static_assert(std::is_same<decltype((a+b)*(a+b))
-							  ,decltype(a*a+a*b+b*a+b*b)
-							  >::value);
-
-	std::cout<<(a*b)<<std::endl;
-	std::cout<<(a+b)<<std::endl;
-	std::cout<<(a+b*a)<<std::endl;
-	std::cout<<(b*a+a)<<std::endl;
-	std::cout<<(a+b*a+a)<<std::endl;
-	std::cout<<(a+b*a+a-2.*b*a)<<std::endl;
-	std::cout<<((a+b)*(a+b))<<std::endl;
-	std::cout<<((a+b)*(c+b))<<std::endl;
+	check_equal(a+b, group::generated_element_t<add_operation_t, decltype(a), decltype(b)>{a,b});
+	check_equal(b+a, a+b);
+	check_equal(a+b+a, 2.*a+b);
+	check_equal(b+a+b, a+2.*b);
+	check_equal(a+b+a-b, 2.*a+0.*b);
+	check_equal((a+b)*a, a*a+b*a);
+	check_equal(a*(a+b), a*a+a*b);
+	check_equal((a+b)*(c+b), a*c+a*b+b*c+b*b);
+	check_equal((a+b)*(a+b), a*a+a*b+b*a+b*b);
 
 	std::cout<<"symetry : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation: "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
