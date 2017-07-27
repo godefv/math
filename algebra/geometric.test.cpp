@@ -1,7 +1,5 @@
-#include"addition.h"
-#include"multiplication.h"
+#include"geometric.h"
 #include"formatting.h"
-#include"../group/geometric.h"
 #include"../group/generate.h"
 #include"../vector/formatting.h"
 #include"../unit_test.h"
@@ -10,19 +8,19 @@
 using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_positive_t<3>;
-using namespace group::geometric;
 
 //mult groups, finite order of generators plus commutation rules guarantees that the group is finite
-constexpr auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), hana_inverse, hana_mult);
+namespace hana=boost::hana;
+constexpr auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), group::geometric::hana_inverse, group::geometric::hana_mult);
 
-template<class ElementT> requires algebra::BasisElementsTemplateParameters<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double, ElementT>
+template<class ElementT> requires algebra::BasisElementsTemplateParameters<decltype(geometric_group_3d), group::geometric::one_t, group::geometric::mult_operation_t, group::geometric::inverse_t, double, ElementT>
 using geometric_basis_element_t=vector::basis_element_t<ElementT, double>;
 
-using          add_operation_t=algebra:: add_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
-using algebra_mult_operation_t=algebra::mult_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
+using  add_operation_t=algebra::geometric:: add_operation_t<decltype(geometric_group_3d), double>;
+using mult_operation_t=algebra::geometric::mult_operation_t<decltype(geometric_group_3d), double>;
 
 template<class A, class B> constexpr auto operator*(A const& a, B const& b){
-	return algebra_mult_operation_t::apply(a,b);
+	return mult_operation_t::apply(a,b);
 }
 template<class A, class B> constexpr auto operator+(A const& a, B const& b){
 	return add_operation_t::apply(a,b);
@@ -49,7 +47,7 @@ int main(){
 	check_equal(-a, -1.*a);
 	check_equal(a-a, 0.*a);
 	//product of basis elements
-	check_equal(a*b, geometric_basis_element_t<mult_t<e1_t,e2_t>>{a.coordinate*b.coordinate});
+	check_equal(a*b, geometric_basis_element_t<group::geometric::mult_t<e1_t,e2_t>>{a.coordinate*b.coordinate});
 	//commutation
 	static_assert(Sorted<decltype(geometric_group_3d),e1_t,e2_t>);
 	check_equal(a+b, group::generated_element_t<add_operation_t, decltype(a), decltype(b)>{a,b});
