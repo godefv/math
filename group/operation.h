@@ -14,9 +14,20 @@ namespace group{
 	template<class Operator, class A,class B,class... C> struct is_generated_element<Operator, generated_element_t<Operator,A,B,C...>>:std::true_type{};
 	template<class Operator, class T> concept bool Generated=is_generated_element<Operator, T>::value;
 
+	template<class Operator, class A,class B>
+	bool operator==(generated_element_t<Operator, A,B> const& a, generated_element_t<Operator, A,B> const& b){
+		return a.first==b.first && a.second==b.second;
+	}
+	bool operator==(generated_element_t<auto, auto,auto> const& a, generated_element_t<auto, auto,auto> const& b){
+		return false;
+	}
+	bool operator!=(generated_element_t<auto, auto,auto> const& a, generated_element_t<auto, auto,auto> const& b){
+		return !(a==b);
+	}
+
+	//default operation
 	template<class Operator, class A,class B> 
 	constexpr auto operation(A const& a, B const& b){return generated_element_t<Operator,A,B>{a,b};}
-
 	//operations with identity
 	template<class Operator, class A> 
 	constexpr auto operation(identity_t<Operator> const&, A const& a){return a;}
