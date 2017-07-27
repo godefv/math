@@ -12,8 +12,8 @@ using namespace group::geometric;
 //mult groups, finite order of generators plus commutation rules guarantees that the group is finite
 constexpr auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), hana_inverse, hana_mult);
 
-template<class ElementT>
-using geometric_basis_element_t=algebra::basis_element_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double, ElementT>;
+template<class ElementT> requires algebra::BasisElementsTemplateParameters<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double, ElementT>
+using geometric_basis_element_t=vector::basis_element_t<ElementT, double>;
 
 using          add_operation_t=algebra:: add_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;
 using algebra_mult_operation_t=algebra::mult_operation_t<decltype(geometric_group_3d), one_t, mult_operation_t, inverse_t, double>;

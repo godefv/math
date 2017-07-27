@@ -2,28 +2,21 @@
 #define MATHS_GROUP_GEOMETRIC_H 
 
 #include"operation.h"
+#include"../vector/direction.h"
 
 #include<boost/hana.hpp>
 
 #include<type_traits>
 
 namespace group::geometric{
-	namespace hana=boost::hana;
-
 	//basis vectors
-	template<unsigned short> struct direction_positive_t{};
-	template<unsigned short> struct direction_negative_t{};
+	template<unsigned short i> struct direction_positive_t:vector::direction_t<i>{};
+	template<unsigned short i> struct direction_negative_t:vector::direction_t<-i>{};
 
 	template<class> struct is_direction_t: std::false_type{};
 	template<unsigned short i> struct is_direction_t<direction_positive_t<i>>: std::true_type{};
 	template<unsigned short i> struct is_direction_t<direction_negative_t<i>>: std::true_type{};
 	template<class A> concept bool BasisVector=is_direction_t<A>::value;
-
-	//ordering of basis vectors
-	template<unsigned short i> constexpr int index(direction_positive_t<i>){return i;}
-	template<unsigned short i> constexpr int index(direction_negative_t<i>){return -i;}
-
-	BasisVector{BasisVector2} constexpr bool is_sorted(BasisVector A, BasisVector2 B){return index(A)<index(B);}
 
 	//mult 
 	template<class A,class B> 
@@ -57,6 +50,7 @@ namespace group::geometric{
 	}
 	template<class A, class B> using mult_t=decltype(mult(A{}, B{}));
 	//mult functions
+	namespace hana=boost::hana;
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
 	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
 

@@ -4,7 +4,10 @@
 #include"group/concept.h"
 #include"group/operation.h"
 #include"sorted.h"
+#include"vector/basis.h"
+#include"vector/formatting.h"
 
+#include<boost/hana.hpp>
 #include<type_traits>
 #include<iostream>
 
@@ -14,7 +17,7 @@ namespace algebra{
 	template<class GroupT, class IdentityT, class OperatorT, template<class> class InverseT, class ScalarT, class... ElementsT>
 	concept bool BasisElementsTemplateParameters=
 		   group::Group<GroupT, IdentityT, OperatorT, InverseT>
-		&& std::is_arithmetic<ScalarT>::value
+		&& vector::Scalar<ScalarT>
 		&& static_cast<bool>(hana::all(hana::make_tuple(group::is_in_type_list<GroupT>(hana::type_c<ElementsT>)...)))
 	;
 	template<class GroupT, class IdentityT, class OperatorT, template<class> class InverseT, class ScalarT>
@@ -25,26 +28,22 @@ namespace algebra{
 	concept bool TwoBasisElementTemplateParameters=BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA, ElementB>;
 
 	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
-	struct basis_element_t{
-		ScalarT coordinate;
-	};
-
-	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
 	auto basis_element(ElementT const& e, ScalarT const& s){
-		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{s};
+		return vector::basis_element_t<ElementT, ScalarT>{s};
 	}
 	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
 	auto basis_element(group::generated_minus_t<OperatorT, ElementT> const& a, ScalarT const& s){
-		return basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>{-s};
+		return vector::basis_element_t<ElementT, ScalarT>{-s};
 	}
 
 	//add operation
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
-	struct add_operation_t{
-		template<class ElementT> requires BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>
-		using basis_element_t=algebra::basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>;
+	struct add_operation_t: vector::add_operation_t<ScalarT>{
+		template<class ElementT>
+		using basis_element_t=typename vector::add_operation_t<ScalarT>::template basis_element_t<ElementT>;
 
-		using zero_t=group::identity_t<add_operation_t>;
+		using vector::add_operation_t<ScalarT>::apply;
+		using vector::add_operation_t<ScalarT>::inverse;
 
 		//commutation rule
 		template<class ElementA, class ElementB>
@@ -53,20 +52,11 @@ namespace algebra{
 		static constexpr auto apply(basis_element_t<ElementA> const& a, basis_element_t<ElementB> const& b){
 			return apply(b,a);
 		}
-		//colinear rule
-		template<class ElementT>
-		static constexpr auto apply(basis_element_t<ElementT> const& a, basis_element_t<ElementT> const& b){
-			return basis_element_t<ElementT>{a.coordinate+b.coordinate};
-		}
 		//group rules
 		static constexpr auto apply(auto const& a, auto const& b){
 			return group::operation<add_operation_t>(a,b);
 		}
 
-
-		static constexpr auto inverse(basis_element_t<auto> const& a){
-			return std::decay_t<decltype(a)>{-a.coordinate};
-		}
 		static constexpr auto inverse(auto const& a){
 			return group::inverse<add_operation_t>(a);
 		}
@@ -116,10 +106,6 @@ namespace algebra{
 	};
 
 	//formatting
-	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
-	std::ostream& operator<<(std::ostream& out, basis_element_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT> const& a){
-		return out<<a.coordinate<<" * "<<ElementT{};
-	}
 	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
 	std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
