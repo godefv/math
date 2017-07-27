@@ -1,7 +1,10 @@
-#include"algebra.h"
-#include"group/geometric.h"
-#include"group/generate.h"
-#include"unit_test.h"
+#include"addition.h"
+#include"multiplication.h"
+#include"formatting.h"
+#include"../group/geometric.h"
+#include"../group/generate.h"
+#include"../vector/formatting.h"
+#include"../unit_test.h"
 
 //generators
 using e1_t=group::geometric::direction_positive_t<1>;
