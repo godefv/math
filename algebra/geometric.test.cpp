@@ -1,5 +1,6 @@
 #include"geometric.h"
 #include"exponential.h"
+#include"reverse.h"
 #include"formatting.h"
 #include"../group/generate.h"
 #include"../vector/formatting.h"
@@ -20,19 +21,20 @@ using geometric_basis_element_t=vector::basis_element_t<ElementT, double>;
 using  add_operation_t=algebra::geometric:: add_operation_t<decltype(geometric_group_3d), double>;
 using mult_operation_t=algebra::geometric::mult_operation_t<decltype(geometric_group_3d), double>;
 
-template<class A, class B> constexpr auto operator*(A const& a, B const& b){
+constexpr auto operator*(auto const& a, auto const& b){
 	return mult_operation_t::apply(a,b);
 }
-template<class A, class B> constexpr auto operator+(A const& a, B const& b){
+constexpr auto operator+(auto const& a, auto const& b){
 	return add_operation_t::apply(a,b);
 }
-template<class A> constexpr auto operator-(A const& a){
+constexpr auto operator-(auto const& a){
 	return add_operation_t::inverse(a);
 }
-template<class A, class B> constexpr auto operator-(A const& a, B const& b){
+constexpr auto operator-(auto const& a, auto const& b){
 	return a+(-b);
 }
 
+static constexpr auto one=1.*group::geometric::one_t{};
 static constexpr auto e1=1.*e1_t{};
 static constexpr auto e2=1.*e2_t{};
 static constexpr auto e3=1.*e3_t{};
@@ -60,10 +62,14 @@ int main(){
 	check_equal(a*(a+b), a*a+a*b);
 	check_equal((a+b)*(c+b), a*c+a*b+b*c+b*b);
 	check_equal((a+b)*(a+b), a*a+a*b+b*a+b*b);
+	//reverse
+	check_equal(reverse(e1*e2), e2*e1);
+	check_equal(reverse(one+e1*e2), one+e2*e1);
 
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
 	std::cout<<"quaternion: "<<algebra::exp(M_PI/4*e1*e2)<<std::endl;
+	std::cout<<"reverse   : "<<reverse(algebra::exp(M_PI/4*e1*e2))<<std::endl;
 
 	return 0;
 }

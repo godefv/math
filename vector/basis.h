@@ -7,6 +7,8 @@ namespace vector{
 	template<class ElementT, Scalar ScalarT=double> 
 	struct basis_element_t{
 		ScalarT coordinate;
+
+		auto constexpr element() const{return ElementT{};}
 	};
 
 	template<class ElementT> 
