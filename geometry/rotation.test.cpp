@@ -9,7 +9,7 @@
 //generators
 using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
-using e3_t=group::geometric::direction_positive_t<3>;
+using e3_t=group::geometric::direction_negative_t<3>;
 
 //mult groups, finite order of generators plus commutation rules guarantees that the group is finite
 namespace hana=boost::hana;
@@ -36,12 +36,16 @@ static constexpr auto e2=1.*e2_t{};
 static constexpr auto e3=1.*e3_t{};
 
 int main(){
-	auto plane12=geometry::plane_t<decltype(e1),decltype(e2)>{e1,e2};
-	auto rotation1=geometry::rotation_t<decltype(plane12)>{plane12, M_PI/2};
-	//auto rotation2=geometry::rotation_t{geometry::plane_t{rotation1(e1),e3}, pi/2};
+	auto rotation1=geometry::rotation(geometry::plane(e1,e2), M_PI/2);
+	auto rotation2=geometry::rotation(geometry::plane(e1,e3), M_PI/2);
 
 	//(rotation2*rotation1)(e1, e2, e3);
-	std::cout<<rotation1.quaternion()<<std::endl;
+	std::cout<<"cyclic quaternion(e1,e2): "<<rotation1.quaternion()<<std::endl;
+	std::cout<<"e1->"<<rotation1(e1)<<std::endl;
+	std::cout<<"e2->"<<rotation1(e2)<<std::endl;
+	std::cout<<"hyperbolic quaternion(e1,e3): "<<rotation2.quaternion()<<std::endl;
+	std::cout<<"e1->"<<rotation2(e1)<<std::endl;
+	std::cout<<"e3->"<<rotation2(e3)<<std::endl;
 	rotation1.plane;
 	rotation1.angle;
 
