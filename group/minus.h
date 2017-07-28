@@ -22,6 +22,15 @@ namespace group{
 	template<class Operator, class A> struct is_generated_minus<Operator, generated_minus_t<Operator,A>>:std::true_type{};
 	template<class Operator, class T> concept bool Minus=is_generated_minus<Operator, T>::value;
 
+	template<class Operator, class T>
+	bool constexpr operator==(generated_minus_t<Operator, T> const& a, generated_minus_t<Operator, T> const& b){
+		return a.value==b.value;
+	}
+	template<class Operator, class T>
+	bool constexpr operator!=(generated_minus_t<Operator, T> const& a, generated_minus_t<Operator, T> const& b){
+		return !(a==b);
+	}
+
 	std::ostream& operator<<(std::ostream& out, generated_minus_t<auto, auto> const& a){
 		return out<<"-("<<a.value<<")";
 	}

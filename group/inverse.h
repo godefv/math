@@ -24,6 +24,16 @@ namespace group{
 	                     && std::is_same<decltype(OperatorT::apply(ElementT{},InverseT<ElementT>{})), IdentityT>::value
 	                     && AbsorbsIdentityElement<InverseT<ElementT>,IdentityT,OperatorT>
                          ;
+
+	template<class Operator, class T>
+	bool constexpr operator==(generated_inverse_t<Operator, T> const& a, generated_inverse_t<Operator, T> const& b){
+		return a.value_before_inverse==b.value_before_inverse;
+	}
+	template<class Operator, class T>
+	bool constexpr operator!=(generated_inverse_t<Operator, T> const& a, generated_inverse_t<Operator, T> const& b){
+		return !(a==b);
+	}
+
 } 
 
 #endif /* INVERSE_H */
