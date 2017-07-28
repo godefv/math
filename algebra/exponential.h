@@ -17,7 +17,7 @@ namespace algebra{
 			return one+a;
 		}
 		auto normalized_a=a*(1./angle);
-		if(angle<0){
+		if(square.coordinate>0){
 			return std::cosh(angle)*one+std::sinh(angle)*normalized_a;
 		}else{
 			return std::cos(angle)*one+std::sin(angle)*normalized_a;
