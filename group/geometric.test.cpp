@@ -14,7 +14,7 @@
 //generators
 using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
-using e3_t=group::geometric::direction_positive_t<3>;
+using e3_t=group::geometric::direction_negative_t<3>;
 static constexpr auto one=group::geometric::one_t{};
 static constexpr auto e1=e1_t{};
 static constexpr auto e2=e2_t{};
@@ -40,6 +40,7 @@ void test_mult_operations(){
 	check_equal(inverse(inverse(e3)), e3);
 	//inverse of generators
 	check_equal(inverse(e1),  e1);
+	check_equal(inverse(e3), -e3);
 	check_equal(inverse(e1*e2), inverse(e2)*inverse(e1));
 	//identity
 	check_equal(one, inverse(one));
@@ -104,17 +105,23 @@ int main(){
 
 	std::cout<<"geometric_group_2d"<<std::endl;
 	hana::for_each(geometric_group_2d, [](auto const& element){
-		print_type(element);
+		std::cout<<typename std::decay_t<decltype(element)>::type{}<<std::endl;
 	});
 
 	std::cout<<"complex_group"<<std::endl;
 	hana::for_each(complex_group, [](auto const& element){
-		print_type(element);
+		std::cout<<typename std::decay_t<decltype(element)>::type{}<<std::endl;
 	});
 
 	std::cout<<"geometric_group_3d"<<std::endl;
 	hana::for_each(geometric_group_3d, [](auto const& element){
-		print_type(element);
+		std::cout<<typename std::decay_t<decltype(element)>::type{}<<std::endl;
+	});
+#else
+	constexpr auto geometric_group_3d=group::add_procucts(boost::hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), hana_mult);
+	std::cout<<"geometric_group_3d"<<std::endl;
+	hana::for_each(geometric_group_3d, [](auto const& element){
+		std::cout<<typename std::decay_t<decltype(element)>::type{}<<std::endl;
 	});
 #endif
 

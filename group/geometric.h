@@ -22,33 +22,39 @@ namespace group::geometric{
 	template<class A,class B> 
 	constexpr auto mult(A const& a, B const& b);
 	struct mult_operation_t{
+		//commutations rules
 		template<class A,class B> 
-		static auto apply(A const& a, B const& b){return mult(a,b);};
-
-		template<class A>
-		static auto inverse(A const& a){return group::inverse<mult_operation_t>(a);}
-
+			requires !std::is_same<A,B>::value 
+			      && BasisVector<A>
+			      && BasisVector<B>
+			      && !is_sorted(A{},B{})
+		static constexpr auto apply(A const& a, B const& b){
+			return group::minus<mult_operation_t>(apply(b,a));
+		}
 		//group order of basis vectors
-		template<unsigned short i> static auto inverse(direction_positive_t<i> const& a){return a;}
-		template<unsigned short i> static auto inverse(direction_negative_t<i> const& a){return group::minus<mult_operation_t>(a);}
+		template<unsigned short i> 
+		static constexpr auto apply(direction_negative_t<i> const& a, direction_negative_t<i> const& b){
+			return group::minus<mult_operation_t>(group::identity_t<mult_operation_t>{});
+		};
+		//group rules
+		template<class A,class B> 
+		static constexpr auto apply(A const& a, B const& b){
+			return group::operation<mult_operation_t>(a,b);
+		}
+
+		//group inverse
+		template<class A>
+		static constexpr auto inverse(A const& a){return group::inverse<mult_operation_t>(a);}
+		//group order of basis vectors
+		template<unsigned short i> static constexpr auto inverse(direction_positive_t<i> const& a){return a;}
+		template<unsigned short i> static constexpr auto inverse(direction_negative_t<i> const& a){return group::minus<mult_operation_t>(a);}
 	};
+
+	using one_t=group::identity_t<mult_operation_t>;
 	template<class A> using inverse_t=group::inverse_t<mult_operation_t, A>;
 	template<class A> using minus_t  =group::minus_t  <mult_operation_t, A>;
-	using one_t=group::identity_t<mult_operation_t>;
-	//commutations rules
-	template<class A,class B> 
-		requires !std::is_same<A,B>::value 
-			&& BasisVector<A>
-			&& BasisVector<B>
-			&& !is_sorted(A{},B{})
-	constexpr auto mult(A const& a, B const& b){
-			return minus_t<decltype(mult(b,a))>{};
-	}
-	template<class A,class B> 
-	constexpr auto mult(A const& a, B const& b){
-		return group::operation<mult_operation_t>(a,b);
-	}
-	template<class A, class B> using mult_t=decltype(mult(A{}, B{}));
+	template<class A, class B> using mult_t=decltype(mult_operation_t::apply(A{}, B{}));
+
 	//mult functions
 	namespace hana=boost::hana;
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
@@ -64,6 +70,9 @@ namespace group::geometric{
 	template<unsigned short i> 
 	std::ostream& operator<<(std::ostream& out, direction_negative_t<i> const&){
 		return out<<"n"<<i;
+	}
+	std::ostream& operator<<(std::ostream& out, one_t const&){
+		return out<<"one";
 	}
 }
 
