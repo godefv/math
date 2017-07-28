@@ -1,12 +1,21 @@
-#ifndef ROTATION_H
-#define ROTATION_H 
+#ifndef GEOMETRY_ROTATION_H
+#define GEOMETRY_ROTATION_H 
 
-#include"../vector/basis.h"
-#include"../vector/direction.h"
+#include"../algebra/exponential.h"
+
+#include<boost/hana.hpp>
 
 namespace geometry{
-	template<class PlaneT, vector::Scalar AngleT=double>
-	struct basis_rotation_t: vector::basis_element_t<PlaneT, AngleT>{};
+	template<class PlaneT, class AngleT=double>
+	struct rotation_t{
+		PlaneT plane;
+		AngleT angle;
+
+		constexpr auto quaternion(){
+			using namespace boost::hana::literals;
+			return algebra::exp((angle/2)*plane.directions[0_c]*plane.directions[1_c]);
+		}
+	};
 }
 
-#endif /* ROTATION_H */
+#endif /* GEOMETRY_ROTATION_H */
