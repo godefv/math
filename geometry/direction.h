@@ -1,9 +1,9 @@
-#ifndef DIRECTION_H
-#define DIRECTION_H 
+#ifndef GEOMETRY_DIRECTION_H
+#define GEOMETRY_DIRECTION_H 
 
 #include<type_traits>
 
-namespace vector{
+namespace geometry{
 	template<int> struct direction_t{};
 
 	template<int i> constexpr int index(direction_t<i>){return i;}
@@ -12,4 +12,4 @@ namespace vector{
 	constexpr bool is_sorted(direction_t<ia> const& A, direction_t<ib> const& B){return ia<ib;}
 }
 
-#endif /* DIRECTION_H */
+#endif /* GEOMETRY_DIRECTION_H */
