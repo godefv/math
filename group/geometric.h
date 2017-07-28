@@ -30,7 +30,7 @@ namespace group::geometric{
 
 		//group order of basis vectors
 		template<unsigned short i> static auto inverse(direction_positive_t<i> const& a){return a;}
-		template<unsigned short i> static auto inverse(direction_negative_t<i> const& a){return group::minus_t<mult_operation_t, decltype(a)>{};}
+		template<unsigned short i> static auto inverse(direction_negative_t<i> const& a){return group::minus<mult_operation_t>(a);}
 	};
 	template<class A> using inverse_t=group::inverse_t<mult_operation_t, A>;
 	template<class A> using minus_t  =group::minus_t  <mult_operation_t, A>;
