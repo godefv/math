@@ -15,7 +15,6 @@ namespace algebra{
 		template<class ElementT>
 		using basis_element_t=typename vector::add_operation_t<ScalarT>::template basis_element_t<ElementT>;
 
-		using vector::add_operation_t<ScalarT>::apply;
 		using vector::add_operation_t<ScalarT>::inverse;
 
 		//commutation rule
@@ -24,6 +23,11 @@ namespace algebra{
 			      && !Sorted<GroupT,ElementA,ElementB> 
 		static constexpr auto apply(basis_element_t<ElementA> const& a, basis_element_t<ElementB> const& b){
 			return apply(b,a);
+		}
+		//colinear rule
+		template<class ElementT>
+		static constexpr auto apply(basis_element_t<ElementT> const& a, basis_element_t<ElementT> const& b){
+			return basis_element_t<ElementT>{a.coordinate+b.coordinate};
 		}
 		//group rules
 		static constexpr auto apply(auto const& a, auto const& b){
