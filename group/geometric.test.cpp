@@ -15,92 +15,65 @@
 using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_positive_t<3>;
+static constexpr auto one=group::geometric::one_t{};
+static constexpr auto e1=e1_t{};
+static constexpr auto e2=e2_t{};
+static constexpr auto e3=e3_t{};
 using namespace group::geometric;
+
+constexpr auto operator*(auto const& a, auto const& b){
+	return mult_operation_t::apply(a,b);
+}
+
+constexpr auto operator-(auto const& a){
+	return group::minus<mult_operation_t>(a);
+}
+
+constexpr auto inverse(auto const& a){
+	return mult_operation_t::inverse(a);
+}
 
 #define DEBUG_MULT_OPERATION 0
 void test_mult_operations(){
-	//inverse
-	static_assert(std::is_same<e1_t
-                              ,inverse_t<inverse_t<e1_t>> 
-                              >::value);
-	static_assert(std::is_same<e1_t
-                              ,inverse_t<e1_t> 
-                              >::value);
-	static_assert(std::is_same<inverse_t<e1_t>
-                              ,decltype(mult_operation_t::inverse(e1_t{}))
-                              >::value);
-	static_assert(std::is_same<inverse_t<mult_t<e1_t,e2_t>>
-							  ,mult_t<inverse_t<e2_t>, inverse_t<e1_t>>
-							  >::value);
+	//inverse of inverse
+	check_equal(inverse(inverse(e1)), e1);
+	check_equal(inverse(inverse(e3)), e3);
+	//inverse of generators
+	check_equal(inverse(e1),  e1);
+	check_equal(inverse(e1*e2), inverse(e2)*inverse(e1));
 	//identity
-	static_assert(std::is_same<one_t
-                              ,inverse_t<one_t> 
-                              >::value);
-	static_assert(std::is_same<mult_t<one_t,e1_t>
-                              ,e1_t 
-                              >::value);
-	static_assert(std::is_same<e1_t
-                              ,mult_t<one_t,e1_t>
-                              >::value);
+	check_equal(one, inverse(one));
+	check_equal(one*e1, e1);
+	check_equal(e1*one, e1);
 	//minus
-	static_assert(std::is_same<inverse_t<minus_t<e1_t>>
-                              ,minus_t<inverse_t<e1_t>>
-                              >::value);
+	check_equal(inverse(-e1), -inverse(e1));
 	//associativity 
-	static_assert(std::is_same<mult_t<e2_t,mult_t<e1_t,e2_t>>
-                              ,mult_t<mult_t<e2_t,e1_t>,e2_t> 
-                              >::value);
+	check_equal(e2*(e1*e2), (e2*e1)*e2);
 	//1(12)
-	static_assert(std::is_same<mult_t<e1_t,mult_t<e1_t,e2_t>>
-                              ,e2_t
-                              >::value);
+	check_equal(e1*(e1*e2), e2);
 	//(12)2
-	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,e2_t>
-                              ,e1_t
-                              >::value);
+	check_equal((e1*e2)*e2, e1);
 	//commutativity
 	//21
-	static_assert(BasisVector<e2_t>     );
-	static_assert(BasisVector<e1_t>     );
-	static_assert(!is_sorted(e2_t{},e1_t{}));
-	static_assert(std::is_same<mult_t<e1_t,e2_t>
-	                    	  ,minus_t<mult_t<e2_t,e1_t>>
-	                    	  >::value);
-	static_assert(std::is_same<mult_t<e2_t,e1_t>
-	                    	  ,minus_t<mult_t<e1_t,e2_t>>
-	                    	  >::value);
+	static_assert(BasisVector<e2_t>);
+	static_assert(BasisVector<e1_t>);
+	static_assert(!is_sorted(e2,e1));
+	check_equal(e1*e2, -(e2*e1));
+	check_equal(e2*e1, -(e1*e2));
 	//(12)1
-	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,e1_t>
-	                    	  ,minus_t<mult_t<e1_t,mult_t<e1_t,e2_t>>>
-	                    	  >::value);
-	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,e1_t>
-	                    	  ,minus_t<e2_t>
-	                    	  >::value);
+	check_equal((e1*e2)*e1, -(e1*(e1*e2)));
+	check_equal((e1*e2)*e1, -e2);
 	//(21)1
-	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,e1_t>
-	                    	  ,minus_t<mult_t<mult_t<e1_t,e2_t>,e1_t>>
-	                    	  >::value);
-	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,e1_t>
-	                    	  ,e2_t
-	                    	  >::value);
+	check_equal((e2*e1)*e1, -((e1*e2)*e1));
+	check_equal((e2*e1)*e1, e2);
 	//(12)(12)
-	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,mult_t<e1_t,e2_t>>
-	                    	  ,mult_t<mult_t<mult_t<e1_t,e2_t>,e1_t>,e2_t> 
-	                    	  >::value);
-	static_assert(std::is_same<mult_t<mult_t<e1_t,e2_t>,mult_t<e1_t,e2_t>>
-	                    	  ,minus_t<one_t>
-	                    	  >::value);
+	check_equal((e1*e2)*(e1*e2), ((e1*e2)*e1)*e2);
+	check_equal((e1*e2)*(e1*e2), -one);
 	//(21)(21)
-	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,mult_t<e2_t,e1_t>>
-	                    	  ,minus_t<one_t>
-	                    	  >::value);
+	check_equal((e2*e1)*(e2*e1), -one);
 	//(21)(12)
-	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,mult_t<e1_t,e2_t>>
-	                    	  ,mult_t<mult_t<mult_t<e2_t,e1_t>,e1_t>,e2_t>
-	                    	  >::value);
-	static_assert(std::is_same<mult_t<mult_t<e2_t,e1_t>,mult_t<e1_t,e2_t>>
-	                    	  ,one_t
-	                    	  >::value);
+	check_equal((e2*e1)*(e1*e2), ((e2*e1)*e1)*e2);
+	check_equal((e2*e1)*(e1*e2), one);
 }
 
 #if !DEBUG_MULT_OPERATION
