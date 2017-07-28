@@ -18,17 +18,13 @@ namespace algebra{
 	;
 	template<class GroupT, class IdentityT, class OperatorT, template<class> class InverseT, class ScalarT>
 	concept bool ZeroBasisElementTemplateParameters=BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT>;
-	template<class GroupT, class IdentityT, class OperatorT, template<class> class InverseT, class ScalarT, class ElementT>
-	concept bool OneBasisElementTemplateParameters=BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT>;
-	template<class GroupT, class IdentityT, class OperatorT, template<class> class InverseT, class ScalarT, class ElementA, class ElementB>
-	concept bool TwoBasisElementTemplateParameters=BasisElementsTemplateParameters<GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementA, ElementB>;
 
-	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
-	auto basis_element(ElementT const& e, ScalarT const& s){
+	template<class ElementT, vector::Scalar ScalarT> 
+	constexpr auto basis_element(ElementT const& e, ScalarT const& s){
 		return vector::basis_element_t<ElementT, ScalarT>{s};
 	}
-	OneBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT, ElementT}
-	auto basis_element(group::generated_minus_t<OperatorT, ElementT> const& a, ScalarT const& s){
+	template<class OperatorT, class ElementT, vector::Scalar ScalarT> 
+	constexpr auto basis_element(group::generated_minus_t<OperatorT, ElementT> const& a, ScalarT const& s){
 		return vector::basis_element_t<ElementT, ScalarT>{-s};
 	}
 }

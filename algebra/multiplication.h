@@ -10,8 +10,6 @@ namespace algebra{
 		template<class ElementT>
 		using basis_element_t=typename add_operation_t::template basis_element_t<ElementT>;
 
-		static constexpr auto basis_element(auto const& e, ScalarT const& s){return algebra::basis_element<GroupT, IdentityT, OperatorT, InverseT>(e,s);}
-
 		//operation with scalar
 		static constexpr auto apply(ScalarT const& a, basis_element_t<auto> const& b){
 			return std::decay_t<decltype(b)>{a*b.coordinate};
