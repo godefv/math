@@ -14,23 +14,11 @@
 using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_negative_t<3>;
-static constexpr auto one=group::geometric::one_t{};
 static constexpr auto e1=e1_t{};
 static constexpr auto e2=e2_t{};
 static constexpr auto e3=e3_t{};
-using namespace group::geometric;
-
-constexpr auto operator*(auto const& a, auto const& b){
-	return mult_operation_t::apply(a,b);
-}
-
-constexpr auto operator-(auto const& a){
-	return group::minus<mult_operation_t>(a);
-}
-
-constexpr auto inverse(auto const& a){
-	return mult_operation_t::inverse(a);
-}
+using namespace group::geometric::operators;
+using group::geometric::one;
 
 #define DEBUG_MULT_OPERATION 0
 void test_mult_operations(){
@@ -55,8 +43,6 @@ void test_mult_operations(){
 	check_equal((e1*e2)*e2, e1);
 	//commutativity
 	//21
-	static_assert(BasisVector<e2_t>);
-	static_assert(BasisVector<e1_t>);
 	static_assert(static_compare(e2,e1)<0);
 	check_equal(e1*e2, -(e2*e1));
 	check_equal(e2*e1, -(e1*e2));
@@ -77,6 +63,7 @@ void test_mult_operations(){
 }
 
 #if !DEBUG_MULT_OPERATION
+using namespace group::geometric;
 //mult groups, finite order of generators plus commutation rules guarantees that the group is finite
 constexpr auto geometric_group_2d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>), hana_inverse, hana_mult);
 constexpr auto complex_group=group::generate(hana::make_set(hana::type_c<mult_t<e1_t,e2_t>>), hana_inverse, hana_mult);

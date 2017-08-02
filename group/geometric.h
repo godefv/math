@@ -58,6 +58,19 @@ namespace group::geometric{
 	template<class A> using minus_t  =group::minus_t  <mult_operation_t, A>;
 	template<class A, class B> using mult_t=decltype(mult_operation_t::apply(A{}, B{}));
 
+	static constexpr auto one=group::geometric::one_t{};
+	namespace operators{
+		constexpr auto operator*(auto const& a, auto const& b){
+			return mult_operation_t::apply(a,b);
+		}
+		constexpr auto operator-(auto const& a){
+			return group::minus<mult_operation_t>(a);
+		}
+		constexpr auto inverse(auto const& a){
+			return mult_operation_t::inverse(a);
+		}
+	}
+
 	//mult functions
 	namespace hana=boost::hana;
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};

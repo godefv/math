@@ -9,23 +9,9 @@ using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_negative_t<3>;
 
-using  add_operation_t=algebra::geometric:: add_operation_t<double>;
-using mult_operation_t=algebra::geometric::mult_operation_t<double>;
+using namespace algebra::geometric::operators;
 
-template<class A, class B> constexpr auto operator*(A const& a, B const& b){
-	return mult_operation_t::apply(a,b);
-}
-template<class A, class B> constexpr auto operator+(A const& a, B const& b){
-	return add_operation_t::apply(a,b);
-}
-template<class A> constexpr auto operator-(A const& a){
-	return add_operation_t::inverse(a);
-}
-template<class A, class B> constexpr auto operator-(A const& a, B const& b){
-	return a+(-b);
-}
-
-static constexpr auto one=1.*group::geometric::one_t{};
+static constexpr auto one=1.*group::geometric::one;
 static constexpr auto e1=1.*e1_t{};
 static constexpr auto e2=1.*e2_t{};
 static constexpr auto e3=1.*e3_t{};

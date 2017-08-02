@@ -9,26 +9,9 @@ using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_positive_t<3>;
 
-template<class ElementT> 
-using geometric_basis_element_t=vector::basis_element_t<ElementT, double>;
+using namespace algebra::geometric::operators;
 
-using  add_operation_t=algebra::geometric:: add_operation_t<double>;
-using mult_operation_t=algebra::geometric::mult_operation_t<double>;
-
-constexpr auto operator*(auto const& a, auto const& b){
-	return mult_operation_t::apply(a,b);
-}
-constexpr auto operator+(auto const& a, auto const& b){
-	return add_operation_t::apply(a,b);
-}
-constexpr auto operator-(auto const& a){
-	return add_operation_t::inverse(a);
-}
-constexpr auto operator-(auto const& a, auto const& b){
-	return a+(-b);
-}
-
-static constexpr auto one=1.*group::geometric::one_t{};
+static constexpr auto one=1.*group::geometric::one;
 static constexpr auto e1=1.*e1_t{};
 static constexpr auto e2=1.*e2_t{};
 static constexpr auto e3=1.*e3_t{};
@@ -44,10 +27,10 @@ int main(){
 	check_equal(-a, -1.*a);
 	check_equal(a-a, 0.*a);
 	//product of basis elements
-	check_equal(a*b, geometric_basis_element_t<group::geometric::mult_t<e1_t,e2_t>>{a.coordinate*b.coordinate});
+	check_equal(a*b, vector::basis_element_t<group::geometric::mult_t<e1_t,e2_t>, double>{a.coordinate*b.coordinate});
 	//commutation
 	static_assert(static_compare(e1,e2)>0);
-	check_equal(a+b, group::generated_element_t{add_operation_t{},a,b});
+	check_equal(a+b, group::generated_element_t{algebra::geometric::add_operation_t<double>{},a,b});
 	check_equal(b+a, a+b);
 	check_equal(a+b+a, 2.*a+b);
 	check_equal(b+a+b, a+2.*b);
