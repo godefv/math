@@ -2,7 +2,6 @@
 #define ALGEBRA_BASIS_H 
 
 #include"../vector/basis.h"
-#include"../group/concept.h"
 #include"../group/minus.h"
 
 #include<boost/hana.hpp>

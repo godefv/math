@@ -1,7 +1,7 @@
 #include"addition.h"
 #include"formatting.h"
-#include"geometry/direction.h"
-#include"geometry/formatting.h"
+#include"../geometry/direction.h"
+#include"../geometry/formatting.h"
 #include"../unit_test.h"
 
 #include<cstdlib>
