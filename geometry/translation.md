@@ -11,5 +11,5 @@ The set of translations is a group :
 
 This group is commutative : the translations in any sequence of translations can be applied in any order resulting in the same translation at the end.
 
-It is not a finite group, so we construct it as a vector space over a finite set of directions
+It is not a finite group, but it is a vector space over a finite set of directions.
 
