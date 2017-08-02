@@ -5,7 +5,9 @@
 #include<iostream>
 
 namespace group{
-	template<class BinaryOperator> struct identity_t{};
+	template<class Operator> struct identity_t{
+		Operator operation;
+	};
 
 	template<class ElementT, class IdentityT, class OperatorT>
 	concept bool AbsorbsIdentityElement=std::is_same<decltype(OperatorT::apply(ElementT{},IdentityT{})), ElementT>::value

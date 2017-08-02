@@ -8,10 +8,15 @@
 #include<type_traits>
 
 namespace group{
-	template<class Operator, class A,class B,class...> struct generated_element_t{A first; B second;};
+	template<class Operator, class A,class B> struct generated_element_t{
+		Operator operation;
+		A first; B second;
+	};
+	template<class Operator, class A,class B> generated_element_t(Operator,A,B)->generated_element_t<Operator,A,B>;
+
 	//is_generated_element
 	template<class Operator, class> struct is_generated_element:std::false_type{};
-	template<class Operator, class A,class B,class... C> struct is_generated_element<Operator, generated_element_t<Operator,A,B,C...>>:std::true_type{};
+	template<class Operator, class A,class B> struct is_generated_element<Operator, generated_element_t<Operator,A,B>>:std::true_type{};
 	template<class Operator, class T> concept bool Generated=is_generated_element<Operator, T>::value;
 
 	template<class Operator, class A,class B>
@@ -27,7 +32,7 @@ namespace group{
 
 	//default operation
 	template<class Operator, class A,class B> 
-	constexpr auto operation(A const& a, B const& b){return generated_element_t<Operator,A,B>{a,b};}
+	constexpr auto operation(A const& a, B const& b){return generated_element_t{Operator{},a,b};}
 	//operations with identity
 	template<class Operator, class A> 
 	constexpr auto operation(identity_t<Operator> const&, A const& a){return a;}

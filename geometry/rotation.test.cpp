@@ -1,8 +1,6 @@
 #include"rotation.h"
 #include"slice.h"
 #include"../algebra/geometric.h"
-#include"../group/generate.h"
-#include"../algebra/formatting.h"
 #include"../vector/formatting.h"
 #include"../unit_test.h"
 
@@ -11,12 +9,8 @@ using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_negative_t<3>;
 
-//mult groups, finite order of generators plus commutation rules guarantees that the group is finite
-namespace hana=boost::hana;
-constexpr auto geometric_group_3d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>, hana::type_c<e3_t>), group::geometric::hana_inverse, group::geometric::hana_mult);
-
-using  add_operation_t=algebra::geometric:: add_operation_t<decltype(geometric_group_3d), double>;
-using mult_operation_t=algebra::geometric::mult_operation_t<decltype(geometric_group_3d), double>;
+using  add_operation_t=algebra::geometric:: add_operation_t<double>;
+using mult_operation_t=algebra::geometric::mult_operation_t<double>;
 
 template<class A, class B> constexpr auto operator*(A const& a, B const& b){
 	return mult_operation_t::apply(a,b);

@@ -1,10 +1,10 @@
 #ifndef ALGEBRA_REVERSE_H
 #define ALGEBRA_REVERSE_H 
 
-#include"addition.h"
 #include"multiplication.h"
 #include"basis.h"
 #include"../group/reverse.h"
+#include"../vector/addition.h"
 
 namespace vector{
 	constexpr auto reverse(vector::basis_element_t<auto, Scalar> const& a){
@@ -17,9 +17,8 @@ namespace vector{
 }
 
 namespace algebra{
-	ZeroBasisElementTemplateParameters{GroupT, IdentityT, OperatorT, InverseT, ScalarT}
-	constexpr auto reverse(group::generated_element_t<add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>, auto,auto> const& ab){
-		return add_operation_t<GroupT, IdentityT, OperatorT, InverseT, ScalarT>::apply(reverse(ab.first), reverse(ab.second));
+	constexpr auto reverse(group::generated_element_t<vector::add_operation_t<auto>, auto,auto> const& ab){
+		return std::decay_t<decltype(ab.operation)>::apply(reverse(ab.first), reverse(ab.second));
 	}
 }
 

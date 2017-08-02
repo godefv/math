@@ -2,7 +2,6 @@
 #include"minus.h"
 #include"geometric.h"
 #include"concept.h"
-#include"../sorted.h"
 #include"../unit_test.h"
 
 #include<boost/hana.hpp>
@@ -58,7 +57,7 @@ void test_mult_operations(){
 	//21
 	static_assert(BasisVector<e2_t>);
 	static_assert(BasisVector<e1_t>);
-	static_assert(!is_sorted(e2,e1));
+	static_assert(static_compare(e2,e1)<0);
 	check_equal(e1*e2, -(e2*e1));
 	check_equal(e2*e1, -(e1*e2));
 	//(12)1

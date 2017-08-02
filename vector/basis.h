@@ -11,6 +11,8 @@ namespace vector{
 		auto constexpr element() const{return ElementT{};}
 	};
 
+	constexpr int static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){return static_compare(a.element(),b.element());}
+
 	template<class ElementT> 
 	bool operator==(basis_element_t<ElementT, Scalar> const& a, basis_element_t<ElementT, Scalar> const& b){
 		return a.coordinate==b.coordinate;

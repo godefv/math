@@ -18,6 +18,9 @@ namespace group::geometric{
 	template<unsigned short i> struct is_direction_t<direction_negative_t<i>>: std::true_type{};
 	template<class A> concept bool BasisVector=is_direction_t<A>::value;
 
+	BasisVector{BasisVector2}
+	constexpr int static_compare(BasisVector const& a, BasisVector2 const& b){return index(b)-index(a);}
+
 	//mult 
 	template<class A,class B> 
 	constexpr auto mult(A const& a, B const& b);
@@ -27,7 +30,7 @@ namespace group::geometric{
 			requires !std::is_same<A,B>::value 
 			      && BasisVector<A>
 			      && BasisVector<B>
-			      && !is_sorted(A{},B{})
+			      && static_compare(A{},B{})<0
 		static constexpr auto apply(A const& a, B const& b){
 			return group::minus<mult_operation_t>(apply(b,a));
 		}

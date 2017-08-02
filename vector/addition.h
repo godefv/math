@@ -16,7 +16,7 @@ namespace vector{
 		//commutation rule
 		template<class ElementA, class ElementB>
 			requires !std::is_same<ElementA,ElementB>::value 
-			      && !is_sorted(ElementA{},ElementB{}) 
+			      && static_compare(ElementA{},ElementB{})<0
 		static constexpr auto apply(basis_element_t<ElementA> const& a, basis_element_t<ElementB> const& b){
 			return apply(b,a);
 		}

@@ -8,10 +8,14 @@
 namespace group{
 	//! minus one commutes with every other element and squares to one under Operator 
 	//! minus_t<Operator, A> equals minus one times A under Operator
-	template<class Operator, class A> struct generated_minus_t{A value;};
+	template<class Operator, class A> struct generated_minus_t{
+		Operator operation;
+		A value;
+	};
+	template<class Operator, class A> generated_minus_t(Operator,A)->generated_minus_t<Operator,A>;
 
 	template<class Operator> constexpr auto minus(auto const& a){
-		return generated_minus_t<Operator, std::decay_t<decltype(a)>>{a};
+		return generated_minus_t{Operator{},a};
 	}
 	template<class Operator> constexpr auto minus(generated_minus_t<Operator,auto> const& a){
 		return a.value;

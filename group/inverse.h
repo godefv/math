@@ -5,7 +5,10 @@
 
 namespace group{
 	//inverse generates a new type by default
-	template<class Operator, class T> struct generated_inverse_t{T value_before_inverse;};
+	template<class Operator, class T> struct generated_inverse_t{
+		Operator operation;
+		T value_before_inverse;
+	};
 
 	template<class Operator, class A>
 	constexpr auto inverse(A const& a){return generated_inverse_t<Operator, A>{a};}
