@@ -61,8 +61,9 @@ int main(){
  
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
+	std::cout<<"projected : "<<algebra::geometric::project(0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3)), hana::make_set(1_c))<<std::endl;
 	std::cout<<"quaternion: "<<algebra::exp(M_PI/4*e1*e2)<<std::endl;
-	std::cout<<"reverse   : "<<reverse(algebra::exp(M_PI/4*e1*e2))<<std::endl;
+	std::cout<<"reversed  : "<<reverse(algebra::exp(M_PI/4*e1*e2))<<std::endl;
 
 	return 0;
 }

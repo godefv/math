@@ -18,11 +18,11 @@ namespace algebra{
 		static constexpr auto apply(basis_element_t<auto> const& a, ScalarT const& b){
 			return apply(b,a);
 		}
-		template<class ElementT>
+		template<class ElementT> requires !group::Generated<add_operation_t, ElementT>
 		static constexpr auto apply(ScalarT const& a, ElementT const& b){
 			return basis_element_t<ElementT>{a};
 		}
-		template<class ElementT> requires !vector::Scalar<ElementT>
+		template<class ElementT> requires !group::Generated<add_operation_t, ElementT>
 		static constexpr auto apply(ElementT const& a, ScalarT const& b){
 			return apply(b,a);
 		}
@@ -32,11 +32,11 @@ namespace algebra{
 			return basis_element(OperatorT::apply(ElementA{}, ElementB{}),a.coordinate*b.coordinate);
 		}
 		//develop product over addition
-		template<class ElementT> requires !vector::Scalar<ElementT>
+		template<class ElementT> 
 		static constexpr auto apply(ElementT const& a, group::generated_element_t<add_operation_t, auto,auto> const& b){
 			return add_operation_t::apply(apply(a,b.first), apply(a,b.second));
 		}
-		template<class B> requires !group::Generated<add_operation_t, B> && !vector::Scalar<B>
+		template<class B> requires !group::Generated<add_operation_t, B>
 		static constexpr auto apply(group::generated_element_t<add_operation_t, auto,auto> const& a, B const& b){
 			return add_operation_t::apply(apply(a.first,b), apply(a.second,b));
 		}
