@@ -50,8 +50,14 @@ int main(){
 	static_assert(algebra::geometric::grades(one)            == hana::make_set(0_c));
 	static_assert(algebra::geometric::grades(e1)             == hana::make_set(1_c));
 	static_assert(algebra::geometric::grades(e1*e2)          == hana::make_set(2_c));
+	static_assert(algebra::geometric::grades(e1*e2+e1*e3)    == hana::make_set(2_c));
 	static_assert(algebra::geometric::grades(e1*e2*e3)       == hana::make_set(3_c));
 	static_assert(algebra::geometric::grades(one+e2+e1*e2*e3)== hana::make_set(0_c,1_c,3_c));
+	//project
+	check_equal(algebra::geometric::project(one+e1, hana::make_set(1_c)), e1);
+	check_equal(algebra::geometric::project(one+e1, hana::make_set(0_c)), one);
+	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,2_c)), one+e1*e2);
+	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,3_c)), one);
  
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
