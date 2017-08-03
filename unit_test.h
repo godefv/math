@@ -1,6 +1,8 @@
 #ifndef UNIT_TEST_H
 #define UNIT_TEST_H 
 
+#include<iostream>
+
 template<class T>
 void check_equal(T const& a, T const& b){
 	if(a!=b){

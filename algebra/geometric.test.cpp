@@ -11,6 +11,7 @@ using e3_t=group::geometric::direction_positive_t<3>;
 
 using namespace algebra::geometric::operators;
 
+static constexpr auto zero=group::identity_t<algebra::geometric::add_operation_t<double>>{};
 static constexpr auto one=1.*group::geometric::one;
 static constexpr auto e1=1.*e1_t{};
 static constexpr auto e2=1.*e2_t{};
@@ -43,7 +44,15 @@ int main(){
 	//reverse
 	check_equal(reverse(e1*e2), e2*e1);
 	check_equal(reverse(one+e1*e2), one+e2*e1);
-
+	//grades
+	namespace hana=boost::hana;
+	using namespace hana::literals;
+	static_assert(algebra::geometric::grades(one)            == hana::make_set(0_c));
+	static_assert(algebra::geometric::grades(e1)             == hana::make_set(1_c));
+	static_assert(algebra::geometric::grades(e1*e2)          == hana::make_set(2_c));
+	static_assert(algebra::geometric::grades(e1*e2*e3)       == hana::make_set(3_c));
+	static_assert(algebra::geometric::grades(one+e2+e1*e2*e3)== hana::make_set(0_c,1_c,3_c));
+ 
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
 	std::cout<<"quaternion: "<<algebra::exp(M_PI/4*e1*e2)<<std::endl;

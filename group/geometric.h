@@ -71,11 +71,19 @@ namespace group::geometric{
 		}
 	}
 
+	//grade
+	auto constexpr grade(group::identity_t<mult_operation_t> const& a){return 0;}
+	auto constexpr grade(group::generated_element_t<mult_operation_t, auto,auto> const& a){
+		return grade(a.first)+grade(a.second);
+	}
+	auto constexpr grade(auto const& a){return 1;}
+
 	//mult functions
 	namespace hana=boost::hana;
 	constexpr auto hana_mult   =[](auto const& a, auto const& b){return hana::type_c<mult_t<typename std::decay_t<decltype(a)>::type, typename std::decay_t<decltype(b)>::type>>;};
 	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
 
+	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_element_t<mult_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
 	}
