@@ -1,14 +1,12 @@
 #include"addition.h"
 #include"formatting.h"
-#include"../geometry/direction.h"
-#include"../geometry/formatting.h"
 #include"../unit_test.h"
 
 #include<cstdlib>
 
-using e1_t=vector::basis_element_t<geometry::direction_t<1>>;
-using e2_t=vector::basis_element_t<geometry::direction_t<2>>;
-using e3_t=vector::basis_element_t<geometry::direction_t<3>>;
+using e1_t=vector::basis_element_t<group::indexed_element_t<1>>;
+using e2_t=vector::basis_element_t<group::indexed_element_t<2>>;
+using e3_t=vector::basis_element_t<group::indexed_element_t<3>>;
 
 template<class A, class B> constexpr auto operator+(A const& a, B const& b){
 	return vector::add_operation_t<double>::apply(a,b);

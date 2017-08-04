@@ -2,7 +2,7 @@
 #define MATHS_GROUP_GEOMETRIC_H 
 
 #include"operation.h"
-#include"../geometry/direction.h"
+#include"commutation.h"
 
 #include<boost/hana.hpp>
 
@@ -10,8 +10,8 @@
 
 namespace group::geometric{
 	//basis vectors
-	template<unsigned short i> struct direction_positive_t:geometry::direction_t<i>{};
-	template<unsigned short i> struct direction_negative_t:geometry::direction_t<-i>{};
+	template<unsigned short i> struct direction_positive_t:indexed_element_t<i>{};
+	template<unsigned short i> struct direction_negative_t:indexed_element_t<-i>{};
 
 	template<class> struct is_direction_t: std::false_type{};
 	template<unsigned short i> struct is_direction_t<direction_positive_t<i>>: std::true_type{};

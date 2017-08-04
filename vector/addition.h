@@ -2,6 +2,7 @@
 #define ADDITION_H 
 
 #include"basis.h"
+#include"../group/commutation.h"
 #include"../group/operation.h"
 #include"../group/inverse.h"
 
