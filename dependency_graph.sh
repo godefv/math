@@ -21,7 +21,7 @@ echo "strict digraph dependency_graph {"
 for file in $files; do
 	node=$(node_from_path $file)
 	[[ $file =~ ".test.cpp" && $module_graph == 0 ]] && echo "${node} [shape=box]"
-	(for include_path in `g++ $file -std=c++17 -fconcepts -I. -E -H 2>&1 >/dev/null |grep "^\. [^/]"|sed "s/^\. //"`; do node_from_path $include_path; done)|sed "s@.*@${node} -> \0@"
+	(for include_path in `g++ $file -std=c++17 -fconcepts -I. -E -H 2>&1 >/dev/null |grep "^\. [^/]"|sed "s/^\. //"`; do dependancy=$(node_from_path $include_path); [[ $dependancy != $node ]] && echo $dependancy; done)|sed "s@.*@${node} -> \0@"
 done
 
 if [[ $module_graph == 0 ]]; then
