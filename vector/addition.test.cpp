@@ -1,5 +1,4 @@
 #include"addition.h"
-#include"formatting.h"
 #include"../unit_test.h"
 
 #include<cstdlib>

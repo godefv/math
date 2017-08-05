@@ -1,7 +1,5 @@
 #include"rotation.h"
-#include"slice.h"
 #include"../algebra/geometric.h"
-#include"../vector/formatting.h"
 #include"../unit_test.h"
 
 //generators

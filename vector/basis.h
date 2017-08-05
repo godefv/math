@@ -3,6 +3,8 @@
 
 #include"scalar.h"
 
+#include<iostream>
+
 namespace vector{
 	template<class ElementT, Scalar ScalarT=double> 
 	struct basis_element_t{
@@ -28,9 +30,12 @@ namespace vector{
 	auto constexpr operator*(Scalar const& a, basis_element_t<ElementT, ScalarT> const& b){
 		return basis_element_t<ElementT, ScalarT>{a*b.coordinate};
 	}
-	template<class ElementT> 
-	auto constexpr operator*(basis_element_t<ElementT, Scalar> const& a, Scalar const& b){
+	auto constexpr operator*(basis_element_t<auto, Scalar> const& a, Scalar const& b){
 		return b*a;
+	}
+
+	std::ostream& operator<<(std::ostream& out, basis_element_t<auto, Scalar> const& a){
+		return out<<a.coordinate<<" * "<<a.element();
 	}
 }
 

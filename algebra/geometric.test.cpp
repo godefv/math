@@ -1,7 +1,6 @@
 #include"geometric.h"
 #include"exponential.h"
 #include"reverse.h"
-#include"../vector/formatting.h"
 #include"../unit_test.h"
 
 //generators

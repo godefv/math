@@ -6,6 +6,8 @@
 #include"../group/operation.h"
 #include"../group/inverse.h"
 
+#include<iostream>
+
 namespace vector{
 	template<Scalar ScalarT=double> 
 	struct add_operation_t{
@@ -40,6 +42,10 @@ namespace vector{
 			return group::inverse<add_operation_t>(a);
 		}
 	};
+
+	std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t<Scalar>, auto, auto> const& ab){
+		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
+	}
 }
 
 #endif /* ADDITION_H */
