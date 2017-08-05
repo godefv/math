@@ -13,10 +13,10 @@ namespace algebra{
 		auto angle=std::sqrt(std::abs(square.coordinate));
 		using ScalarT=decltype(angle);
 		auto constexpr one=decltype(square){static_cast<ScalarT>(1.0)};
-		if(angle<std::numeric_limits<ScalarT>::epsilon()*10){
+		if(angle<=std::numeric_limits<ScalarT>::epsilon()*10){
 			return one+a;
 		}
-		auto normalized_a=a*(1./angle);
+		auto normalized_a=a/angle;
 		if(square.coordinate>0){
 			return std::cosh(angle)*one+std::sinh(angle)*normalized_a;
 		}else{

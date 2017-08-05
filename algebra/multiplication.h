@@ -46,8 +46,9 @@ namespace algebra{
 			return add_operation_t::apply(apply(a.first,b), apply(a.second,b));
 		}
 
+		static constexpr auto inverse(vector::Scalar const& a){return 1/a;}
 		static constexpr auto inverse(basis_element_t<auto> const& a){
-			return basis_element(OperatorT::inverse(a.element()),1/a.coordinate);
+			return basis_element(OperatorT::inverse(a.element()),inverse(a.coordinate));
 		}
 	};
 }

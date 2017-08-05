@@ -18,8 +18,10 @@ namespace algebra::geometric{
 	namespace hana=boost::hana;
 	using namespace hana::literals;
 
-	auto constexpr grades(group::identity_t<add_operation_t<auto>> const& a){return hana::make_set();}
-	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return hana::make_set(hana::llong_c<grade(a.element())>);}
+	template<int... Is>
+	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
+	auto constexpr grades(group::identity_t<add_operation_t<auto>> const& a){return grades<>();}
+	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return grades<grade(a.element())>();}
 	auto constexpr grades(group::generated_element_t<add_operation_t<auto>, auto,auto> const& a){
 		return hana::union_(grades(a.first), grades(a.second));
 	}
@@ -60,16 +62,19 @@ namespace algebra::geometric{
 	vector::Scalar{ScalarT} using   dot_operation_t=algebra::mult_operation_t<  group_dot_operation_t, ScalarT>;
 
 	namespace operators{
-		template<class A, class B> constexpr auto operator*(A const& a, B const& b){
+		constexpr auto operator*(auto const& a, auto const& b){
 			return mult_operation_t<double>::apply(a,b);
 		}
-		template<class A, class B> constexpr auto operator+(A const& a, B const& b){
+		constexpr auto operator/(auto const& a, auto const& b){
+			return a*mult_operation_t<double>::inverse(b);
+		}
+		constexpr auto operator+(auto const& a, auto const& b){
 			return add_operation_t<double>::apply(a,b);
 		}
-		template<class A> constexpr auto operator-(A const& a){
+		constexpr auto operator-(auto const& a){
 			return add_operation_t<double>::inverse(a);
 		}
-		template<class A, class B> constexpr auto operator-(A const& a, B const& b){
+		constexpr auto operator-(auto const& a, auto const& b){
 			return a+(-b);
 		}
 		constexpr auto operator^(auto const& a, auto const& b){
