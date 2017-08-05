@@ -1,6 +1,8 @@
 #ifndef GEOMETRY_SLICE_H
 #define GEOMETRY_SLICE_H 
 
+#include"../algebra/geometric.h"
+
 #include<boost/hana.hpp>
 
 namespace geometry{
@@ -8,8 +10,12 @@ namespace geometry{
 	struct slice_t{
 		boost::hana::tuple<DirectionTypes...> directions;
 
-		slice_t()=default;
-		slice_t(DirectionTypes const&... directions_):directions{boost::hana::make_tuple(directions_...)}{}
+		constexpr slice_t()=default;
+		constexpr slice_t(DirectionTypes const&... directions_):directions{boost::hana::make_tuple(directions_...)}{}
+
+		auto constexpr blade() const{
+			return boost::hana::fold(directions, [](auto const& a, auto const& b){return a^b;});
+		}
 	};
 
 	template<class Direction1, class Direction2>

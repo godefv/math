@@ -6,17 +6,17 @@
 #include"../algebra/geometric.h"
 #include"../algebra/reverse.h"
 
-#include<boost/hana.hpp>
-
 namespace geometry{
 	template<class Direction1, class Direction2, class AngleT=double>
 	struct rotation_t{
 		plane_t<Direction1,Direction2> plane;
 		AngleT angle;
 
-		constexpr auto quaternion(){
-			using namespace boost::hana::literals;
-			return algebra::exp((angle/2)*plane.directions[1_c]*plane.directions[0_c]);
+		constexpr auto bivector() const{
+			return angle*plane.blade();
+		}
+		constexpr auto quaternion() const{
+			return algebra::exp(0.5*bivector());
 		}
 		constexpr auto operator()(auto const& a){
 			auto q=quaternion();
