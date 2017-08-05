@@ -11,7 +11,7 @@ namespace group{
 	};
 
 	template<class Operator, class A>
-	constexpr auto inverse(A const& a){return generated_inverse_t<Operator, A>{a};}
+	constexpr auto inverse(A const& a){return generated_inverse_t<Operator, A>{Operator{}, a};}
 	//inverse of inverse is self
 	template<class Operator, class A>
 	constexpr auto inverse(generated_inverse_t<Operator, A> const& a){return a.value_before_inverse;}
