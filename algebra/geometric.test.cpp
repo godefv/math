@@ -8,6 +8,7 @@
 using e1_t=group::geometric::direction_positive_t<1>;
 using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_positive_t<3>;
+using n1_t=group::geometric::direction_negative_t<1>;
 
 using namespace algebra::geometric::operators;
 
@@ -16,6 +17,7 @@ static constexpr auto one=1.*group::geometric::one;
 static constexpr auto e1=1.*e1_t{};
 static constexpr auto e2=1.*e2_t{};
 static constexpr auto e3=1.*e3_t{};
+static constexpr auto n1=1.*n1_t{};
 
 int main(){
 	auto a=2.*e1;
@@ -58,6 +60,20 @@ int main(){
 	check_equal(algebra::geometric::project(one+e1, hana::make_set(0_c)), one);
 	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,2_c)), one+e1*e2);
 	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,3_c)), one);
+	//wedge
+	{auto constexpr e1e2=algebra::geometric::group_wedge_operation_t::apply(e1_t{}, e2_t{});}
+	{auto constexpr e1e2=e1^e2;}
+	check_equal(e1^e1, zero);
+	check_equal(e1^e2, e1*e2);
+	check_equal(e1^n1, e1*n1);
+	check_equal(e1^(e2+e1), e1*e2);
+	//dot
+	{auto constexpr e1e2=algebra::geometric::group_dot_operation_t::apply(e1_t{}, e2_t{});}
+	{auto constexpr e1e2=e1|e2;}
+	check_equal(e1|e1, one);
+	check_equal(e1|e2, zero);
+	check_equal(e1|n1, zero);
+	check_equal(e1|(e2+e1), one);
  
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;

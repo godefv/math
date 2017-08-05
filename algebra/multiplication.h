@@ -34,13 +34,11 @@ namespace algebra{
 			return zero_;
 		}
 		//operation with basis vectors
-		template<class ElementA, class ElementB> 
-		static constexpr auto apply(basis_element_t<ElementA> const& a, basis_element_t<ElementB> const& b){
-			return basis_element(OperatorT::apply(ElementA{}, ElementB{}),a.coordinate*b.coordinate);
+		static constexpr auto apply(basis_element_t<auto> const& a, basis_element_t<auto> const& b){
+			return basis_element(OperatorT::apply(a.element(), b.element()),a.coordinate*b.coordinate);
 		}
 		//develop product over addition
-		template<class ElementT> 
-		static constexpr auto apply(ElementT const& a, group::generated_element_t<add_operation_t, auto,auto> const& b){
+		static constexpr auto apply(auto const& a, group::generated_element_t<add_operation_t, auto,auto> const& b){
 			return add_operation_t::apply(apply(a,b.first), apply(a,b.second));
 		}
 		template<class B> requires !group::Generated<add_operation_t, B>
@@ -48,8 +46,8 @@ namespace algebra{
 			return add_operation_t::apply(apply(a.first,b), apply(a.second,b));
 		}
 
-		template<class ElementT> static constexpr auto inverse(basis_element_t<ElementT> const& a){
-			return basis_element(OperatorT::inverse(ElementT{}),1/a.coordinate);
+		static constexpr auto inverse(basis_element_t<auto> const& a){
+			return basis_element(OperatorT::inverse(a.element()),1/a.coordinate);
 		}
 	};
 }

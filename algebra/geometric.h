@@ -14,21 +14,6 @@ namespace algebra::geometric{
 
 	auto constexpr zero=group::identity_t<add_operation_t<double>>{};
 
-	namespace operators{
-		template<class A, class B> constexpr auto operator*(A const& a, B const& b){
-			return mult_operation_t<double>::apply(a,b);
-		}
-		template<class A, class B> constexpr auto operator+(A const& a, B const& b){
-			return add_operation_t<double>::apply(a,b);
-		}
-		template<class A> constexpr auto operator-(A const& a){
-			return add_operation_t<double>::inverse(a);
-		}
-		template<class A, class B> constexpr auto operator-(A const& a, B const& b){
-			return a+(-b);
-		}
-	}
-
 	namespace hana=boost::hana;
 	using namespace hana::literals;
 
@@ -48,6 +33,50 @@ namespace algebra::geometric{
 	}
 	auto constexpr project(group::generated_element_t<add_operation_t<auto>, auto,auto> const& a, auto grades){
 		return std::decay_t<decltype(a.operation)>::apply(project(a.first, grades), project(a.second, grades));
+	}
+
+	struct group_wedge_operation_t{
+		static auto constexpr apply(auto a, auto b){
+			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==grade(a)+grade(b)){
+				return group::geometric::mult_operation_t::apply(a,b);
+			}else{
+				return zero;
+			}
+		}
+	};
+
+	struct group_dot_operation_t{
+		static auto constexpr apply(auto a, auto b){
+			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==std::abs(grade(a)-grade(b))){
+				return group::geometric::mult_operation_t::apply(a,b);
+			}else{
+				return zero;
+			}
+		}
+	};
+
+	vector::Scalar{ScalarT} using wedge_operation_t=algebra::mult_operation_t<group_wedge_operation_t, ScalarT>;
+	vector::Scalar{ScalarT} using   dot_operation_t=algebra::mult_operation_t<  group_dot_operation_t, ScalarT>;
+
+	namespace operators{
+		template<class A, class B> constexpr auto operator*(A const& a, B const& b){
+			return mult_operation_t<double>::apply(a,b);
+		}
+		template<class A, class B> constexpr auto operator+(A const& a, B const& b){
+			return add_operation_t<double>::apply(a,b);
+		}
+		template<class A> constexpr auto operator-(A const& a){
+			return add_operation_t<double>::inverse(a);
+		}
+		template<class A, class B> constexpr auto operator-(A const& a, B const& b){
+			return a+(-b);
+		}
+		constexpr auto operator^(auto const& a, auto const& b){
+			return wedge_operation_t<double>::apply(a,b);
+		}
+		constexpr auto operator|(auto const& a, auto const& b){
+			return dot_operation_t<double>::apply(a,b);
+		}
 	}
 }
 #endif /* ALGEBRA_GEOMETRIC_H */
