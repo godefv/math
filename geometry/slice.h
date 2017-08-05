@@ -14,7 +14,7 @@ namespace geometry{
 		constexpr slice_t(DirectionTypes const&... directions_):directions{boost::hana::make_tuple(directions_...)}{}
 
 		auto constexpr blade() const{
-			return boost::hana::fold(directions, [](auto const& a, auto const& b){return a^b;});
+			return algebra::geometric::normalized(boost::hana::fold(directions, [](auto const& a, auto const& b){return a^b;}));
 		}
 	};
 

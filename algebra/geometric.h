@@ -7,6 +7,7 @@
 #include"multiplication.h"
 
 #include<boost/hana.hpp>
+#include<cmath>
 
 namespace algebra::geometric{
 	vector::Scalar{ScalarT} using  add_operation_t=vector:: add_operation_t<ScalarT>;
@@ -78,5 +79,12 @@ namespace algebra::geometric{
 			return dot_operation_t<double>::apply(a,b);
 		}
 	}
+
+	auto constexpr norm(auto const& a){
+		vector::basis_element_t<group::identity_t<group::geometric::mult_operation_t>, auto> a_square=(a|a);
+		return std::sqrt(std::abs(a_square.coordinate));
+	}
+
+	auto constexpr normalized(auto const& a){return a/norm(a);}
 }
 #endif /* ALGEBRA_GEOMETRIC_H */
