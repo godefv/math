@@ -59,6 +59,7 @@ namespace group::geometric{
 	template<class A, class B> using mult_t=decltype(mult_operation_t::apply(A{}, B{}));
 
 	static constexpr auto one=group::geometric::one_t{};
+
 	namespace operators{
 		constexpr auto operator*(auto const& a, auto const& b){
 			return mult_operation_t::apply(a,b);
@@ -75,6 +76,9 @@ namespace group::geometric{
 	auto constexpr grade(group::identity_t<mult_operation_t> const& a){return 0;}
 	auto constexpr grade(group::generated_element_t<mult_operation_t, auto,auto> const& a){
 		return grade(a.first)+grade(a.second);
+	}
+	auto constexpr grade(group::generated_minus_t<mult_operation_t, auto> const& a){
+		return grade(a.value);
 	}
 	auto constexpr grade(auto const& a){return 1;}
 
