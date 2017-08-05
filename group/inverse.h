@@ -9,12 +9,13 @@ namespace group{
 		Operator operation;
 		T value_before_inverse;
 	};
+	template<class Operator, class T> generated_inverse_t(Operator,T)->generated_inverse_t<Operator,T>;
 
-	template<class Operator, class A>
-	constexpr auto inverse(A const& a){return generated_inverse_t<Operator, A>{Operator{}, a};}
+	template<class Operator>
+	constexpr auto inverse(auto const& a){return generated_inverse_t{Operator{}, a};}
 	//inverse of inverse is self
-	template<class Operator, class A>
-	constexpr auto inverse(generated_inverse_t<Operator, A> const& a){return a.value_before_inverse;}
+	template<class Operator>
+	constexpr auto inverse(generated_inverse_t<Operator, auto> const& a){return a.value_before_inverse;}
 	//inverse of identity is identity
 	template<class Operator>
 	constexpr auto inverse(identity_t<Operator> const& a){return a;}
