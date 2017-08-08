@@ -23,7 +23,7 @@ int main(){
 	auto a=2.*e1;
 	auto b=3.*e2;
 	auto c=5.*e3;
-	auto xy=e1*e2;
+	auto xy=e1*e2; unused(xy);
 
 	//colinear
 	check_equal(a+a, 2.*a);
@@ -61,15 +61,15 @@ int main(){
 	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,2_c)), one+e1*e2);
 	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,3_c)), one);
 	//wedge
-	{auto constexpr e1e2=algebra::geometric::group_wedge_operation_t::apply(e1_t{}, e2_t{});}
-	{auto constexpr e1e2=e1^e2;}
+	{auto constexpr e1e2=algebra::geometric::group_wedge_operation_t::apply(e1_t{}, e2_t{}); unused(e1e2);}
+	{auto constexpr e1e2=e1^e2; unused(e1e2);}
 	check_equal(e1^e1, zero);
 	check_equal(e1^e2, e1*e2);
 	check_equal(e1^n1, e1*n1);
 	check_equal(e1^(e2+e1), e1*e2);
 	//dot
-	{auto constexpr e1e2=algebra::geometric::group_dot_operation_t::apply(e1_t{}, e2_t{});}
-	{auto constexpr e1e2=e1|e2;}
+	{auto constexpr e1e2=algebra::geometric::group_dot_operation_t::apply(e1_t{}, e2_t{}); unused(e1e2);}
+	{auto constexpr e1e2=e1|e2; unused(e1e2);}
 	check_equal(e1|e1, one);
 	check_equal(e1|e2, zero);
 	check_equal(e1|n1, zero);

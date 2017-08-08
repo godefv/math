@@ -15,7 +15,7 @@ namespace group{
 									;
 
 	template<class Operator>
-	bool constexpr operator==(identity_t<Operator> const& a, identity_t<Operator> const& b){
+	bool constexpr operator==(identity_t<Operator> const& /*a*/, identity_t<Operator> const& /*b*/){
 		return true;
 	}
 	template<class Operator>
@@ -24,7 +24,7 @@ namespace group{
 	}
 
 	template<class BinaryOperator>
-	std::ostream& operator<<(std::ostream& out, identity_t<BinaryOperator> const& a){
+	std::ostream& operator<<(std::ostream& out, identity_t<BinaryOperator> const& /*a*/){
 		return out<<"id<"<<typeid(BinaryOperator).name()<<">";
 	}
 } 

@@ -26,8 +26,8 @@ int main(){
 	std::cout<<"hyperbolic quaternion("<<e1.element()<<","<<e3.element()<<"): "<<rotation2.quaternion()<<std::endl;
 	std::cout<<e1.element()<<"->"<<rotation2(e1)<<std::endl;
 	std::cout<<e3.element()<<"->"<<rotation2(e3)<<std::endl;
-	rotation1.plane;
-	rotation1.angle;
+	auto plane=rotation1.plane; unused(plane);
+	auto angle=rotation1.angle; unused(angle);
 
 	return 0;
 }
