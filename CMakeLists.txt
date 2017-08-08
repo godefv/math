@@ -5,6 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts" ) 
 
+if(NOT CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
+    message(FATAL_ERROR "Require at least gcc-7.0")
+endif()
+
+# Boost >= 1.61 for hana
+find_package(Boost 1.61.0 REQUIRED)
+
 enable_testing()
 
 function(math_add_test module)
