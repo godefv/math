@@ -17,4 +17,6 @@ void print_type(auto const& a){
 	std::cout<<typeid(a).name()<<std::endl;
 }
 
+inline auto unused(auto const& a){ static_cast<void>(a); }
+
 #endif /* UNIT_TEST_H */

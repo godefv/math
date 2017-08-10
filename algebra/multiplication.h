@@ -19,7 +19,7 @@ namespace algebra{
 			return apply(b,a);
 		}
 		template<class ElementT> requires !group::Generated<add_operation_t, ElementT>
-		static constexpr auto apply(ScalarT const& a, ElementT const& b){
+		static constexpr auto apply(ScalarT const& a, ElementT const& /*b*/){
 			return basis_element_t<ElementT>{a};
 		}
 		template<class ElementT> requires !group::Generated<add_operation_t, ElementT>

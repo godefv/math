@@ -21,7 +21,7 @@ using namespace group::geometric::operators;
 using group::geometric::one;
 
 #define DEBUG_MULT_OPERATION 0
-void test_mult_operations(){
+static void test_mult_operations(){
 	//inverse of inverse
 	check_equal(inverse(inverse(e1)), e1);
 	check_equal(inverse(inverse(e3)), e3);

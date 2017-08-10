@@ -9,7 +9,7 @@ namespace group{
 	template<int i> constexpr int index(indexed_element_t<i>){return i;}
 
 	template<int ia, int ib>
-	constexpr int static_compare(indexed_element_t<ia> const& A, indexed_element_t<ib> const& B){return ib-ia;}
+	constexpr int static_compare(indexed_element_t<ia> const& /*A*/, indexed_element_t<ib> const& /*B*/){return ib-ia;}
 
 	template<int i>
 	bool constexpr operator==(indexed_element_t<i> const&, indexed_element_t<i> const&){
@@ -21,7 +21,7 @@ namespace group{
 	}
 
 	template<int i>
-	std::ostream& operator<<(std::ostream& out, indexed_element_t<i> const& a){
+	std::ostream& operator<<(std::ostream& out, indexed_element_t<i> const& /*a*/){
 		return out<<"e"<<i;
 	}
 }
