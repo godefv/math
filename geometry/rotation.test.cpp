@@ -25,8 +25,8 @@ int main(){
 	std::cout<<"hyperbolic quaternion("<<e1.element()<<","<<e3.element()<<"): "<<rotation2.quaternion()<<std::endl;
 	std::cout<<e1.element()<<"->"<<rotation2(e1)<<std::endl;
 	std::cout<<e3.element()<<"->"<<rotation2(e3)<<std::endl;
-	rotation1.plane;
-	rotation1.angle;
+	unused(rotation1.plane);
+	unused(rotation1.angle);
 
 	//auto constexpr rotation12=geometry::compose_operation_t::apply(rotation1, rotation2);
 

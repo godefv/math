@@ -36,7 +36,7 @@ namespace group::geometric{
 		}
 		//group order of basis vectors
 		template<unsigned short i> 
-		static constexpr auto apply(direction_negative_t<i> const& a, direction_negative_t<i> const& b){
+		static constexpr auto apply(direction_negative_t<i> const&, direction_negative_t<i> const&){
 			return group::minus<mult_operation_t>(group::identity_t<mult_operation_t>{});
 		};
 		//group rules
@@ -73,14 +73,14 @@ namespace group::geometric{
 	}
 
 	//grade
-	auto constexpr grade(group::identity_t<mult_operation_t> const& a){return 0;}
+	auto constexpr grade(group::identity_t<mult_operation_t> const&){return 0;}
 	auto constexpr grade(group::generated_element_t<mult_operation_t, auto,auto> const& a){
 		return grade(a.first)+grade(a.second);
 	}
 	auto constexpr grade(group::generated_minus_t<mult_operation_t, auto> const& a){
 		return grade(a.value);
 	}
-	auto constexpr grade(auto const& a){return 1;}
+	auto constexpr grade(auto const&){return 1;}
 
 	//mult functions
 	namespace hana=boost::hana;
@@ -99,7 +99,7 @@ namespace group::geometric{
 	std::ostream& operator<<(std::ostream& out, direction_negative_t<i> const&){
 		return out<<"n"<<i;
 	}
-	std::ostream& operator<<(std::ostream& out, one_t const&){
+	inline std::ostream& operator<<(std::ostream& out, one_t const&){
 		return out<<"one";
 	}
 }
