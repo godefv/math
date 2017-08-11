@@ -8,7 +8,7 @@
 
 namespace geometry{
 	template<class Direction1, class Direction2, class AngleT=double>
-	struct rotation_t{
+	struct simple_rotation_t{
 		plane_t<Direction1,Direction2> plane;
 		AngleT angle;
 
@@ -18,14 +18,14 @@ namespace geometry{
 		constexpr auto quaternion() const{
 			return algebra::exp(0.5*bivector());
 		}
-		constexpr auto operator()(auto const& a){
+		constexpr auto operator()(auto const& a) const{
 			auto q=quaternion();
 			return algebra::geometric::project(q*a*reverse(q), algebra::geometric::grades(a));
 		}
 	};
 
 	template<class Direction1, class Direction2, class AngleT>
-	rotation_t(plane_t<Direction1,Direction2> const& plane, AngleT const& angle)->rotation_t<Direction1,Direction2,AngleT>;
+	simple_rotation_t(plane_t<Direction1,Direction2> const& plane, AngleT const& angle)->simple_rotation_t<Direction1,Direction2,AngleT>;
 }
 
 #endif /* GEOMETRY_ROTATION_H */
