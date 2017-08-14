@@ -13,7 +13,7 @@ namespace algebra::geometric{
 	using  add_operation_t=vector:: add_operation_t;
 	using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t>;
 
-	auto constexpr zero=group::identity_t<add_operation_t>{};
+	using vector::zero;
 
 	namespace hana=boost::hana;
 	using namespace hana::literals;

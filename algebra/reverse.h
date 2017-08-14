@@ -2,8 +2,8 @@
 #define ALGEBRA_REVERSE_H 
 
 #include"multiplication.h"
-#include"basis.h"
 #include"../group/reverse.h"
+#include"../vector/basis.h"
 #include"../vector/addition.h"
 
 namespace vector{
@@ -12,7 +12,7 @@ namespace vector{
 	}
 	template<class OperatorT, class A,class B> 
 	constexpr auto reverse(basis_element_t<group::generated_element_t<OperatorT, A,B>, Scalar> const& ab){
-		return algebra::basis_element(group::reverse(ab.element), ab.coordinate);
+		return basis_element(group::reverse(ab.element), ab.coordinate);
 	}
 }
 
