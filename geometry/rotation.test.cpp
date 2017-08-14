@@ -7,11 +7,12 @@ static constexpr auto e2=vector::basis_element_t{group::geometric::direction_pos
 static constexpr auto e3=vector::basis_element_t{group::geometric::direction_negative_t<3>{}, 1.};
 
 int main(){
+	using math::pi;
 	using namespace algebra::geometric::operators;
 
-	auto constexpr rotation1=geometry::simple_rotation_t{geometry::plane(e1,e2), M_PI/2};
-	auto constexpr rotation2=geometry::simple_rotation_t{geometry::plane(e1,e3), M_PI/2};
-	auto constexpr q=rotation1.quaternion();
+	auto constexpr rotation1=geometry::simple_rotation_t{geometry::plane(e1,e2), pi/2};
+	auto constexpr rotation2=geometry::simple_rotation_t{geometry::plane(e1,e3), pi/2};
+	{auto constexpr q=rotation1.quaternion();unused(q);}
 
 	std::cout<<"cyclic quaternion("<<e1.element<<","<<e2.element<<"): "<<rotation1.quaternion()<<std::endl;
 	std::cout<<e1+e3<<"->"<<rotation1(e1+e3)<<std::endl;

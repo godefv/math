@@ -10,6 +10,7 @@ using e3_t=group::geometric::direction_positive_t<3>;
 using n1_t=group::geometric::direction_negative_t<1>;
 
 using namespace algebra::geometric::operators;
+using math::pi;
 
 static constexpr auto zero=group::identity_t<algebra::geometric::add_operation_t>{};
 static constexpr auto one=1.*group::geometric::one;
@@ -72,12 +73,13 @@ int main(){
 	check_equal(e1|e2, zero);
 	check_equal(e1|n1, zero);
 	check_equal(e1|(e2+e1), one);
+	check_equal((e1^e2)|(e1^e2), -one);
  
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3))<<std::endl;
 	std::cout<<"projected : "<<algebra::geometric::project(0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3)), hana::make_set(1_c))<<std::endl;
-	std::cout<<"quaternion: "<<algebra::exp(M_PI/4*e1*e2)<<std::endl;
-	std::cout<<"reversed  : "<<reverse(algebra::exp(M_PI/4*e1*e2))<<std::endl;
+	std::cout<<"quaternion: "<<algebra::exp(pi/4*e1*e2)<<std::endl;
+	std::cout<<"reversed  : "<<reverse(algebra::exp(pi/4*e1*e2))<<std::endl;
 
 	return 0;
 }
