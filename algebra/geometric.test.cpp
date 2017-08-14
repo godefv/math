@@ -9,17 +9,17 @@ using e2_t=group::geometric::direction_positive_t<2>;
 using e3_t=group::geometric::direction_positive_t<3>;
 using n1_t=group::geometric::direction_negative_t<1>;
 
-using namespace algebra::geometric::operators;
-using math::pi;
-
 static constexpr auto zero=group::identity_t<algebra::geometric::add_operation_t>{};
-static constexpr auto one=1.*group::geometric::one;
-static constexpr auto e1=1.*e1_t{};
-static constexpr auto e2=1.*e2_t{};
-static constexpr auto e3=1.*e3_t{};
-static constexpr auto n1=1.*n1_t{};
+static constexpr auto one=vector::basis_element_t{group::geometric::one, 1.};
+static constexpr auto e1=vector::basis_element_t{e1_t{}, 1.};
+static constexpr auto e2=vector::basis_element_t{e2_t{}, 1.};
+static constexpr auto e3=vector::basis_element_t{e3_t{}, 1.};
+static constexpr auto n1=vector::basis_element_t{n1_t{}, 1.};
 
 int main(){
+	using namespace algebra::geometric::operators;
+	using math::pi;
+
 	auto a=2.*e1;
 	auto b=3.*e2;
 	auto c=5.*e3;

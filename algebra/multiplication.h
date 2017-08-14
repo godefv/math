@@ -14,14 +14,6 @@ namespace algebra{
 		static constexpr auto apply(vector::basis_element_t<auto> const& a, vector::Scalar const& b){
 			return apply(b,a);
 		}
-		template<class ElementT> requires !group::Generated<vector::add_operation_t, ElementT>
-		static constexpr auto apply(vector::Scalar const& a, ElementT const& e){
-			return vector::basis_element_t{e,a};
-		}
-		template<class ElementT> requires !group::Generated<vector::add_operation_t, ElementT>
-		static constexpr auto apply(ElementT const& a, vector::Scalar const& b){
-			return apply(b,a);
-		}
 		//operation with zero
 		static constexpr auto apply(group::identity_t<vector::add_operation_t> zero_, vector::basis_element_t<auto> const&){
 			return zero_;
