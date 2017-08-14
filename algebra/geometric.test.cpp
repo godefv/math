@@ -11,7 +11,7 @@ using n1_t=group::geometric::direction_negative_t<1>;
 
 using namespace algebra::geometric::operators;
 
-static constexpr auto zero=group::identity_t<algebra::geometric::add_operation_t<double>>{};
+static constexpr auto zero=group::identity_t<algebra::geometric::add_operation_t>{};
 static constexpr auto one=1.*group::geometric::one;
 static constexpr auto e1=1.*e1_t{};
 static constexpr auto e2=1.*e2_t{};
@@ -31,7 +31,7 @@ int main(){
 	check_equal(a*b, vector::basis_element_t{group::geometric::mult_t<e1_t,e2_t>{}, a.coordinate*b.coordinate});
 	//commutation
 	static_assert(static_compare(e1,e2)>0);
-	check_equal(a+b, group::generated_element_t{algebra::geometric::add_operation_t<double>{},a,b});
+	check_equal(a+b, group::generated_element_t{algebra::geometric::add_operation_t{},a,b});
 	check_equal(b+a, a+b);
 	check_equal(a+b+a, 2.*a+b);
 	check_equal(b+a+b, a+2.*b);

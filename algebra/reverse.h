@@ -17,7 +17,7 @@ namespace vector{
 }
 
 namespace algebra{
-	constexpr auto reverse(group::generated_element_t<vector::add_operation_t<auto>, auto,auto> const& ab){
+	constexpr auto reverse(group::generated_element_t<vector::add_operation_t, auto,auto> const& ab){
 		return std::decay_t<decltype(ab.operation)>::apply(reverse(ab.first), reverse(ab.second));
 	}
 }

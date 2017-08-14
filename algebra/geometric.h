@@ -10,23 +10,23 @@
 #include<cmath>
 
 namespace algebra::geometric{
-	vector::Scalar{ScalarT} using  add_operation_t=vector:: add_operation_t<ScalarT>;
+	using  add_operation_t=vector:: add_operation_t;
 	vector::Scalar{ScalarT} using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t, ScalarT>;
 
-	auto constexpr zero=group::identity_t<add_operation_t<double>>{};
+	auto constexpr zero=group::identity_t<add_operation_t>{};
 
 	namespace hana=boost::hana;
 	using namespace hana::literals;
 
 	template<int... Is>
 	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
-	auto constexpr grades(group::identity_t<add_operation_t<auto>> const& a){return grades<>();}
+	auto constexpr grades(group::identity_t<add_operation_t> const&){return grades<>();}
 	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return grades<grade(a.element)>();}
-	auto constexpr grades(group::generated_element_t<add_operation_t<auto>, auto,auto> const& a){
+	auto constexpr grades(group::generated_element_t<add_operation_t, auto,auto> const& a){
 		return hana::union_(grades(a.first), grades(a.second));
 	}
 
-	auto constexpr project(group::identity_t<add_operation_t<auto>> const& a, auto const& grades){return zero;}
+	auto constexpr project(group::identity_t<add_operation_t> const& a, auto const& grades){return zero;}
 	auto constexpr project(vector::basis_element_t<auto,auto> const& a, auto grades){
 		if constexpr(hana::find(grades, hana::llong_c<grade(a.element)>)==hana::nothing){
 			return zero;
@@ -34,7 +34,7 @@ namespace algebra::geometric{
 			return a;
 		}
 	}
-	auto constexpr project(group::generated_element_t<add_operation_t<auto>, auto,auto> const& a, auto grades){
+	auto constexpr project(group::generated_element_t<add_operation_t, auto,auto> const& a, auto grades){
 		return std::decay_t<decltype(a.operation)>::apply(project(a.first, grades), project(a.second, grades));
 	}
 
@@ -69,10 +69,10 @@ namespace algebra::geometric{
 			return a*mult_operation_t<double>::inverse(b);
 		}
 		constexpr auto operator+(auto const& a, auto const& b){
-			return add_operation_t<double>::apply(a,b);
+			return add_operation_t::apply(a,b);
 		}
 		constexpr auto operator-(auto const& a){
-			return add_operation_t<double>::inverse(a);
+			return add_operation_t::inverse(a);
 		}
 		constexpr auto operator-(auto const& a, auto const& b){
 			return a+(-b);

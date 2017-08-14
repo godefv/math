@@ -16,7 +16,7 @@ namespace algebra{
 	constexpr auto basis_element(group::generated_minus_t<OperatorT, ElementT> const& a, ScalarT const& s){
 		return vector::basis_element_t{a.value,-s};
 	}
-	constexpr auto basis_element(group::identity_t<vector::add_operation_t<auto>> a, vector::Scalar const&){
+	constexpr auto basis_element(group::identity_t<vector::add_operation_t> a, vector::Scalar const&){
 		return a;
 	}
 }

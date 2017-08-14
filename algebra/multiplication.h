@@ -7,7 +7,7 @@
 namespace algebra{
 	template<class OperatorT, class ScalarT>
 	struct mult_operation_t{
-		using add_operation_t=vector::add_operation_t<ScalarT>;
+		using add_operation_t=vector::add_operation_t;
 		template<class ElementT>
 		using basis_element_t=vector::basis_element_t<ElementT>;
 
@@ -27,10 +27,10 @@ namespace algebra{
 			return apply(b,a);
 		}
 		//operation with zero
-		static constexpr auto apply(group::identity_t<vector::add_operation_t<auto>> zero_, basis_element_t<auto> const&){
+		static constexpr auto apply(group::identity_t<vector::add_operation_t> zero_, basis_element_t<auto> const&){
 			return zero_;
 		}
-		static constexpr auto apply(basis_element_t<auto> const&, group::identity_t<vector::add_operation_t<auto>> zero_){
+		static constexpr auto apply(basis_element_t<auto> const&, group::identity_t<vector::add_operation_t> zero_){
 			return zero_;
 		}
 		//operation with basis vectors

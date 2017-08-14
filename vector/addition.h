@@ -9,7 +9,6 @@
 #include<iostream>
 
 namespace vector{
-	template<Scalar ScalarT=double> 
 	struct add_operation_t{
 		//commutation rule
 		template<class ElementA, class ElementB>
@@ -40,7 +39,7 @@ namespace vector{
 		}
 	};
 
-	std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t<Scalar>, auto, auto> const& ab){
+	std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
 	}
 }
