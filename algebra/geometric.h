@@ -11,7 +11,7 @@
 
 namespace algebra::geometric{
 	using  add_operation_t=vector:: add_operation_t;
-	vector::Scalar{ScalarT} using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t, ScalarT>;
+	using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t>;
 
 	auto constexpr zero=group::identity_t<add_operation_t>{};
 
@@ -58,15 +58,15 @@ namespace algebra::geometric{
 		}
 	};
 
-	vector::Scalar{ScalarT} using wedge_operation_t=algebra::mult_operation_t<group_wedge_operation_t, ScalarT>;
-	vector::Scalar{ScalarT} using   dot_operation_t=algebra::mult_operation_t<  group_dot_operation_t, ScalarT>;
+	using wedge_operation_t=algebra::mult_operation_t<group_wedge_operation_t>;
+	using   dot_operation_t=algebra::mult_operation_t<  group_dot_operation_t>;
 
 	namespace operators{
 		constexpr auto operator*(auto const& a, auto const& b){
-			return mult_operation_t<double>::apply(a,b);
+			return mult_operation_t::apply(a,b);
 		}
 		constexpr auto operator/(auto const& a, auto const& b){
-			return a*mult_operation_t<double>::inverse(b);
+			return a*mult_operation_t::inverse(b);
 		}
 		constexpr auto operator+(auto const& a, auto const& b){
 			return add_operation_t::apply(a,b);
@@ -78,10 +78,10 @@ namespace algebra::geometric{
 			return a+(-b);
 		}
 		constexpr auto operator^(auto const& a, auto const& b){
-			return wedge_operation_t<double>::apply(a,b);
+			return wedge_operation_t::apply(a,b);
 		}
 		constexpr auto operator|(auto const& a, auto const& b){
-			return dot_operation_t<double>::apply(a,b);
+			return dot_operation_t::apply(a,b);
 		}
 	}
 
