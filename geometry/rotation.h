@@ -13,12 +13,15 @@ namespace geometry{
 		AngleT angle;
 
 		constexpr auto bivector() const{
+			using namespace algebra::geometric::operators;
 			return angle*plane.blade();
 		}
 		constexpr auto quaternion() const{
+			using namespace algebra::geometric::operators;
 			return algebra::exp(0.5*bivector());
 		}
 		constexpr auto operator()(auto const& a) const{
+			using namespace algebra::geometric::operators;
 			auto q=quaternion();
 			return algebra::geometric::project(q*a*reverse(q), algebra::geometric::grades(a));
 		}

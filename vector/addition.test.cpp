@@ -3,10 +3,6 @@
 
 #include<cstdlib>
 
-using e1_t=vector::basis_element_t<group::indexed_element_t<1>>;
-using e2_t=vector::basis_element_t<group::indexed_element_t<2>>;
-using e3_t=vector::basis_element_t<group::indexed_element_t<3>>;
-
 template<class A, class B> constexpr auto operator+(A const& a, B const& b){
 	return vector::add_operation_t<double>::apply(a,b);
 }
@@ -17,9 +13,9 @@ template<class A, class B> constexpr auto operator-(A const& a, B const& b){
 	return a+(-b);
 }
 
-static constexpr auto e1=e1_t{1.};
-static constexpr auto e2=e2_t{1.};
-static constexpr auto e3=e3_t{1.};
+static constexpr auto e1=vector::basis_element_t{group::indexed_element_t<1>{}, 1.};
+static constexpr auto e2=vector::basis_element_t{group::indexed_element_t<2>{}, 1.};
+static constexpr auto e3=vector::basis_element_t{group::indexed_element_t<3>{}, 1.};
 
 int main(){
 	//colinear

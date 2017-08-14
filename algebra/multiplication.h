@@ -9,18 +9,18 @@ namespace algebra{
 	struct mult_operation_t{
 		using add_operation_t=vector::add_operation_t<ScalarT>;
 		template<class ElementT>
-		using basis_element_t=typename add_operation_t::template basis_element_t<ElementT>;
+		using basis_element_t=vector::basis_element_t<ElementT>;
 
 		//operation with scalar
 		static constexpr auto apply(ScalarT const& a, basis_element_t<auto> const& b){
-			return std::decay_t<decltype(b)>{a*b.coordinate};
+			return std::decay_t<decltype(b)>{b.element, a*b.coordinate};
 		}
 		static constexpr auto apply(basis_element_t<auto> const& a, ScalarT const& b){
 			return apply(b,a);
 		}
 		template<class ElementT> requires !group::Generated<add_operation_t, ElementT>
-		static constexpr auto apply(ScalarT const& a, ElementT const&){
-			return basis_element_t<ElementT>{a};
+		static constexpr auto apply(ScalarT const& a, ElementT const& e){
+			return vector::basis_element_t{e,a};
 		}
 		template<class ElementT> requires !group::Generated<add_operation_t, ElementT>
 		static constexpr auto apply(ElementT const& a, ScalarT const& b){
@@ -35,7 +35,7 @@ namespace algebra{
 		}
 		//operation with basis vectors
 		static constexpr auto apply(basis_element_t<auto> const& a, basis_element_t<auto> const& b){
-			return basis_element(OperatorT::apply(a.element(), b.element()),a.coordinate*b.coordinate);
+			return basis_element(OperatorT::apply(a.element, b.element),a.coordinate*b.coordinate);
 		}
 		//develop product over addition
 		static constexpr auto apply(auto const& a, group::generated_element_t<add_operation_t, auto,auto> const& b){
@@ -48,7 +48,7 @@ namespace algebra{
 
 		static constexpr auto inverse(vector::Scalar const& a){return 1/a;}
 		static constexpr auto inverse(basis_element_t<auto> const& a){
-			return basis_element(OperatorT::inverse(a.element()),inverse(a.coordinate));
+			return basis_element(OperatorT::inverse(a.element),inverse(a.coordinate));
 		}
 	};
 }

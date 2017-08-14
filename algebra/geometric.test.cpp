@@ -28,7 +28,7 @@ int main(){
 	check_equal(-a, -1.*a);
 	check_equal(a-a, 0.*a);
 	//product of basis elements
-	check_equal(a*b, vector::basis_element_t<group::geometric::mult_t<e1_t,e2_t>, double>{a.coordinate*b.coordinate});
+	check_equal(a*b, vector::basis_element_t{group::geometric::mult_t<e1_t,e2_t>{}, a.coordinate*b.coordinate});
 	//commutation
 	static_assert(static_compare(e1,e2)>0);
 	check_equal(a+b, group::generated_element_t{algebra::geometric::add_operation_t<double>{},a,b});

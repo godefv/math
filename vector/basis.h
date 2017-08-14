@@ -8,12 +8,12 @@
 namespace vector{
 	template<class ElementT, Scalar ScalarT=double> 
 	struct basis_element_t{
+		ElementT element;
 		ScalarT coordinate;
-
-		auto constexpr element() const{return ElementT{};}
 	};
+	template<class ElementT, Scalar ScalarT> basis_element_t(ElementT,ScalarT)->basis_element_t<ElementT,ScalarT>;
 
-	constexpr int static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){return static_compare(a.element(),b.element());}
+	constexpr int static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){return static_compare(a.element,b.element);}
 
 	template<class ElementT> 
 	bool constexpr operator==(basis_element_t<ElementT, Scalar> const& a, basis_element_t<ElementT, Scalar> const& b){
@@ -28,14 +28,14 @@ namespace vector{
 
 	template<class ElementT, Scalar ScalarT> 
 	auto constexpr operator*(Scalar const& a, basis_element_t<ElementT, ScalarT> const& b){
-		return basis_element_t<ElementT, ScalarT>{a*b.coordinate};
+		return basis_element_t{b.element,a*b.coordinate};
 	}
 	auto constexpr operator*(basis_element_t<auto, Scalar> const& a, Scalar const& b){
 		return b*a;
 	}
 
 	std::ostream& operator<<(std::ostream& out, basis_element_t<auto, Scalar> const& a){
-		return out<<a.coordinate<<" * "<<a.element();
+		return out<<a.coordinate<<" * "<<a.element;
 	}
 }
 

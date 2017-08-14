@@ -73,6 +73,7 @@ namespace group::geometric{
 	}
 
 	//grade
+	auto constexpr grade(auto const&){return 1;}
 	auto constexpr grade(group::identity_t<mult_operation_t> const&){return 0;}
 	auto constexpr grade(group::generated_element_t<mult_operation_t, auto,auto> const& a){
 		return grade(a.first)+grade(a.second);
@@ -80,7 +81,6 @@ namespace group::geometric{
 	auto constexpr grade(group::generated_minus_t<mult_operation_t, auto> const& a){
 		return grade(a.value);
 	}
-	auto constexpr grade(auto const&){return 1;}
 
 	//mult functions
 	namespace hana=boost::hana;

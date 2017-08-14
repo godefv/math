@@ -21,14 +21,14 @@ namespace algebra::geometric{
 	template<int... Is>
 	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
 	auto constexpr grades(group::identity_t<add_operation_t<auto>> const& a){return grades<>();}
-	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return grades<grade(a.element())>();}
+	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return grades<grade(a.element)>();}
 	auto constexpr grades(group::generated_element_t<add_operation_t<auto>, auto,auto> const& a){
 		return hana::union_(grades(a.first), grades(a.second));
 	}
 
 	auto constexpr project(group::identity_t<add_operation_t<auto>> const& a, auto const& grades){return zero;}
 	auto constexpr project(vector::basis_element_t<auto,auto> const& a, auto grades){
-		if constexpr(hana::find(grades, hana::llong_c<grade(a.element())>)==hana::nothing){
+		if constexpr(hana::find(grades, hana::llong_c<grade(a.element)>)==hana::nothing){
 			return zero;
 		}else{
 			return a;
@@ -86,10 +86,14 @@ namespace algebra::geometric{
 	}
 
 	auto constexpr norm(auto const& a){
+		using namespace operators;
 		vector::basis_element_t<group::identity_t<group::geometric::mult_operation_t>, auto> a_square=(a|a);
 		return std::sqrt(std::abs(a_square.coordinate));
 	}
 
-	auto constexpr normalized(auto const& a){return a/norm(a);}
+	auto constexpr normalized(auto const& a){
+		using namespace operators;
+		return a/norm(a);
+	}
 }
 #endif /* ALGEBRA_GEOMETRIC_H */
