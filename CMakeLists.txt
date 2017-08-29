@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.8)
-project(math)
+project(math CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(NOT CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
-    message(FATAL_ERROR "Require at least gcc-7.0")
+if(NOT CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
+	if(DISABLE_COMPILER_CHECK)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17" ) 
+	else()
+		message(FATAL_ERROR "Require at least g++-7.0")
+	endif()
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts" ) 
@@ -30,7 +34,7 @@ set(GCC_WARNING_FLAGS
 )
 
 # require hana library, may work with Boost >= 1.61, but was tested only with boost 1.64
-find_package(Boost 1.64.0 REQUIRED)
+find_package(Boost 1.64.0)
 
 enable_testing()
 
