@@ -7,17 +7,19 @@
 namespace geometry{
 	struct compose_operation_t{
 		static auto constexpr apply(simple_rotation_t<auto,auto,auto> const& a, simple_rotation_t<auto,auto,auto> const& b){
-			if constexpr(a.plane.blade()==b.plane.blade()){
-				return std::decay_t<decltype(a)>{a.plane, a.angle+b.angle};
-			}
-			else if constexpr(a.plane.blade()|b.plane.blade()==algebra::geometric::zero){
-				return group::operation<compose_operation_t>(a,b);
+			using namespace algebra::geometric;
+			using namespace algebra::geometric::operators;
+
+			auto ab_rotor=a.rotor()*b.rotor();
+
+			if constexpr(hana::find(grades(ab_rotor), 4_c)==hana::nothing){
+				//auto ab_angle=std::acos(project(ab_rotor, grades<0>()).coordinate);
+				//auto ab_blade=project(ab_rotor, grades<2>());
+				//return simple_rotation_t{ab_blade, ab_angle};
+				return ab_rotor;
 			}
 			else{
-				auto ab_quaternion=a.quaternion()*b.quaternion();
-				auto ab_angle=std::acos(project(ab_quaternion, algebra::geometric::grades<0>()));
-				auto ab_blade=normalized(project(ab_quaternion, algebra::geometric::grades<2>()));
-				return simple_rotation_t{ab_blade, ab_angle};
+				return group::operation<compose_operation_t>(a,b);
 			}
 		}
 
