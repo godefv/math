@@ -12,6 +12,9 @@ int main(){
 	auto constexpr blade12 =slice12 .blade(); unused(blade12);
 	auto constexpr blade132=slice132.blade(); unused(blade132);
 
+	std::cout<<slice12 <<std::endl;
+	std::cout<<slice132<<std::endl;
+
 	return 0;
 }
 

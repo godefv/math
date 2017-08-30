@@ -4,6 +4,7 @@
 #include"../algebra/geometric.h"
 
 #include<boost/hana.hpp>
+#include<iostream>
 
 namespace geometry{
 	template<class... DirectionTypes>
@@ -25,6 +26,12 @@ namespace geometry{
 	using plane_t=slice_t<Direction1, Direction2>;
 
 	constexpr auto plane(auto const& a, auto const& b){return slice_t(a,b);}
+
+	template<class... DirectionTypes>
+	std::ostream& operator<<(std::ostream& out, slice_t<DirectionTypes...> const& slice){
+		using namespace boost::hana::literals;
+		return boost::hana::fold(boost::hana::drop_front(slice.directions), out<<"slice{"<<slice.directions[0_c], [](std::ostream& o, auto const& d)->std::ostream&{return o<<", "<<d;})<<"}";
+	}
 }
 
 #endif /* GEOMETRY_SLICE_H */
