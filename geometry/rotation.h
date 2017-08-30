@@ -29,6 +29,10 @@ namespace geometry{
 
 	template<class Direction1, class Direction2, class AngleT>
 	simple_rotation_t(plane_t<Direction1,Direction2> const& plane, AngleT const& angle)->simple_rotation_t<Direction1,Direction2,AngleT>;
+
+	std::ostream& operator<<(std::ostream& out, simple_rotation_t<auto,auto,auto> const& r){
+		return out<<"rotation{"<<r.plane<<" ; "<<r.angle<<"}";
+	}
 }
 
 #endif /* GEOMETRY_ROTATION_H */
