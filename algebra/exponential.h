@@ -9,8 +9,9 @@
 
 namespace algebra{
 	constexpr auto exp(auto const& a){
+		using namespace algebra::geometric;
 		using namespace algebra::geometric::operators;
-		vector::basis_element_t<group::identity_t<auto>, auto> square=(a*a);
+		vector::basis_element_t<group::identity_t<auto>, auto> square=project(a*a, grades<0>());
 		using ScalarT=decltype(square.coordinate);
 		auto constexpr one=vector::basis_element_t{decltype(square.element){}, static_cast<ScalarT>(1.0)};
 
