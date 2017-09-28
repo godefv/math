@@ -60,6 +60,22 @@ namespace vector{
 		return vector::basis_element(a.element, -a.coordinate);
 	}
 
+	//concepts
+	template<class T> bool concept Vector=BasisVector<T> || group::Generated<T,add_operation_t> || std::is_same<T,group::identity_t<add_operation_t>>::value;
+
+	//operators
+	auto constexpr operator-(Vector const& a){
+		return vector::add_operation_t::inverse(a);
+	}
+	Vector{Vector2}
+	auto constexpr operator+(Vector const& a, Vector2 const& b){
+		return vector::add_operation_t::apply(a,b);
+	}
+	Vector{Vector2}
+	auto constexpr operator-(Vector const& a, Vector2 const& b){
+		return a+(-b);
+	}
+
 	std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
 	}
