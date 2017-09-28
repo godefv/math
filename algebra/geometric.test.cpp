@@ -20,7 +20,7 @@ static constexpr auto n1=vector::basis_element_t{n1_t{}, vector::scalar<1>};
 
 int main(){
 	using namespace algebra::geometric::operators;
-	using math::pi;
+	using symbolic::half_turn;
 
 	auto a=vector::scalar<2>*e1;
 	auto b=vector::scalar<3>*e2;
@@ -80,8 +80,8 @@ int main(){
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(vector::scalar<3>*e3+e1+vector::scalar<2>*e2)*e3*(e1+e3))<<std::endl;
 	std::cout<<"projected : "<<algebra::geometric::project(0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3)), hana::make_set(1_c))<<std::endl;
-	std::cout<<"quaternion: "<<algebra::exp(pi/4*e1*e2)<<std::endl;
-	std::cout<<"reversed  : "<<reverse(algebra::exp(pi/4*e1*e2))<<std::endl;
+	std::cout<<"quaternion: "<<algebra::exp<group::geometric::one_t>(half_turn/4*e1*e2)<<std::endl;
+	std::cout<<"reversed  : "<<reverse(algebra::exp<group::geometric::one_t>(half_turn/4*e1*e2))<<std::endl;
 
 	return 0;
 }

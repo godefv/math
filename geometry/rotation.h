@@ -2,6 +2,7 @@
 #define GEOMETRY_ROTATION_H 
 
 #include"slice.h"
+#include"../symbolic/trigonometry.h"
 #include"../algebra/exponential.h"
 #include"../algebra/geometric.h"
 #include"../algebra/reverse.h"
@@ -18,7 +19,7 @@ namespace geometry{
 		}
 		constexpr auto rotor() const{
 			using namespace algebra::geometric::operators;
-			return algebra::exp(0.5*bivector());
+			return algebra::exp<group::geometric::one_t>(symbolic::ratio<1,2>*bivector());
 		}
 		constexpr auto operator()(auto const& a) const{
 			using namespace algebra::geometric::operators;

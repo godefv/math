@@ -8,18 +8,25 @@ static constexpr auto e2=vector::basis_element_t{group::geometric::direction_pos
 static constexpr auto e3=vector::basis_element_t{group::geometric::direction_negative_t<3>{}, 1.};
 
 int main(){
-	using math::pi;
-	using namespace algebra::geometric::operators;
+	using symbolic::pi;
 
 	auto constexpr rotation1=geometry::simple_rotation_t{geometry::plane(e1,e2), pi/2};
 	auto constexpr rotation2=geometry::simple_rotation_t{geometry::plane(e1,e3), pi/2};
 	auto constexpr rotation3=geometry::simple_rotation_t{geometry::plane(e0,e3), pi/2};
-	{auto constexpr q=rotation1.rotor();unused(q);}
+	auto constexpr R1=rotation1.rotor();
+	auto constexpr R2=rotation1.rotor();
+	auto constexpr B1=rotation1.bivector();
 
-	std::cout<<"cyclic quaternion("<<e1.element<<","<<e2.element<<"): "<<rotation1.rotor()<<std::endl;
+	using namespace algebra::geometric::operators;
+
+	std::cout<<"cyclic blade "<<rotation1.plane.blade()<<std::endl;
+	std::cout<<"bivector "<<B1<<std::endl;
+	std::cout<<"square "<<B1*B1<<std::endl;
+
+	std::cout<<"cyclic quaternion("<<e1.element<<","<<e2.element<<"): "<<R1<<std::endl;
 	std::cout<<e1+e3<<"->"<<rotation1(e1+e3)<<std::endl;
 	std::cout<<e2.element<<"->"<<rotation1(e2)<<std::endl;
-	std::cout<<"hyperbolic quaternion("<<e1.element<<","<<e3.element<<"): "<<rotation2.rotor()<<std::endl;
+	std::cout<<"hyperbolic quaternion("<<e1.element<<","<<e3.element<<"): "<<R2<<std::endl;
 	std::cout<<e1.element<<"->"<<rotation2(e1)<<std::endl;
 	std::cout<<e3.element<<"->"<<rotation2(e3)<<std::endl;
 	unused(rotation1.plane);
