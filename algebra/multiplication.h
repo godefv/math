@@ -15,10 +15,10 @@ namespace algebra{
 			return apply(b,a);
 		}
 		//operation with zero
-		static constexpr auto apply(group::identity_t<vector::add_operation_t> zero_, vector::basis_element_t<auto,auto> const&){
+		static constexpr auto apply(vector::zero_t zero_, auto const&){
 			return zero_;
 		}
-		static constexpr auto apply(vector::basis_element_t<auto,auto> const&, group::identity_t<vector::add_operation_t> zero_){
+		static constexpr auto apply(vector::basis_element_t<auto,auto> const&, vector::zero_t zero_){
 			return zero_;
 		}
 		//operation with basis vectors

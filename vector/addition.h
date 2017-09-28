@@ -32,7 +32,8 @@ namespace vector{
 			return group::inverse<add_operation_t>(a);
 		}
 	};
-	auto constexpr zero=group::identity_t<add_operation_t>{};
+	using zero_t=group::identity_t<add_operation_t>;
+	auto constexpr zero=zero_t{};
 
 
 	//basis_element_t constructors
