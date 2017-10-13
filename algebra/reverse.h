@@ -7,11 +7,11 @@
 #include"../vector/addition.h"
 
 namespace vector{
-	constexpr auto reverse(vector::basis_element_t<auto, Scalar> const& a){
+	constexpr auto reverse(vector::basis_element_t<auto, auto> const& a){
 		return a;
 	}
 	template<class OperatorT, class A,class B> 
-	constexpr auto reverse(basis_element_t<group::generated_element_t<OperatorT, A,B>, Scalar> const& ab){
+	constexpr auto reverse(basis_element_t<group::generated_element_t<OperatorT, A,B>, auto> const& ab){
 		return basis_element(group::reverse(ab.element), ab.coordinate);
 	}
 }

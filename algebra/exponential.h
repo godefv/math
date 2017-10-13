@@ -5,6 +5,7 @@
 #include"../group/identity.h"
 #include"../symbolic/trigonometry.h"
 #include"../symbolic/rational.h"
+#include"../symbolic/eval.h"
 
 #include<cmath>
 #include<limits>
@@ -20,13 +21,14 @@ namespace algebra{
 			return one+a;
 		}else{
 			vector::basis_element_t<OneElementT, auto> square=project(a*a, grades<0>());
+			double square_scalar=eval(square.coordinate);
 
-			auto angle=std::sqrt(std::abs(square.coordinate));
+			auto angle=std::sqrt(std::abs(square_scalar));
 			if(angle<=std::numeric_limits<double>::epsilon()*10){
 				return 1.*one+a;
 			}
 			auto normalized_a=a/angle;
-			if(square.coordinate>0){
+			if(square_scalar>0){
 				return std::cosh(angle)*one+std::sinh(angle)*normalized_a;
 			}else{
 				return std::cos(angle)*one+std::sin(angle)*normalized_a;

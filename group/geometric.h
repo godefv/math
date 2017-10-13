@@ -39,6 +39,10 @@ namespace group::geometric{
 		static constexpr auto apply(direction_negative_t<i> const&, direction_negative_t<i> const&){
 			return group::minus<mult_operation_t>(group::identity_t<mult_operation_t>{});
 		};
+		//scalar rules
+		static constexpr auto apply(double const& a, double const& b){
+			return a*b;
+		}
 		//group rules
 		template<class A,class B> 
 		static constexpr auto apply(A const& a, B const& b){

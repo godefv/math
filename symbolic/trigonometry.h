@@ -9,8 +9,11 @@
 
 namespace symbolic{
 	struct pi_t{
-		constexpr operator double() const{return 3.14159265358979323846;}
+		auto constexpr value() const{return 3.14159265358979323846;}
+		constexpr operator double() const{return value();}
 	};
+	auto constexpr pi=pi_t{};
+	auto constexpr eval(pi_t const& a){return a.value();}
 
 	inline std::ostream& operator<<(std::ostream& out, pi_t){
 		return out<<"pi";
@@ -20,7 +23,6 @@ namespace symbolic{
 	using angle_t=decltype(vector::basis_element(pi_t{},RatioT{}));
 
 	auto constexpr half_turn=angle_t<integer_t<1>>{};
-	auto constexpr pi=pi_t{};
 
 	template<class T> concept bool Angle=vector::Vector<T> && requires(T angle){{angle.element} -> pi_t;};
 	template<class T> concept bool NegativeAngle=Angle<T> && requires(T angle){{angle.coordinate< integer<0>} -> std::true_type;};

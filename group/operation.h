@@ -4,6 +4,7 @@
 #include"inverse.h"
 #include"identity.h"
 #include"minus.h"
+#include"../symbolic/eval.h"
 
 #include<type_traits>
 
@@ -13,6 +14,11 @@ namespace group{
 		A first; B second;
 	};
 	template<class Operator, class A,class B> generated_element_t(Operator,A,B)->generated_element_t<Operator,A,B>;
+
+	auto constexpr eval(generated_element_t<auto,auto,auto> const& a){
+		using ::eval;
+		return std::decay_t<decltype(a.operation)>::apply(eval(a.first), eval(a.second));
+	}
 
 	//is_generated_element
 	template<class Operator, class> struct is_generated_element:std::false_type{};

@@ -2,18 +2,21 @@
 #define BASIS_H 
 
 #include"scalar.h"
+#include"../symbolic/eval.h"
 
 #include<iostream>
 
 namespace vector{
-	template<class ElementT, Scalar ScalarT=double> 
+	template<class ElementT, class ScalarT=double> 
 	struct basis_element_t{
 		ElementT element;
 		ScalarT coordinate;
 	};
-	template<class ElementT, Scalar ScalarT> basis_element_t(ElementT,ScalarT)->basis_element_t<ElementT,ScalarT>;
+	template<class ElementT, class ScalarT> basis_element_t(ElementT,ScalarT)->basis_element_t<ElementT,ScalarT>;
 
-	constexpr int static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){return static_compare(a.element,b.element);}
+	int constexpr static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){
+		return static_compare(a.element,b.element);
+	}
 
 	template<class ElementT> 
 	bool constexpr operator==(basis_element_t<ElementT, auto> const& a, basis_element_t<ElementT, auto> const& b){
@@ -35,6 +38,22 @@ namespace vector{
 
 	std::ostream& operator<<(std::ostream& out, basis_element_t<auto, auto> const& a){
 		return out<<a.coordinate<<" * "<<a.element;
+	}
+
+	//eval
+	using ::eval;
+	template<class, class=void> 
+	struct is_eval_to_scalar: std::false_type{};
+	template<class ElementT, class ScalarT> 
+	struct is_eval_to_scalar<basis_element_t<ElementT,ScalarT>, std::void_t<decltype(eval(std::declval<ElementT&>())*eval(std::declval<ScalarT&>()))>>: std::true_type{};
+
+	auto constexpr eval(basis_element_t<auto,auto> const& a) 
+	{
+		if constexpr(is_eval_to_scalar<std::decay_t<decltype(a)>>::value){
+			return eval(a.element)*eval(a.coordinate);
+		}else{
+			return basis_element_t{eval(a.element),eval(a.coordinate)};
+		}
 	}
 
 	//concepts

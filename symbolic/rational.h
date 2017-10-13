@@ -11,6 +11,10 @@ namespace symbolic{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
 	};
 
+	//eval
+	template<std::intmax_t N1, std::intmax_t D1>
+	auto constexpr eval(ratio_t<N1,D1> const& a){return static_cast<double>(a);}
+
 	//operators
 	template<std::intmax_t N1, std::intmax_t D1, std::intmax_t N2, std::intmax_t D2>
 	auto constexpr operator*(ratio_t<N1,D1> a, ratio_t<N2,D2> b){
