@@ -15,7 +15,7 @@ namespace geometry{
 
 		constexpr auto bivector() const{
 			using namespace algebra::geometric::operators;
-			return angle*plane.blade();
+			return vector::scalar_wrapper_t{angle}*plane.blade();
 		}
 		constexpr auto rotor() const{
 			using namespace algebra::geometric::operators;

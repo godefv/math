@@ -11,6 +11,9 @@ namespace algebra{
 			return a*b;
 		}
 		//operation with scalar
+		static constexpr auto apply(vector::scalar_wrapper_t<auto> const& a, vector::basis_element_t<auto,auto> const& b){
+			return vector::basis_element_t{b.element, a.value*b.coordinate};
+		}
 		static constexpr auto apply(vector::Scalar const& a, vector::basis_element_t<auto,auto> const& b){
 			return vector::basis_element_t{b.element, a*b.coordinate};
 		}
@@ -25,7 +28,10 @@ namespace algebra{
 			return zero_;
 		}
 		//operation with basis vectors
-		static constexpr auto apply(vector::basis_element_t<auto,auto> const& a, vector::basis_element_t<auto,auto> const& b){
+		template<class ElementT1, class ElementT2> 
+			//requires !vector::Scalar<ElementT1>
+				  //&& !vector::Scalar<ElementT2>
+		static constexpr auto apply(vector::basis_element_t<ElementT1,auto> const& a, vector::basis_element_t<ElementT2,auto> const& b){
 			return vector::basis_element(OperatorT::apply(a.element, b.element), apply(a.coordinate, b.coordinate));
 		}
 		//develop product over addition

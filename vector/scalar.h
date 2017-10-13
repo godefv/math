@@ -7,6 +7,11 @@
 #include<ratio>
 
 namespace vector{
+	template<class T> struct scalar_wrapper_t{
+		T value;
+	};
+	template<class T> scalar_wrapper_t(T a) -> scalar_wrapper_t<T>;
+
 	//concepts
 	template<class T> concept bool SimpleScalar=std::is_arithmetic<T>::value || symbolic::Ratio<T>;
 	//template<class T> concept bool BasisVectorScalar=vector::BasisVector<T> && requires(T vector){
@@ -19,6 +24,7 @@ namespace vector{
 		//});
 	template<class T> concept bool Scalar=SimpleScalar<T>;// || VectorScalar<T>;
 	template<class T> concept bool Zero=symbolic::is_zero<T>::value;
+	template<class T> concept bool NonZero=!symbolic::is_zero<T>::value;
 	template<class T> concept bool NonZeroScalar=Scalar<T> && !Zero<T>;
 }
 
