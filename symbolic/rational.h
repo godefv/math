@@ -1,6 +1,7 @@
 #ifndef RATIONAL_H
 #define RATIONAL_H 
 
+#include"operation.h"
 #include<iostream>
 #include<ratio>
 #include<type_traits>
@@ -11,9 +12,32 @@ namespace symbolic{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
 	};
 
+	template<std::intmax_t value>
+	using integer_t=ratio_t<value, 1>;
+
+	//variable templates
+	template<std::intmax_t value>
+	auto integer=integer_t<value>{};
+
+	template<std::intmax_t Numerator, std::intmax_t Denominator>
+	auto ratio=ratio_t<Numerator, Denominator>{};
+	
 	//eval
 	template<std::intmax_t N1, std::intmax_t D1>
 	auto constexpr eval(ratio_t<N1,D1> const& a){return static_cast<double>(a);}
+
+	//abs
+	template<std::intmax_t N1, std::intmax_t D1>
+	auto constexpr abs(ratio_t<N1,D1> a){
+		using type=typename decltype(a)::type;
+		return ratio_t<(type::num>0)?type::num:-type::num,type::den>{};
+	}
+
+	//nth_root
+	template<std::intmax_t N>
+	auto constexpr nth_root(integer_t<1> a){
+		return a;
+	}
 
 	//operators
 	template<std::intmax_t N1, std::intmax_t D1, std::intmax_t N2, std::intmax_t D2>
@@ -69,17 +93,6 @@ namespace symbolic{
 		return out<<N1<<"/"<<D1;
 	}
 
-	//integers
-	template<std::intmax_t value>
-	using integer_t=ratio_t<value, 1>;
-
-	//variable templates
-	template<std::intmax_t value>
-	auto integer=integer_t<value>{};
-
-	template<std::intmax_t Numerator, std::intmax_t Denominator>
-	auto ratio=ratio_t<Numerator, Denominator>{};
-	
 	//concepts
 	template<class T> struct is_ratio: std::false_type{};
 	template<std::intmax_t Numerator, std::intmax_t Denominator> 
