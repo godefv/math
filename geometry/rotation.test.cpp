@@ -2,10 +2,10 @@
 #include"composition.h"
 #include"../unit_test.h"
 
-static constexpr auto e0=vector::basis_element_t{group::geometric::direction_positive_t<3>{}, 1.};
-static constexpr auto e1=vector::basis_element_t{group::geometric::direction_positive_t<1>{}, 1.};
-static constexpr auto e2=vector::basis_element_t{group::geometric::direction_positive_t<2>{}, 1.};
-static constexpr auto e3=vector::basis_element_t{group::geometric::direction_negative_t<3>{}, 1.};
+static constexpr auto e0=vector::basis_element_t{group::geometric::direction_positive_t<3>{}, symbolic::integer<1>};
+static constexpr auto e1=vector::basis_element_t{group::geometric::direction_positive_t<1>{}, symbolic::integer<1>};
+static constexpr auto e2=vector::basis_element_t{group::geometric::direction_positive_t<2>{}, symbolic::integer<1>};
+static constexpr auto e3=vector::basis_element_t{group::geometric::direction_negative_t<3>{}, symbolic::integer<1>};
 
 int main(){
 	using symbolic::half_turn;
@@ -23,8 +23,8 @@ int main(){
 
 	using namespace algebra::geometric::operators;
 
-	std::cout<<algebra::exp<group::geometric::one_t>(rotation1.angle*symbolic::ratio<1,2>*e1*e2)<<std::endl;
 	std::cout<<"cyclic blade "<<rotation1.plane.blade()<<std::endl;
+	std::cout<<"angle "<<rotation1.angle<<std::endl;
 	std::cout<<"bivector "<<B1<<std::endl;
 	std::cout<<"half bivector "<<half_B1<<std::endl;
 	std::cout<<"square "<<square_half_B1<<std::endl;

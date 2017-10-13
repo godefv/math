@@ -1,6 +1,7 @@
 #ifndef ALGEBRA_MULTIPLICATION_H
 #define ALGEBRA_MULTIPLICATION_H 
 
+#include"../symbolic/rational.h"
 #include"../vector/basis.h"
 #include"../vector/addition.h"
 
@@ -43,7 +44,7 @@ namespace algebra{
 			return vector::add_operation_t::apply(apply(a.first,b), apply(a.second,b));
 		}
 
-		static constexpr auto inverse(vector::Scalar const& a){return 1./a;}
+		static constexpr auto inverse(vector::Scalar const& a){return symbolic::integer<1>/a;}
 		static constexpr auto inverse(vector::basis_element_t<auto,auto> const& a){
 			return vector::basis_element(OperatorT::inverse(a.element),inverse(a.coordinate));
 		}

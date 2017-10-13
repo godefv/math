@@ -21,24 +21,24 @@ namespace algebra{
 			return one+a;
 		}else{
 			vector::basis_element_t<OneElementT, auto> square=project(a*a, grades<0>());
-			double square_scalar=eval(square.coordinate);
+			auto square_scalar=square.coordinate;
 
-			auto angle=std::sqrt(std::abs(square_scalar));
-			if(angle<=std::numeric_limits<double>::epsilon()*10){
-				return 1.*one+a;
+			using std::sqrt;
+			using std::abs;
+			auto angle=sqrt(abs(square_scalar));
+			double angle_value=eval(angle);
+			if(angle_value<=std::numeric_limits<double>::epsilon()*10){
+				return 1.*one+1.*a;
 			}
-			auto normalized_a=a/angle;
-			if(square_scalar>0){
-				return std::cosh(angle)*one+std::sinh(angle)*normalized_a;
+			auto normalized_a=a/angle_value;
+			if(eval(square_scalar)>0){
+				using std::cosh;
+				using std::sinh;
+				return eval(cosh(angle))*one+eval(sinh(angle))*normalized_a;
 			}else{
-				return std::cos(angle)*one+std::sin(angle)*normalized_a;
-				//using std::cosh;
-				//using std::sinh;
-				//return cosh(angle)*one+sinh(angle)*normalized_a;
-			//}else{
-				//using std::cos;
-				//using std::sin;
-				//return cos(angle)*one+sin(angle)*normalized_a;
+				using std::cos;
+				using std::sin;
+				return eval(cos(angle))*one+eval(sin(angle))*normalized_a;
 			}
 		}
 	}

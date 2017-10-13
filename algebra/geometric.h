@@ -88,7 +88,9 @@ namespace algebra::geometric{
 	auto constexpr norm(auto const& a){
 		using namespace operators;
 		vector::basis_element_t<group::identity_t<group::geometric::mult_operation_t>, auto> a_square=(a|a);
-		return std::sqrt(std::abs(a_square.coordinate));
+		using std::sqrt;
+		using std::abs;
+		return sqrt(abs(a_square.coordinate));
 	}
 
 	auto constexpr normalized(auto const& a){
