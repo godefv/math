@@ -1,5 +1,5 @@
-#ifndef EXPONENTIAL_H
-#define EXPONENTIAL_H 
+#ifndef SYMBOLIC_EXPONENTIAL_H
+#define SYMBOLIC_EXPONENTIAL_H 
 
 #include"factorial.h"
 #include"rational.h"
@@ -17,4 +17,4 @@ namespace symbolic{
 	}
 }
 
-#endif /* EXPONENTIAL_H */
+#endif /* SYMBOLIC_EXPONENTIAL_H */
