@@ -64,6 +64,10 @@ namespace symbolic{
 	auto constexpr operator!=(ratio_t<N1,D1> a, ratio_t<N2,D2> b){
 		return std::ratio_not_equal<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
+	template<std::intmax_t N1, std::intmax_t D1>
+	std::ostream& operator<<(std::ostream& out, ratio_t<N1,D1>){
+		return out<<N1<<"/"<<D1;
+	}
 
 	//integers
 	template<std::intmax_t value>

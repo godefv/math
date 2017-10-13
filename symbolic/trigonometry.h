@@ -24,6 +24,10 @@ namespace symbolic{
 
 	auto constexpr half_turn=angle_t<integer_t<1>>{};
 
+	inline std::ostream& operator<<(std::ostream& out, angle_t<auto> const& angle){
+		return out<<angle.coordinate<<" half-turn";
+	}
+
 	template<class T> concept bool Angle=vector::Vector<T> && requires(T angle){{angle.element} -> pi_t;};
 	template<class T> concept bool NegativeAngle=Angle<T> && requires(T angle){{angle.coordinate< integer<0>} -> std::true_type;};
 	template<class T> concept bool PositiveAngle=Angle<T> && requires(T angle){{angle.coordinate>=integer<0>} -> std::true_type;};
