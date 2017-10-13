@@ -40,9 +40,15 @@ namespace symbolic{
 	template<class T> concept bool AngleQuadrant3=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{angle.coordinate< ratio<-1,2>} -> std::true_type;};
 	template<class T> concept bool AngleQuadrant4=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{angle.coordinate>=ratio<-1,2>} -> std::true_type;};
 
+	//first quadrant exact values
 	auto constexpr cos(vector::zero_t){return integer<1>;}
+	auto constexpr cos(angle_t<ratio_t<1,6>>){return vector::basis_element_t{sqrt(integer<3>), ratio<1,2>};}
+	auto constexpr cos(angle_t<ratio_t<1,5>>){return vector::add_operation_t::apply(integer<1>, vector::basis_element_t{sqrt(integer<5>), ratio<1,4>});}
+	auto constexpr cos(angle_t<ratio_t<1,4>>){return vector::basis_element_t{sqrt(integer<2>), ratio<1,2>};}
+	auto constexpr cos(angle_t<ratio_t<1,3>>){return ratio<1,2>;}
 	auto constexpr cos(angle_t<ratio_t<1,2>>){return integer<0>;}
-	auto constexpr cos(angle_t<integer_t<1>>){return integer<-1>;}
+	auto constexpr cos(angle_t<ratio_t<3,5>>){return vector::add_operation_t::apply(integer<1>, -vector::basis_element_t{sqrt(integer<5>), ratio<1,4>});}
+	//express every angle in terms of the corresponding first quadrant angle
 	auto constexpr cos(NegativeAngle const& angle){
 		return cos(-angle);
 	}
@@ -52,8 +58,13 @@ namespace symbolic{
 	auto constexpr cos(AngleQuadrant2 const& angle){
 		return cos(angle_t<integer_t<1>>{}-angle);
 	}
+	//avoid problematic value of one half turn exactly
+	auto constexpr cos(angle_t<integer_t<1>>){
+		return integer<-1>;
+	}
 
-	auto constexpr sin(auto const& angle){
+	//implement sin over cos
+	auto constexpr sin(Angle const& angle){
 		return cos(angle_t<ratio_t<1,2>>{}-angle);
 	}
 }
