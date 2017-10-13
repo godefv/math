@@ -1,8 +1,10 @@
 #ifndef SYMBOLIC_OPERATION_H
 #define SYMBOLIC_OPERATION_H 
 
+#include"eval.h"
 #include<boost/hana.hpp>
 #include<iostream>
+#include<cmath>
 
 namespace symbolic{
 	template<class OperationT, class... OperandsT>
@@ -10,8 +12,8 @@ namespace symbolic{
 		OperationT operation; 
 		boost::hana::tuple<OperandsT...> operands;
 
-		operation_t()=default;
-		operation_t(OperationT const& operation_in, OperandsT const&... operands_in)
+		constexpr operation_t()=default;
+		constexpr operation_t(OperationT const& operation_in, OperandsT const&... operands_in)
 			:operation{operation_in}, operands{boost::hana::make_tuple(operands_in...)}
 		{}
 	};
@@ -26,14 +28,19 @@ namespace symbolic{
 #define DEFINE_OPERATION(op, ...) \
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
-	template<class... OperandsT> auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};}
+	template<class... OperandsT> auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};} \
+	auto constexpr eval(operation_t<op##_t, auto> const& operand){using std::op; return op(eval(boost::hana::front(operand.operands)));}
 	DEFINE_OPERATION(exp)
-	DEFINE_OPERATION(ln)
+	DEFINE_OPERATION(log)
 	DEFINE_OPERATION(abs)
 	DEFINE_OPERATION(sin)
 	DEFINE_OPERATION(asin)
-	DEFINE_OPERATION(sh)
-	DEFINE_OPERATION(ash)
+	DEFINE_OPERATION(sinh)
+	DEFINE_OPERATION(asinh)
+	DEFINE_OPERATION(cos)
+	DEFINE_OPERATION(acos)
+	DEFINE_OPERATION(cosh)
+	DEFINE_OPERATION(acosh)
 #undef DEFINE_OPERATION
 	//pow
 	template<std::uintmax_t>
@@ -74,7 +81,11 @@ namespace symbolic{
 
 	template<std::uintmax_t N>
 	auto constexpr nth_root(auto const& operand){return operation_t{nth_root_t<N>{}, operand};}
-	auto constexpr sqrt(auto const& operand){return operation_t{nth_root_t<2>{}, operand};}
+	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
+	auto constexpr eval(operation_t<nth_root_t<2>, auto> const& operand){
+		using std::sqrt; 
+		using ::eval;
+		return sqrt(eval(boost::hana::front(operand.operands)));}
 
 }
 
