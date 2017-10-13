@@ -1,6 +1,7 @@
 #ifndef TRIGONOMETRY_H
 #define TRIGONOMETRY_H 
 
+#include"operation.h"
 #include"rational.h"
 #include"../vector/basis.h"
 #include"../vector/addition.h"
