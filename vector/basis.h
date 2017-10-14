@@ -47,13 +47,20 @@ namespace vector{
 	template<class ElementT, class ScalarT> 
 	struct is_eval_to_scalar<basis_element_t<ElementT,ScalarT>, std::void_t<decltype(eval(std::declval<ElementT&>())*eval(std::declval<ScalarT&>()))>>: std::true_type{};
 
-	auto constexpr eval(basis_element_t<auto,auto> const& a) 
-	{
+	auto constexpr eval(basis_element_t<auto,auto> const& a){
 		if constexpr(is_eval_to_scalar<std::decay_t<decltype(a)>>::value){
 			return eval(a.element)*eval(a.coordinate);
 		}else{
 			return basis_element_t{eval(a.element),eval(a.coordinate)};
 		}
+	}
+
+	//operations
+	auto constexpr abs(basis_element_t<auto,auto> const& a){
+		return basis_element_t{abs(a.element),abs(a.coordinate)};
+	}
+	auto constexpr sqrt(basis_element_t<auto,auto> const& a){
+		return basis_element_t{sqrt(a.element),sqrt(a.coordinate)};
 	}
 
 	//concepts

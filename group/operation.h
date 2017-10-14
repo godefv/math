@@ -7,6 +7,7 @@
 #include"../symbolic/eval.h"
 
 #include<type_traits>
+#include<cmath>
 
 namespace group{
 	template<class Operator, class A,class B> struct generated_element_t{
@@ -18,6 +19,18 @@ namespace group{
 	auto constexpr eval(generated_element_t<auto,auto,auto> const& a){
 		using ::eval;
 		return std::decay_t<decltype(a.operation)>::apply(eval(a.first), eval(a.second));
+	}
+	auto constexpr sqrt(generated_element_t<auto,auto,auto> const& a){
+		if constexpr(a.first==a.second){
+			return a.first;
+		}else{
+			using ::sqrt;
+			return std::decay_t<decltype(a.operation)>::apply(sqrt(a.first), sqrt(a.second));
+		}
+	}
+	auto constexpr abs(generated_element_t<auto,auto,auto> const& a){
+		using ::abs;
+		return std::decay_t<decltype(a.operation)>::apply(abs(a.first), abs(a.second));
 	}
 
 	//is_generated_element

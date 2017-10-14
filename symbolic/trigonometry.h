@@ -15,6 +15,7 @@ namespace symbolic{
 	};
 	auto constexpr pi=pi_t{};
 	auto constexpr eval(pi_t const& a){return a.value();}
+	auto constexpr abs(pi_t const& a){return a;}
 
 	inline std::ostream& operator<<(std::ostream& out, pi_t){
 		return out<<"pi";

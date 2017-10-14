@@ -19,7 +19,6 @@ int main(){
 	auto constexpr half_B1=symbolic::ratio<1,2>*B1;
 	using namespace algebra::geometric::operators;
 	auto constexpr square_half_B1=half_B1*half_B1;
-	auto constexpr projected_square_half_B1=algebra::geometric::project(square_half_B1, algebra::geometric::grades<0>());
 
 	using namespace algebra::geometric::operators;
 
@@ -28,9 +27,10 @@ int main(){
 	std::cout<<"bivector "<<B1<<std::endl;
 	std::cout<<"half bivector "<<half_B1<<std::endl;
 	std::cout<<"square "<<square_half_B1<<std::endl;
-	std::cout<<"scalar part "<<projected_square_half_B1<<std::endl;
-	std::cout<<"scalar "<<eval(projected_square_half_B1.coordinate)<<std::endl;
-	std::cout<<"normalized half bivector "<<half_B1/eval(projected_square_half_B1.coordinate)<<std::endl;
+	std::cout<<"scalar "<<square_half_B1.coordinate<<std::endl;
+	std::cout<<"scalar abs "<<abs(square_half_B1.coordinate)<<std::endl;
+	std::cout<<"sqrt scalar abs "<<sqrt(abs(square_half_B1.coordinate))<<std::endl;
+	std::cout<<"normalized half bivector "<<algebra::geometric::normalized(half_B1)<<std::endl;
 
 	std::cout<<"cyclic quaternion("<<e1.element<<","<<e2.element<<"): "<<R1<<std::endl;
 	std::cout<<e1+e3<<"->"<<eval(rotation1(e1+e3))<<std::endl;

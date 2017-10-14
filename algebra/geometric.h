@@ -10,7 +10,7 @@
 #include<cmath>
 
 namespace algebra::geometric{
-	using  add_operation_t=vector:: add_operation_t;
+	using  add_operation_t= vector::add_operation_t;
 	using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t>;
 
 	using vector::zero;
@@ -50,6 +50,7 @@ namespace algebra::geometric{
 
 	struct group_dot_operation_t{
 		static auto constexpr apply(auto a, auto b){
+			using group::geometric::grade;
 			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==std::abs(grade(a)-grade(b))){
 				return group::geometric::mult_operation_t::apply(a,b);
 			}else{
@@ -95,7 +96,7 @@ namespace algebra::geometric{
 
 	auto constexpr normalized(auto const& a){
 		using namespace operators;
-		return a/norm(a);
+		return a/vector::scalar_wrapper_t{norm(a)};
 	}
 }
 #endif /* ALGEBRA_GEOMETRIC_H */

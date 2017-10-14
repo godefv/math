@@ -2,6 +2,7 @@
 #define ALGEBRA_MULTIPLICATION_H 
 
 #include"../symbolic/rational.h"
+#include"../symbolic/operation.h"
 #include"../vector/basis.h"
 #include"../vector/addition.h"
 
@@ -9,12 +10,14 @@ namespace algebra{
 	template<class OperatorT>
 	struct mult_operation_t{
 		static constexpr auto apply(auto const& a, auto const& b){
+			using namespace symbolic::operators;
 			return a*b;
 		}
 		//operation with scalar
 		static constexpr auto apply(vector::scalar_wrapper_t<auto> const& a, vector::basis_element_t<auto,auto> const& b){
-			return vector::basis_element_t{b.element, a.value*b.coordinate};
+			return vector::basis_element_t{b.element, apply(a.value,b.coordinate)};
 		}
+		static constexpr auto apply( vector::basis_element_t<auto,auto> const& a, vector::scalar_wrapper_t<auto> const& b){return apply(b,a);}
 		static constexpr auto apply(vector::Scalar const& a, vector::basis_element_t<auto,auto> const& b){
 			return vector::basis_element_t{b.element, a*b.coordinate};
 		}
@@ -45,7 +48,11 @@ namespace algebra{
 		}
 
 		static constexpr auto inverse(vector::Scalar const& a){return symbolic::integer<1>/a;}
+		static constexpr auto inverse(vector::scalar_wrapper_t<auto> const& a){
+			return vector::scalar_wrapper_t{inverse(a.value)};
+		}
 		static constexpr auto inverse(vector::basis_element_t<auto,auto> const& a){
+			using symbolic::inverse;
 			return vector::basis_element(OperatorT::inverse(a.element),inverse(a.coordinate));
 		}
 	};
