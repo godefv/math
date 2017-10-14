@@ -17,10 +17,10 @@ namespace algebra{
 		using namespace algebra::geometric::operators;
 		auto constexpr one=vector::basis_element_t{OneElementT{}, symbolic::integer<1>};
 
-		if constexpr(std::is_same<decltype(project(a*a, grades<0>())),vector::zero_t>::value){
+		if constexpr(std::is_same<decltype(a*a),vector::zero_t>::value){
 			return one+a;
 		}else{
-			vector::basis_element_t<OneElementT, auto> square=project(a*a, grades<0>());
+			vector::basis_element_t<OneElementT, auto> square=a*a;
 			auto square_scalar=square.coordinate;
 
 			using std::sqrt;
