@@ -4,6 +4,8 @@
 #include"../group/geometric.h"
 #include"../group/ordering.h"
 #include"../vector/addition.h"
+#include"../symbolic/trigonometry.h"
+#include"../symbolic/rational.h"
 #include"multiplication.h"
 
 #include<boost/hana.hpp>
@@ -14,6 +16,7 @@ namespace algebra::geometric{
 	using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t>;
 
 	using vector::zero;
+	static auto constexpr one=vector::basis_element_t{group::geometric::one, symbolic::integer<1>};
 
 	namespace hana=boost::hana;
 	using namespace hana::literals;
@@ -98,5 +101,49 @@ namespace algebra::geometric{
 		using namespace operators;
 		return a/vector::scalar_wrapper_t{norm(a)};
 	}
+
+	template<class BivectorT> 
+		requires boost::hana::value(grades(BivectorT{})==grades<2>()) 
+		      && symbolic::Angle<decltype(BivectorT{}.coordinate)> 
+		      && symbolic::Ratio<decltype(BivectorT{}.coordinate.coordinate)> 
+		      && std::is_same<decltype(BivectorT{}*BivectorT{}),vector::zero_t>::value 
+	constexpr auto exp(BivectorT const& a){
+			return one+a;
+	}
+
+	template<class BivectorT> 
+		requires boost::hana::value(grades(BivectorT{})==grades<2>()) 
+		      && symbolic::Angle<decltype(BivectorT{}.coordinate)> 
+		      && symbolic::Ratio<decltype(BivectorT{}.coordinate.coordinate)> 
+		      && !std::is_same<decltype(BivectorT{}*BivectorT{}),vector::zero_t>::value
+			  && eval((BivectorT{}*BivectorT{}).coordinate)>0
+	constexpr auto exp(BivectorT const& a){
+		using namespace operators;
+		vector::basis_element_t<group::geometric::one_t, auto> square=a*a;
+		using std::sqrt;
+		using std::abs;
+		auto angle=sqrt(abs(square.coordinate));
+		using std::cosh;
+		using std::sinh;
+		return vector::scalar_wrapper_t{cosh(angle)}*one+vector::scalar_wrapper_t{sinh(angle)/angle}*a;
+	}
+
+	template<class BivectorT> 
+		requires boost::hana::value(grades(BivectorT{})==grades<2>()) 
+		      && symbolic::Angle<decltype(BivectorT{}.coordinate)> 
+		      && symbolic::Ratio<decltype(BivectorT{}.coordinate.coordinate)> 
+		      && !std::is_same<decltype(BivectorT{}*BivectorT{}),vector::zero_t>::value
+			  && eval((BivectorT{}*BivectorT{}).coordinate)<0
+	constexpr auto exp(BivectorT const& a){
+		using namespace operators;
+		vector::basis_element_t<group::geometric::one_t, auto> square=a*a;
+		using std::sqrt;
+		using std::abs;
+		auto angle=sqrt(abs(square.coordinate));
+		using std::cos;
+		using std::sin;
+		return vector::scalar_wrapper_t{cos(angle)}*one+vector::scalar_wrapper_t{sin(angle)/angle}*a;
+	}
+
 }
 #endif /* ALGEBRA_GEOMETRIC_H */

@@ -80,8 +80,11 @@ int main(){
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(symbolic::integer<3>*e3+e1+symbolic::integer<2>*e2)*e3*(e1+e3))<<std::endl;
 	std::cout<<"projected : "<<algebra::geometric::project(0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3)), hana::make_set(1_c))<<std::endl;
-	std::cout<<"quaternion: "<<algebra::exp<group::geometric::one_t>(half_turn/4*e1*e2)<<std::endl;
-	std::cout<<"reversed  : "<<reverse(algebra::exp<group::geometric::one_t>(half_turn/4*e1*e2))<<std::endl;
+	auto constexpr bivector=vector::scalar_wrapper_t{half_turn*symbolic::ratio<1,4>}*(e1*e2);
+	std::cout<<"quaternion: "<<algebra::exp<group::geometric::one_t>(bivector)<<std::endl;
+	std::cout<<"quaternion: "<<algebra::geometric::exp(bivector)<<std::endl;
+	std::cout<<"reversed  : "<<reverse(algebra::exp<group::geometric::one_t>(bivector))<<std::endl;
+	std::cout<<"reversed  : "<<reverse(algebra::geometric::exp(bivector))<<std::endl;
 
 	return 0;
 }

@@ -19,7 +19,7 @@ namespace geometry{
 		}
 		constexpr auto rotor() const{
 			using namespace algebra::geometric::operators;
-			return algebra::exp<group::geometric::one_t>(symbolic::ratio<1,2>*bivector());
+			return algebra::geometric::exp(symbolic::ratio<1,2>*bivector());
 		}
 		constexpr auto operator()(auto const& a) const{
 			using namespace algebra::geometric::operators;
