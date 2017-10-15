@@ -96,6 +96,9 @@ namespace group::geometric{
 	std::ostream& operator<<(std::ostream& out, group::generated_element_t<mult_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
 	}
+	std::ostream& operator<<(std::ostream& out, group::generated_inverse_t<mult_operation_t, auto> const& a){
+		return out<<"1/("<<a.value_before_inverse<<")";
+	}
 	template<unsigned short i> 
 	std::ostream& operator<<(std::ostream& out, direction_positive_t<i> const&){
 		return out<<"p"<<i;
