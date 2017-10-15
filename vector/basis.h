@@ -5,6 +5,7 @@
 #include"../symbolic/eval.h"
 
 #include<iostream>
+#include<cmath>
 
 namespace vector{
 	template<class ElementT, class ScalarT=double> 
@@ -57,9 +58,11 @@ namespace vector{
 
 	//operations
 	auto constexpr abs(basis_element_t<auto,auto> const& a){
+		using std::abs;
 		return basis_element_t{abs(a.element),abs(a.coordinate)};
 	}
 	auto constexpr sqrt(basis_element_t<auto,auto> const& a){
+		using std::sqrt;
 		return basis_element_t{sqrt(a.element),sqrt(a.coordinate)};
 	}
 

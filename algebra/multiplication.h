@@ -10,16 +10,16 @@ namespace algebra{
 	template<class OperatorT>
 	struct mult_operation_t{
 		static constexpr auto apply(auto const& a, auto const& b){
-			using namespace symbolic::operators;
+			using symbolic::operators::operator*;
 			return a*b;
 		}
 		//operation with scalar
 		static constexpr auto apply(vector::scalar_wrapper_t<auto> const& a, vector::basis_element_t<auto,auto> const& b){
-			return vector::basis_element_t{b.element, apply(a.value,b.coordinate)};
+			return vector::basis_element(b.element, apply(a.value,b.coordinate));
 		}
 		static constexpr auto apply( vector::basis_element_t<auto,auto> const& a, vector::scalar_wrapper_t<auto> const& b){return apply(b,a);}
 		static constexpr auto apply(vector::Scalar const& a, vector::basis_element_t<auto,auto> const& b){
-			return vector::basis_element_t{b.element, a*b.coordinate};
+			return vector::basis_element(b.element, a*b.coordinate);
 		}
 		static constexpr auto apply(vector::basis_element_t<auto,auto> const& a, vector::Scalar const& b){
 			return apply(b,a);
