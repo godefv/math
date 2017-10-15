@@ -16,6 +16,7 @@ int main(){
 	std::cout<<pow<ratio_t<2,5>>(integer<5>)<<std::endl;
 	std::cout<<square(sin(sqrt(integer<5>)))<<std::endl;
 	using namespace symbolic::operators;
+	std::cout<<-exp(integer<5>)<<std::endl;
 	std::cout<<integer<5>*exp(integer<5>)<<std::endl;
 	return 0;
 }

@@ -127,6 +127,20 @@ namespace symbolic{
 		}
 	}
 
+	//minus
+	struct minus_t{}; 
+	inline std::ostream& operator<<(std::ostream& out, minus_t const){return out<<"minus";} 
+	namespace operators{ 
+	auto constexpr operator-(auto const& a){return operation_t{minus_t{}, a};} 
+	} 
+	auto constexpr eval(operation_t<minus_t, auto> const& operand){
+		auto evaluated_operand=eval(operand.operand());
+		if constexpr(std::is_same<decltype(evaluated_operand), double>::value){
+			return -evaluated_operand;
+		}else{
+			return inverse(evaluated_operand);
+		}
+	}
 }
 
 #endif /* SYMBOLIC_OPERATION_H */
