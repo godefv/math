@@ -10,7 +10,6 @@ namespace algebra{
 	template<class OperatorT>
 	struct mult_operation_t{
 		static constexpr auto apply(auto const& a, auto const& b){
-			using symbolic::operators::operator*;
 			return a*b;
 		}
 		//operation with scalar

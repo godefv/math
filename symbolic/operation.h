@@ -54,15 +54,6 @@ namespace symbolic{
 	DEFINE_OPERATION(acosh)
 #undef DEFINE_OPERATION
 
-#define DEFINE_OPERATION(op, symbol) \
-	struct op##_t{}; \
-	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
-	namespace operators{ \
-	auto constexpr operator symbol(auto const& a, auto const& b){return operation_t{op##_t{}, a,b};} \
-	} \
-	auto constexpr eval(operation_t<op##_t, auto> const& operand){using namespace boost::hana::literals; return eval(operand.operands[0_c]) symbol eval(operand.operands[1_c]);}
-	DEFINE_OPERATION(mult, *)
-#undef DEFINE_OPERATION
 
 	//pow
 	template<Ratio RatioT>

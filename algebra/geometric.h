@@ -125,7 +125,7 @@ namespace algebra::geometric{
 		auto angle=sqrt(abs(square.coordinate));
 		using std::cosh;
 		using std::sinh;
-		return vector::scalar_wrapper_t{cosh(angle)}*one+vector::scalar_wrapper_t{sinh(angle)/angle}*a;
+		return vector::basis_element(cosh(angle), symbolic::integer<1>)*one+vector::basis_element(sinh(angle), symbolic::integer<1>/angle)*a;
 	}
 
 	template<class BivectorT> 
