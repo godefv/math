@@ -4,7 +4,7 @@
 #include"inverse.h"
 #include"identity.h"
 #include"minus.h"
-#include"../symbolic/eval.h"
+#include"../eval.h"
 
 #include<type_traits>
 #include<cmath>

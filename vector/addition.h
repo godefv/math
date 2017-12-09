@@ -6,7 +6,6 @@
 #include"../group/operation.h"
 #include"../group/inverse.h"
 #include"../group/minus.h"
-#include"../symbolic/operation.h"
 
 #include<iostream>
 
@@ -54,7 +53,6 @@ namespace vector{
 		return vector::basis_element_t{element,s};
 	}
 	constexpr auto basis_element(group::generated_minus_t<auto, auto> const& a, vector::NonZero const& s){
-		using symbolic::operators::operator-;
 		return vector::basis_element(a.value,-s);
 	}
 	constexpr auto basis_element(group::identity_t<vector::add_operation_t>, vector::NonZero const&){

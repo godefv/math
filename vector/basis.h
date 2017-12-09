@@ -1,8 +1,8 @@
 #ifndef BASIS_H
 #define BASIS_H 
 
-#include"scalar.h"
-#include"../symbolic/eval.h"
+#include"../scalar.h"
+#include"../eval.h"
 
 #include<iostream>
 #include<cmath>

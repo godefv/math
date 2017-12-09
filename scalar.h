@@ -1,7 +1,7 @@
 #ifndef SCALAR_H
 #define SCALAR_H 
 
-#include"../symbolic/rational.h"
+#include"symbolic/rational.h"
 
 #include<type_traits>
 #include<ratio>
