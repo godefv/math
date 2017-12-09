@@ -38,7 +38,7 @@ namespace vector{
 	}
 
 	std::ostream& operator<<(std::ostream& out, basis_element_t<auto, auto> const& a){
-		return out<<a.coordinate<<" * "<<a.element;
+		return out<<a.coordinate<<" * \""<<a.element<<"\"";
 	}
 
 	//eval
