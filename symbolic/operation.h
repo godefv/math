@@ -3,6 +3,7 @@
 
 #include"rational.h"
 #include"../eval.h"
+#include"../unit_test.h"
 #include<boost/hana.hpp>
 #include<iostream>
 #include<cmath>
@@ -34,6 +35,12 @@ namespace symbolic{
 		out<<operation.operation<<"("<<boost::hana::front(operation.operands);
 		boost::hana::for_each(boost::hana::drop_front(operation.operands), [&out](auto const& operand){out<<", "<<operand;});
 		return out<<")";
+	}
+
+	template<class OperationT, class... OperandsT>
+	auto constexpr check_equal(operation_t<OperationT, OperandsT...> const& a, operation_t<OperationT, OperandsT...> const& b){
+		using ::check_equal;
+		return check_equal(a.operands, b.operands);
 	}
 
 #define DEFINE_OPERATION(op) \
@@ -97,6 +104,11 @@ namespace symbolic{
 		using std::sqrt; 
 		using ::eval;
 		return sqrt(eval(operand.operand()));
+	}
+
+	template<std::intmax_t N>
+	auto operator*(operation_t<pow_t<integer_t<N>>, auto> const& a, operation_t<pow_t<integer_t<N>>, auto> const& b){
+		return operation_t{pow_t<integer_t<N>>{}, a.operand()*b.operand()};
 	}
 
 	//inverse

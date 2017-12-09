@@ -1,7 +1,16 @@
 #ifndef UNIT_TEST_H
 #define UNIT_TEST_H 
 
+#include<boost/hana.hpp>
 #include<iostream>
+
+namespace boost::hana{
+	template<class T, class... Ts>
+	std::ostream& operator<<(std::ostream& out, tuple<T, Ts...> const& foldable){
+		out<<"<"<<front(foldable);
+		return fold(drop_front(foldable), std::cout, [](std::ostream& o, auto const& value){return o<<value<<", ";})<<">";
+	}
+}
 
 template<class T>
 void check_equal(T const& a, T const& b){

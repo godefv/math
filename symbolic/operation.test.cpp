@@ -17,6 +17,9 @@ int main(){
 	std::cout<<square(sin(sqrt(integer<5>)))<<std::endl;
 	using namespace symbolic::operators;
 	std::cout<<-exp(integer<5>)<<std::endl;
+
+	check_equal(pow<3>(integer<5>)*pow<3>(integer<5>), pow<3>(integer<5*5>));
+
 	return 0;
 }
 
