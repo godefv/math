@@ -1,5 +1,5 @@
-#ifndef INVERSE_H
-#define INVERSE_H 
+#ifndef GROUP_INVERSE_H
+#define GROUP_INVERSE_H 
 
 #include"identity.h"
 
@@ -40,4 +40,4 @@ namespace group{
 
 } 
 
-#endif /* INVERSE_H */
+#endif /* GROUP_INVERSE_H */
