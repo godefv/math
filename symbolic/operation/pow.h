@@ -13,6 +13,7 @@ namespace symbolic{
 	template<Ratio RatioT>
 	using nth_root_t=pow_t<decltype(inverse(RatioT{}))>;
 
+	//formatting
 	inline std::ostream& operator<<(std::ostream& out, pow_t<auto> const power_operation){return out<<"power<"<<power_operation.exponent<<">";}
 	template<std::intmax_t N>
 	inline std::ostream& operator<<(std::ostream& out, pow_t<integer_t<N>> const){return out<<N<<"th_power";}
@@ -36,6 +37,7 @@ namespace symbolic{
 		return out<<exponent_string(inverse(RatioT{}))<<"√("<<operation.operand()<<")";
 	}
 	
+	//comparison of powers
 	template<class Operands>
 	bool operator==(operation_t<pow_t<Ratio>, Operands> const& a, operation_t<pow_t<Ratio>, Operands> const& b){
 		return a.operation.exponent==b.operation.exponent && a.operands==b.operands;
@@ -47,13 +49,42 @@ namespace symbolic{
 		return !(a==b);
 	}
 
+	//pow function
 	template<Ratio RatioT>
 	auto constexpr pow(auto const& operand){
-		if constexpr(std::is_same<RatioT,integer_t<1>>::value){
+		if constexpr(std::is_same<RatioT,integer_t<0>>::value){
+			return integer<1>;
+		}else if constexpr(std::is_same<RatioT,integer_t<1>>::value){
 			return operand;
 		}else{
 			return operation_t{pow_t<RatioT>{}, operand};
 		}
+	}
+	template<Ratio RatioT> requires RatioT::den==1 && RatioT::num>1
+	auto constexpr pow(vector::Scalar const& operand){
+		return pow<integer_t<RatioT::num-1>>(operand)*operand;
+	}
+	//look for exact roots
+	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t left, std::intmax_t right>
+	auto constexpr ct_sqrt(integer_t<N> target, integer_t<left>, integer_t<right>){
+		if constexpr(left == right){
+			return operation_t{pow_t<ratio_t<1,Exponent>>{}, target};
+		} else {
+			auto constexpr mid = integer<(right+left)/2>;
+			auto constexpr power=pow<integer_t<Exponent>>(mid);
+
+			if constexpr(power == target){
+				return mid;
+			}else if constexpr(power > target){
+				return ct_sqrt<Exponent>(target, integer<left>, mid);
+			} else {
+				return ct_sqrt<Exponent>(target, mid+integer<1>, integer<right>);
+			}
+		}
+	}
+	template<Ratio RatioT, std::intmax_t N> requires RatioT::num==1 && RatioT::den>1 && N>1
+	auto constexpr pow(integer_t<N> res){
+		return ct_sqrt<RatioT::den>(res, integer<1>, res);
 	}
 	//power of power is a power
 	template<Ratio RatioT>
@@ -69,6 +100,7 @@ namespace symbolic{
 	auto constexpr square(auto const& operand){return pow<2>(operand);}
 	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
 
+	//eval
 	auto constexpr eval(operation_t<pow_t<Ratio>, auto> const& operation){
 		using std::pow; 
 		using ::eval;
@@ -80,14 +112,19 @@ namespace symbolic{
 		return sqrt(eval(operation.operand()));
 	}
 
+	//commutation rules
+	std::intmax_t constexpr index(pow_t<Ratio>){return 100;}
+	int constexpr static_compare(operation_t<pow_t<Ratio>, auto> const& a, operation_t<pow_t<Ratio>, auto> const& b){return b.operation.exponent-a.operation.exponent;}
+
+	//operator*
 	template<Ratio RatioT>
 	auto constexpr operator*(operation_t<pow_t<RatioT>, auto> const& a, operation_t<pow_t<RatioT>, auto> const& b){
-		return operation_t{pow_t<RatioT>{}, a.operand()*b.operand()};
+		return pow<RatioT>(a.operand()*b.operand());
 	}
 
 	template<class Name>
 	auto constexpr operator*(symbol_t<Name>,symbol_t<Name>){
-		return operation_t{pow_t<integer_t<2>>{}, symbol_t<Name>{}};
+		return pow<integer_t<2>>(symbol_t<Name>{});
 	}
 
 }

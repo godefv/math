@@ -6,22 +6,23 @@
 #include"../../eval.h"
 
 namespace symbolic{
-#define DEFINE_OPERATION(op) \
+#define DEFINE_OPERATION(op, op_index) \
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
 	template<class... OperandsT> auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};} \
-	auto constexpr eval(operation_t<op##_t, auto> const& operand){using std::op; return op(eval(operand.operand()));}
-	DEFINE_OPERATION(exp)
-	DEFINE_OPERATION(log)
-	DEFINE_OPERATION(abs)
-	DEFINE_OPERATION(sin)
-	DEFINE_OPERATION(asin)
-	DEFINE_OPERATION(sinh)
-	DEFINE_OPERATION(asinh)
-	DEFINE_OPERATION(cos)
-	DEFINE_OPERATION(acos)
-	DEFINE_OPERATION(cosh)
-	DEFINE_OPERATION(acosh)
+	auto constexpr eval(operation_t<op##_t, auto> const& operand){using std::op; return op(eval(operand.operand()));} \
+	std::intmax_t constexpr index(op##_t){return op_index;}
+	DEFINE_OPERATION(exp  , 0)
+	DEFINE_OPERATION(log  , 1)
+	DEFINE_OPERATION(abs  , 2)
+	DEFINE_OPERATION(sin  , 3)
+	DEFINE_OPERATION(asin , 4)
+	DEFINE_OPERATION(sinh , 5)
+	DEFINE_OPERATION(asinh, 6)
+	DEFINE_OPERATION(cos  , 7)
+	DEFINE_OPERATION(acos , 8)
+	DEFINE_OPERATION(cosh , 9)
+	DEFINE_OPERATION(acosh, 10)
 #undef DEFINE_OPERATION
 
 	//inverse

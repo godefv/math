@@ -7,6 +7,9 @@
 #include"../vector/addition.h"
 
 namespace vector{
+	constexpr auto basis_element(basis_element_t<auto,auto> const& element, vector::NonZero const& scalar){
+		return element*scalar;
+	}
 	constexpr auto basis_element(symbolic::Ratio const& element, vector::NonZero const& scalar){
 		return element*scalar;
 	}
