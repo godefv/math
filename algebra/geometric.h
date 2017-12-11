@@ -26,6 +26,7 @@ namespace algebra::geometric{
 				return zero;
 			}
 		}
+		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
 	};
 	//dot operation
 	struct group_dot_operation_t{
@@ -37,6 +38,7 @@ namespace algebra::geometric{
 				return zero;
 			}
 		}
+		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
 	};
 
 	struct group_mult_operation_t{

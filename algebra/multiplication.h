@@ -15,7 +15,7 @@ namespace algebra{
 	template<class OperatorT>
 	struct mult_operation_t{
 		static constexpr auto apply(auto const& a, auto const& b){
-			return a*b;
+			return OperatorT::apply(a,b);
 		}
 		//operation with scalar
 		static constexpr auto apply(vector::scalar_wrapper_t<auto> const& a, vector::basis_element_t<auto,auto> const& b){
@@ -40,7 +40,7 @@ namespace algebra{
 			//requires !vector::Scalar<ElementT1>
 				  //&& !vector::Scalar<ElementT2>
 		static constexpr auto apply(vector::basis_element_t<ElementT1,auto> const& a, vector::basis_element_t<ElementT2,auto> const& b){
-			return vector::basis_element(OperatorT::apply(a.element, b.element), apply(a.coordinate, b.coordinate));
+			return vector::basis_element(apply(a.element, b.element), apply(a.coordinate, b.coordinate));
 		}
 		//develop product over addition
 		static constexpr auto apply(auto const& a, group::generated_element_t<vector::add_operation_t, auto,auto> const& b){
