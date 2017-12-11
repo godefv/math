@@ -17,10 +17,8 @@ using e3_t=group::geometric::direction_negative_t<3>;
 static constexpr auto e1=e1_t{};
 static constexpr auto e2=e2_t{};
 static constexpr auto e3=e3_t{};
-using namespace group::geometric::operators;
 using group::geometric::one;
 
-#define DEBUG_MULT_OPERATION 0
 static void test_mult_operations(){
 	//inverse of inverse
 	check_equal(inverse(inverse(e1)), e1);
@@ -62,7 +60,8 @@ static void test_mult_operations(){
 	check_equal((e2*e1)*(e1*e2), one);
 }
 
-#if !DEBUG_MULT_OPERATION
+#define COMPUTE_FULL_GROUPS 1
+#if COMPUTE_FULL_GROUPS
 using namespace group::geometric;
 //mult groups, finite order of generators plus commutation rules guarantees that the group is finite
 constexpr auto geometric_group_2d=group::generate(hana::make_set(hana::type_c<e1_t>, hana::type_c<e2_t>), hana_inverse, hana_mult);
@@ -86,7 +85,7 @@ int main(){
 	check_equal(grade(e1*e2), 2);
 	check_equal(grade(e1*e3), 2);
 
-#if !DEBUG_MULT_OPERATION
+#if COMPUTE_FULL_GROUPS
 	check_mult_group_element<decltype(geometric_group_2d)>((e1_t*)nullptr);
 	check_mult_group_element<decltype(geometric_group_2d)>((mult_t<e1_t, e2_t>*)nullptr);
 
