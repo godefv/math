@@ -6,6 +6,11 @@
 #include"../vector/basis.h"
 #include"../vector/addition.h"
 
+namespace vector{
+	constexpr auto basis_element(symbolic::Ratio const& element, vector::NonZero const& scalar){
+		return element*scalar;
+	}
+}
 namespace algebra{
 	template<class OperatorT>
 	struct mult_operation_t{

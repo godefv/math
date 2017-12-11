@@ -6,17 +6,48 @@
 #include"../vector/addition.h"
 #include"../symbolic/trigonometry.h"
 #include"../symbolic/rational.h"
+#include"../inverse.h"
 #include"multiplication.h"
 
 #include<boost/hana.hpp>
 #include<cmath>
 
 namespace algebra::geometric{
-	using  add_operation_t= vector::add_operation_t;
-	using mult_operation_t=algebra::mult_operation_t<group::geometric::mult_operation_t>;
-
 	using vector::zero;
 	static auto constexpr one=vector::basis_element_t{group::geometric::one, symbolic::integer<1>};
+
+	//wedge operation
+	struct group_wedge_operation_t{
+		group::geometric::Blade{Blade2}
+		static auto constexpr apply(group::geometric::Blade a, Blade2 b){
+			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==grade(a)+grade(b)){
+				return group::geometric::mult_operation_t::apply(a,b);
+			}else{
+				return zero;
+			}
+		}
+	};
+	//dot operation
+	struct group_dot_operation_t{
+		group::geometric::Blade{Blade2}
+		static auto constexpr apply(group::geometric::Blade a, Blade2 b){
+			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==std::abs(grade(a)-grade(b))){
+				return group::geometric::mult_operation_t::apply(a,b);
+			}else{
+				return zero;
+			}
+		}
+	};
+
+	struct group_mult_operation_t{
+		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
+		static auto constexpr inverse(auto const& a){using ::inverse; return inverse(a);}
+	};
+
+	using   add_operation_t= vector::add_operation_t;
+	using  mult_operation_t=algebra::mult_operation_t<group_mult_operation_t>;
+	using wedge_operation_t=algebra::mult_operation_t<group_wedge_operation_t>;
+	using   dot_operation_t=algebra::mult_operation_t<group_dot_operation_t>;
 
 	namespace hana=boost::hana;
 	using namespace hana::literals;
@@ -40,30 +71,6 @@ namespace algebra::geometric{
 	auto constexpr project(group::generated_element_t<add_operation_t, auto,auto> const& a, auto grades){
 		return std::decay_t<decltype(a.operation)>::apply(project(a.first, grades), project(a.second, grades));
 	}
-
-	struct group_wedge_operation_t{
-		static auto constexpr apply(auto a, auto b){
-			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==grade(a)+grade(b)){
-				return group::geometric::mult_operation_t::apply(a,b);
-			}else{
-				return zero;
-			}
-		}
-	};
-
-	struct group_dot_operation_t{
-		static auto constexpr apply(auto a, auto b){
-			using group::geometric::grade;
-			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==std::abs(grade(a)-grade(b))){
-				return group::geometric::mult_operation_t::apply(a,b);
-			}else{
-				return zero;
-			}
-		}
-	};
-
-	using wedge_operation_t=algebra::mult_operation_t<group_wedge_operation_t>;
-	using   dot_operation_t=algebra::mult_operation_t<  group_dot_operation_t>;
 
 	namespace operators{
 		constexpr auto operator*(auto const& a, auto const& b){
@@ -143,8 +150,9 @@ namespace algebra::geometric{
 		auto angle=sqrt(abs(square.coordinate));
 		using std::cos;
 		using std::sin;
-		return vector::scalar_wrapper_t{cos(angle)}*one+vector::scalar_wrapper_t{sin(angle)/angle}*a;
+		return vector::scalar_wrapper_t{vector::basis_element(cos(angle), symbolic::integer<1>)}*one
+		      +vector::scalar_wrapper_t{vector::basis_element(sin(angle), symbolic::integer<1>)}*(a/vector::scalar_wrapper_t{angle});
 	}
-
 }
+
 #endif /* ALGEBRA_GEOMETRIC_H */

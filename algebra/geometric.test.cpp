@@ -32,6 +32,7 @@ int main(){
 	check_equal(a-a, vector::zero);
 	//product of basis elements
 	check_equal(a*b, vector::basis_element_t{group::geometric::mult_t<e1_t,e2_t>{}, a.coordinate*b.coordinate});
+	check_equal(a*a, vector::basis_element_t{group::geometric::one_t{}, a.coordinate*a.coordinate});
 	//commutation
 	static_assert(static_compare(e1,e2)>0);
 	check_equal(a+b, group::generated_element_t{algebra::geometric::add_operation_t{},a,b});
@@ -48,19 +49,20 @@ int main(){
 	check_equal(reverse(e1*e2), e2*e1);
 	check_equal(reverse(one+e1*e2), one+e2*e1);
 	//grades
-	namespace hana=boost::hana;
-	using namespace hana::literals;
-	static_assert(algebra::geometric::grades(one)            == hana::make_set(0_c));
-	static_assert(algebra::geometric::grades(e1)             == hana::make_set(1_c));
-	static_assert(algebra::geometric::grades(e1*e2)          == hana::make_set(2_c));
-	static_assert(algebra::geometric::grades(e1*e2+e1*e3)    == hana::make_set(2_c));
-	static_assert(algebra::geometric::grades(e1*e2*e3)       == hana::make_set(3_c));
-	static_assert(algebra::geometric::grades(one+e2+e1*e2*e3)== hana::make_set(0_c,1_c,3_c));
+	using algebra::geometric::grades;
+	static_assert(grades(one)            == grades<0>());
+	static_assert(grades(e1)             == grades<1>());
+	static_assert(grades(e1*e1)          == grades<0>());
+	static_assert(grades(e1*e2)          == grades<2>());
+	static_assert(grades(e1*e2+e1*e3)    == grades<2>());
+	static_assert(grades(e1*e2*e3)       == grades<3>());
+	static_assert(grades(one+e2+e1*e2*e3)== grades<0,1,3>());
 	//project
-	check_equal(algebra::geometric::project(one+e1, hana::make_set(1_c)), e1);
-	check_equal(algebra::geometric::project(one+e1, hana::make_set(0_c)), one);
-	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,2_c)), one+e1*e2);
-	check_equal(algebra::geometric::project(one+e1+e1*e2, hana::make_set(0_c,3_c)), one);
+	check_equal(algebra::geometric::project(e1*e1, grades<2>()), zero);
+	check_equal(algebra::geometric::project(one+e1, grades<1>()), e1);
+	check_equal(algebra::geometric::project(one+e1, grades<0>()), one);
+	check_equal(algebra::geometric::project(one+e1+e1*e2, grades<0,2>()), one+e1*e2);
+	check_equal(algebra::geometric::project(one+e1+e1*e2, grades<0,3>()), one);
 	//wedge
 	{auto constexpr e1e2=algebra::geometric::group_wedge_operation_t::apply(e1_t{}, e2_t{}); unused(e1e2);}
 	{auto constexpr e1e2=e1^e2; unused(e1e2);}
@@ -77,9 +79,14 @@ int main(){
 	check_equal(e1|(e2+e1), one);
 	check_equal((e1^e2)|(e1^e2), -one);
  
+	auto sqrt_5_element=symbolic::nth_root<2>(symbolic::integer<5>);
+	auto sqrt_5=vector::basis_element_t{sqrt_5_element, symbolic::integer<1>};
+	auto sqrt_5_e1=vector::scalar_wrapper_t{sqrt_5}*e1;
+	check_equal(sqrt_5_e1*sqrt_5_e1, vector::basis_element_t{one.element, vector::basis_element_t{sqrt_5_element*sqrt_5_element, symbolic::integer<1>}});
+	
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(symbolic::integer<3>*e3+e1+symbolic::integer<2>*e2)*e3*(e1+e3))<<std::endl;
-	std::cout<<"projected : "<<algebra::geometric::project(0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3)), hana::make_set(1_c))<<std::endl;
+	std::cout<<"projected : "<<algebra::geometric::project(0.5*((e1+e3)*e3*(3.*e3+e1+2.*e2)*e3*(e1+e3)), grades<1>())<<std::endl;
 	auto constexpr bivector=vector::scalar_wrapper_t{half_turn*symbolic::ratio<1,4>}*(e1*e2);
 	std::cout<<"quaternion: "<<algebra::exp<group::geometric::one_t>(bivector)<<std::endl;
 	std::cout<<"quaternion: "<<algebra::geometric::exp(bivector)<<std::endl;
