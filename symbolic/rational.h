@@ -38,6 +38,8 @@ namespace symbolic{
 	template<class T> concept bool Zero=is_zero<T>::value;
 
 	//eval
+	template<std::intmax_t N>
+	auto constexpr eval(integer_t<N> const&){return N;}
 	auto constexpr eval(Ratio const& a){return static_cast<double>(a);}
 
 	//inverse
