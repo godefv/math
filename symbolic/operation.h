@@ -2,6 +2,7 @@
 #define SYMBOLIC_OPERATION_H 
 
 #include"rational.h"
+#include"symbol.h"
 #include"../eval.h"
 #include"../unit_test.h"
 #include<boost/hana.hpp>
@@ -40,6 +41,7 @@ namespace symbolic{
 	template<class OperationT, class... OperandsT>
 	auto constexpr check_equal(operation_t<OperationT, OperandsT...> const& a, operation_t<OperationT, OperandsT...> const& b){
 		using ::check_equal;
+		std::cout<<"checking "<<a<<" equals "<<b<<" : ";
 		return check_equal(a.operands, b.operands);
 	}
 
@@ -91,24 +93,63 @@ namespace symbolic{
 		return out<<exponent_string(inverse(RatioT{}))<<"√("<<operation.operand()<<")";
 	}
 	
-	template<std::intmax_t N>
-	auto constexpr pow(auto const& operand){return operation_t{pow_t<integer_t<N>>{}, operand};}
+	template<class Operands>
+	bool operator==(operation_t<pow_t<Ratio>, Operands> const& a, operation_t<pow_t<Ratio>, Operands> const& b){
+		return a.operation.exponent==b.operation.exponent && a.operands==b.operands;
+	}
+	bool operator==(operation_t<pow_t<Ratio>, auto> const& a, operation_t<pow_t<Ratio>, auto> const& b){
+		return false;
+	}
+	bool operator!=(operation_t<pow_t<Ratio>, auto> const& a, operation_t<pow_t<Ratio>, auto> const& b){
+		return !(a==b);
+	}
+
 	template<Ratio RatioT>
-	auto constexpr pow(auto const& operand){return operation_t{pow_t<RatioT>{}, operand};}
+	auto constexpr pow(auto const& operand){
+		if constexpr(std::is_same<RatioT,integer_t<1>>::value){
+			return operand;
+		}else{
+			return operation_t{pow_t<RatioT>{}, operand};
+		}
+	}
+	//abs is put outer not to interfere with inner simplifications
+	template<Ratio RatioT>
+	auto constexpr pow(operation_t<abs_t,auto> const& operation){
+		return abs(pow<RatioT>(operation.operand()));
+	} 
+	//power of power is a power
+	template<Ratio RatioT>
+	auto constexpr pow(operation_t<pow_t<Ratio>,auto> const& operation){
+		return pow<decltype(RatioT{}*operation.operation.exponent)>(operation.operand());
+	} 
+
+	//pow() aliases
+	template<std::intmax_t N>
+	auto constexpr pow(auto const& operand){return pow<integer_t<N>>(operand);}
 	template<std::intmax_t N>
 	auto constexpr nth_root(auto const& operand){return pow<ratio_t<1,N>>(operand);}
 	auto constexpr square(auto const& operand){return pow<2>(operand);}
 	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
 
-	auto constexpr eval(operation_t<nth_root_t<integer_t<2>>, auto> const& operand){
+	auto constexpr eval(operation_t<pow_t<Ratio>, auto> const& operation){
+		using std::pow; 
+		using ::eval;
+		return pow(eval(operation.operand()), eval(operation.operation.exponent));
+	}
+	auto constexpr eval(operation_t<nth_root_t<integer_t<2>>, auto> const& operation){
 		using std::sqrt; 
 		using ::eval;
-		return sqrt(eval(operand.operand()));
+		return sqrt(eval(operation.operand()));
 	}
 
-	template<std::intmax_t N>
-	auto operator*(operation_t<pow_t<integer_t<N>>, auto> const& a, operation_t<pow_t<integer_t<N>>, auto> const& b){
-		return operation_t{pow_t<integer_t<N>>{}, a.operand()*b.operand()};
+	template<Ratio RatioT>
+	auto constexpr operator*(operation_t<pow_t<RatioT>, auto> const& a, operation_t<pow_t<RatioT>, auto> const& b){
+		return operation_t{pow_t<RatioT>{}, a.operand()*b.operand()};
+	}
+
+	template<class Name>
+	auto constexpr operator*(symbol_t<Name>,symbol_t<Name>){
+		return operation_t{pow_t<integer_t<2>>{}, symbol_t<Name>{}};
 	}
 
 	//inverse
@@ -116,9 +157,19 @@ namespace symbolic{
 	inline std::ostream& operator<<(std::ostream& out, inverse_t const){return out<<"inverse";} 
 	auto constexpr inverse(auto const& operand){return operation_t{inverse_t{}, operand};} 
 	
+	Symbol{SymbolT}
+	auto constexpr operator*(operation_t<inverse_t,SymbolT>, SymbolT){return integer<1>;} 
+	Symbol{SymbolT}
+	auto constexpr operator*(SymbolT, operation_t<inverse_t,SymbolT>){return integer<1>;} 
+
+	//pow is put outer not to interfere with inner simplifications
 	template<Ratio RatioT>
 	auto constexpr inverse(operation_t<pow_t<RatioT>,auto> const& operand){
 		return pow<RatioT>(inverse(operand.operand()));
+	} 
+	//abs is put outer not to interfere with inner simplifications
+	auto constexpr inverse(operation_t<abs_t,auto> const& operand){
+		return abs(inverse(operand.operand()));
 	} 
 	
 	auto constexpr eval(operation_t<inverse_t, auto> const& operand){

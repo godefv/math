@@ -9,12 +9,9 @@
 #include<iostream>
 
 namespace symbolic{
-	struct pi_t{
-		auto constexpr value() const{return 3.14159265358979323846;}
-		constexpr operator double() const{return value();}
-	};
+	using pi_t=symbol_t<struct pi_symbol_name_t>;
 	auto constexpr pi=pi_t{};
-	auto constexpr eval(pi_t const& a){return a.value();}
+	auto constexpr eval(pi_t){return 3.14159265358979323846;}
 	auto constexpr abs(pi_t const& a){return a;}
 
 	inline std::ostream& operator<<(std::ostream& out, pi_t){

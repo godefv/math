@@ -1,6 +1,12 @@
 #include"operation.h"
 #include"rational.h"
 
+using x_t=symbolic::symbol_t<struct x_symbol_name_t>; 
+x_t x;
+inline bool operator==(x_t,x_t){return true;}
+inline bool operator!=(x_t,x_t){return false;}
+inline std::ostream& operator<<(std::ostream& out,x_t){return out<<"x";}
+
 int main(){
 	using namespace symbolic;
 	std::cout<<exp(integer<3>)<<std::endl;
@@ -19,6 +25,15 @@ int main(){
 	std::cout<<-exp(integer<5>)<<std::endl;
 
 	check_equal(pow<3>(integer<5>)*pow<3>(integer<5>), pow<3>(integer<5*5>));
+	check_equal(nth_root<3>(integer<5>)*nth_root<3>(integer<5>), nth_root<3>(integer<5*5>));
+	check_equal(nth_root<2>(integer<5>)*nth_root<2>(integer<5>), nth_root<2>(integer<5*5>));
+
+	check_equal(x,x);
+	check_equal(pow<1>(x),x);
+	check_equal(inverse(x)*x,integer<1>);
+	check_equal(abs(nth_root<2>(x)), nth_root<2>(abs(x)));
+	check_equal(pow<4>(nth_root<3>(x)), pow<ratio_t<4,3>>(x));
+	check_equal(pow<4>(nth_root<2>(x)), pow<2>(x));
 
 	return 0;
 }
