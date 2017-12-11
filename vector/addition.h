@@ -49,11 +49,11 @@ namespace vector{
 	constexpr auto basis_element(auto const&, vector::Zero){
 		return zero;
 	}
-	constexpr auto basis_element(auto const& element, vector::NonZero const& s){
-		return vector::basis_element_t{element,s};
+	constexpr auto basis_element(auto const& element, vector::NonZero const& scalar){
+		return vector::basis_element_t{element,scalar};
 	}
-	constexpr auto basis_element(group::generated_minus_t<auto, auto> const& a, vector::NonZero const& s){
-		return vector::basis_element(a.value,-s);
+	constexpr auto basis_element(group::generated_minus_t<auto, auto> const& a, vector::NonZero const& scalar){
+		return vector::basis_element(a.value,-scalar);
 	}
 	constexpr auto basis_element(group::identity_t<vector::add_operation_t>, vector::NonZero const&){
 		return zero;
