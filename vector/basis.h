@@ -8,7 +8,7 @@
 #include<cmath>
 
 namespace vector{
-	template<class ElementT, class ScalarT=double> 
+	template<class ElementT, class ScalarT=double> requires !Scalar<ElementT>
 	struct basis_element_t{
 		ElementT element;
 		ScalarT coordinate;
