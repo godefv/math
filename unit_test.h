@@ -14,11 +14,11 @@ namespace boost::hana{
 
 template<class T>
 void check_equal(T const& a, T const& b){
-	if(a!=b){
+	if(a==b){
+		std::cerr<<a<<" == "<<b<<std::endl;
+	}else{
 		std::cerr<<a<<" != "<<b<<std::endl;
 		std::exit(1);
-	}else{
-		std::cerr<<a<<" == "<<b<<std::endl;
 	}
 }
 
