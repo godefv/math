@@ -33,15 +33,18 @@ int main(){
 	std::cout<<"normalized half bivector "<<algebra::geometric::normalized(half_B1)<<std::endl;
 
 	std::cout<<"cyclic quaternion("<<e1.element<<","<<e2.element<<"): "<<R1<<std::endl;
-	std::cout<<e1+e3<<"->"<<eval(rotation1(e1+e3))<<std::endl;
-	std::cout<<e2.element<<"->"<<eval(rotation1(e2))<<std::endl;
+	std::cout<<e1+e3<<"->"<<rotation1(e1+e3)<<" = "<<eval(rotation1(e1+e3))<<std::endl;
+	std::cout<<e2.element<<"->"<<rotation1(e2)<<" = "<<eval(rotation1(e2))<<std::endl;
 	std::cout<<"hyperbolic quaternion("<<e1.element<<","<<e3.element<<"): "<<R2<<std::endl;
-	std::cout<<e1.element<<"->"<<rotation2(e1)<<std::endl;
-	std::cout<<e3.element<<"->"<<rotation2(e3)<<std::endl;
+	std::cout<<e1.element<<"->"<<eval(rotation2.rotor())*e1*eval(reverse(rotation2.rotor()))<<std::endl;
+	std::cout<<e3.element<<"->"<<eval(rotation2.rotor())*e3*eval(reverse(rotation2.rotor()))<<std::endl;
+	//std::cout<<e1.element<<"->"<<rotation2(e1)<<std::endl;
+	//std::cout<<e3.element<<"->"<<rotation2(e3)<<std::endl;
 	unused(rotation1.plane);
 	unused(rotation1.angle);
 
 	//auto constexpr rotation12=geometry::compose_operation_t::apply(rotation1, rotation2);
+	//auto constexpr rotation12=rotation1.rotor()*rotation2.rotor();
 	//std::cout<<rotation12<<std::endl;
 	//std::cout<<rotation1.rotor()*rotation2.rotor()-rotation12.rotor()<<std::endl;
 	//check_equal(rotation1.rotor()*rotation2.rotor(), rotation12.rotor());
