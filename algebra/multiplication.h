@@ -2,7 +2,7 @@
 #define ALGEBRA_MULTIPLICATION_H 
 
 #include"../symbolic/rational.h"
-#include"../symbolic/operation.h"
+#include"../symbolic/operation/template.h"
 #include"../vector/basis.h"
 #include"../vector/addition.h"
 

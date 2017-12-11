@@ -1,6 +1,8 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H 
 
+#include<type_traits>
+
 namespace symbolic{
 	template<class Name>
 	struct symbol_t{};

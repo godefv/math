@@ -1,4 +1,4 @@
-#include"operation.h"
+#include"operation/all.h"
 #include"rational.h"
 
 using x_t=symbolic::symbol_t<struct x_symbol_name_t>; 
