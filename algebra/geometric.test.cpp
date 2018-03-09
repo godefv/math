@@ -82,7 +82,7 @@ int main(){
 	auto sqrt_5_element=symbolic::nth_root<2>(symbolic::integer<5>);
 	auto sqrt_5=vector::basis_element_t{sqrt_5_element, symbolic::integer<1>};
 	auto sqrt_5_e1=vector::scalar_wrapper_t{sqrt_5}*e1;
-	check_equal(sqrt_5_e1*sqrt_5_e1, vector::basis_element_t{one.element, vector::basis_element_t{sqrt_5_element*sqrt_5_element, symbolic::integer<1>}});
+	check_equal(sqrt_5_e1*sqrt_5_e1, vector::basis_element_t{one.element, symbolic::integer<5>});
 	
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(symbolic::integer<3>*e3+e1+symbolic::integer<2>*e2)*e3*(e1+e3))<<std::endl;

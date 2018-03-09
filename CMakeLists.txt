@@ -33,8 +33,8 @@ set(GCC_WARNING_FLAGS
     -Wodr
 )
 
-# require hana library, may work with Boost >= 1.61, but was tested only with boost 1.64
-find_package(Boost 1.64.0)
+# require hana library, may work with Boost >= 1.61, but was tested only with boost 1.62 and 1.64
+find_package(Boost 1.62.0)
 
 enable_testing()
 
