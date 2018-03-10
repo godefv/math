@@ -12,11 +12,11 @@ using e3_t=group::geometric::direction_positive_t<3>;
 using n1_t=group::geometric::direction_negative_t<1>;
 
 using vector::zero;
-static constexpr auto one=vector::basis_element_t{group::geometric::one, symbolic::integer<1>};
-static constexpr auto e1=vector::basis_element_t{e1_t{}, symbolic::integer<1>};
-static constexpr auto e2=vector::basis_element_t{e2_t{}, symbolic::integer<1>};
-static constexpr auto e3=vector::basis_element_t{e3_t{}, symbolic::integer<1>};
-static constexpr auto n1=vector::basis_element_t{n1_t{}, symbolic::integer<1>};
+static constexpr auto one=vector::unit_t<group::geometric::one_t>{};
+static constexpr auto e1=vector::unit_t<e1_t>{};
+static constexpr auto e2=vector::unit_t<e2_t>{};
+static constexpr auto e3=vector::unit_t<e3_t>{};
+static constexpr auto n1=vector::unit_t<n1_t>{};
 
 int main(){
 	using namespace algebra::geometric::operators;
@@ -80,7 +80,7 @@ int main(){
 	check_equal((e1^e2)|(e1^e2), -one);
  
 	auto sqrt_5_element=symbolic::nth_root<2>(symbolic::integer<5>);
-	auto sqrt_5=vector::basis_element_t{sqrt_5_element, symbolic::integer<1>};
+	auto sqrt_5=vector::unit(sqrt_5_element);
 	auto sqrt_5_e1=vector::scalar_wrapper_t{sqrt_5}*e1;
 	check_equal(sqrt_5_e1*sqrt_5_e1, vector::basis_element_t{one.element, symbolic::integer<5>});
 	

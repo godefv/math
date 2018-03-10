@@ -15,6 +15,9 @@ namespace vector{
 	};
 	template<class ElementT, class ScalarT> basis_element_t(ElementT,ScalarT)->basis_element_t<ElementT,ScalarT>;
 
+	template<class ElementT>
+	using unit_t=basis_element_t<ElementT,symbolic::integer_t<1>>;
+
 	int constexpr static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){
 		return static_compare(a.element,b.element);
 	}

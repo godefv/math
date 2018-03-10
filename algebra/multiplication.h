@@ -13,6 +13,10 @@ namespace vector{
 	constexpr auto basis_element(symbolic::Ratio const& element, vector::NonZero const& scalar){
 		return element*scalar;
 	}
+	auto constexpr unit(auto const& element){
+		return basis_element(element, symbolic::integer<1>);
+	}
+
 }
 namespace algebra{
 	template<class OperatorT>

@@ -14,7 +14,7 @@ namespace algebra{
 	template<class OneElementT>
 	constexpr auto exp(auto const& a){
 		using namespace algebra::geometric::operators;
-		auto constexpr one=vector::basis_element(OneElementT{}, symbolic::integer<1>);
+		auto constexpr one=vector::unit_t<OneElementT>{};
 
 		if constexpr(std::is_same<decltype(a*a),vector::zero_t>::value){
 			return one+a;

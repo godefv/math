@@ -2,10 +2,10 @@
 #include"composition.h"
 #include"../unit_test.h"
 
-static constexpr auto e0=vector::basis_element_t{group::geometric::direction_positive_t<3>{}, symbolic::integer<1>};
-static constexpr auto e1=vector::basis_element_t{group::geometric::direction_positive_t<1>{}, symbolic::integer<1>};
-static constexpr auto e2=vector::basis_element_t{group::geometric::direction_positive_t<2>{}, symbolic::integer<1>};
-static constexpr auto e3=vector::basis_element_t{group::geometric::direction_negative_t<3>{}, symbolic::integer<1>};
+static constexpr auto e0=vector::unit_t<group::geometric::direction_positive_t<3>>{};
+static constexpr auto e1=vector::unit_t<group::geometric::direction_positive_t<1>>{};
+static constexpr auto e2=vector::unit_t<group::geometric::direction_positive_t<2>>{};
+static constexpr auto e3=vector::unit_t<group::geometric::direction_negative_t<3>>{};
 
 int main(){
 	using symbolic::half_turn;

@@ -14,7 +14,7 @@
 
 namespace algebra::geometric{
 	using vector::zero;
-	static auto constexpr one=vector::basis_element_t{group::geometric::one, symbolic::integer<1>};
+	static auto constexpr one=vector::unit_t<group::geometric::one_t>{};
 
 	//wedge operation
 	struct group_wedge_operation_t{
@@ -100,7 +100,7 @@ namespace algebra::geometric{
 
 	auto constexpr norm(auto const& a){
 		using namespace operators;
-		vector::basis_element_t<group::identity_t<group::geometric::mult_operation_t>, auto> a_square=(a|a);
+		vector::basis_element_t<group::geometric::one_t, auto> a_square=(a|a);
 		using std::sqrt;
 		using std::abs;
 		return sqrt(abs(a_square.coordinate));
@@ -134,8 +134,8 @@ namespace algebra::geometric{
 		auto angle=sqrt(abs(square.coordinate));
 		using std::cosh;
 		using std::sinh;
-		return vector::scalar_wrapper_t{vector::basis_element(cosh(angle), symbolic::integer<1>)}*one
-		      +vector::scalar_wrapper_t{vector::basis_element(sinh(angle), symbolic::integer<1>)}*(a/vector::scalar_wrapper_t{angle});
+		return vector::scalar_wrapper_t{vector::unit(cosh(angle))}*one
+		      +vector::scalar_wrapper_t{vector::unit(sinh(angle))}*(a/vector::scalar_wrapper_t{angle});
 	}
 
 	template<class BivectorT> 
@@ -152,8 +152,8 @@ namespace algebra::geometric{
 		auto angle=sqrt(abs(square.coordinate));
 		using std::cos;
 		using std::sin;
-		return vector::scalar_wrapper_t{vector::basis_element(cos(angle), symbolic::integer<1>)}*one
-		      +vector::scalar_wrapper_t{vector::basis_element(sin(angle), symbolic::integer<1>)}*(a/vector::scalar_wrapper_t{angle});
+		return vector::scalar_wrapper_t{vector::unit(cos(angle))}*one
+		      +vector::scalar_wrapper_t{vector::unit(sin(angle))}*(a/vector::scalar_wrapper_t{angle});
 	}
 }
 
