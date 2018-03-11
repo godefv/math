@@ -41,6 +41,8 @@ int main(){
 	using namespace symbolic::operators;
 	std::cout<<-exp(integer<5>)<<std::endl;
 
+	static_assert(Symbol<decltype(nth_root<2>(x))>);
+
 	return 0;
 }
 

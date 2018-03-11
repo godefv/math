@@ -1,6 +1,7 @@
 #ifndef SYMBOLIC_OPERATION_H
 #define SYMBOLIC_OPERATION_H 
 
+#include"../symbol.h"
 #include"../../unit_test.h"
 #include"../../scalar.h"
 #include"../../group/operation.h"
@@ -23,6 +24,9 @@ namespace symbolic{
 			return boost::hana::front(operands);
 		}
 	};
+
+	template<class OperationT, Symbol... OperandsT>
+	struct is_symbol<operation_t<OperationT, OperandsT...>>: std::true_type{};
 
 	template<class> struct is_operation:std::false_type{};
 	template<class OperationT, class... OperandsT>

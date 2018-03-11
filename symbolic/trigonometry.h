@@ -2,10 +2,9 @@
 #define TRIGONOMETRY_H 
 
 #include"symbol.h"
+#include"vector.h"
 #include"rational.h"
 #include"operation/all.h"
-#include"../vector/basis.h"
-#include"../vector/addition.h"
 
 #include<iostream>
 

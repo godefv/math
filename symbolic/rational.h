@@ -1,6 +1,7 @@
 #ifndef RATIONAL_H
 #define RATIONAL_H 
 
+#include"symbol.h"
 #include<iostream>
 #include<ratio>
 #include<type_traits>
@@ -22,6 +23,9 @@ namespace symbolic{
 	auto ratio=ratio_t<Numerator, Denominator>{};
 	
 	//concepts
+	template<std::intmax_t Numerator, std::intmax_t Denominator> 
+	struct is_symbol<ratio_t<Numerator,Denominator>>: std::true_type{};
+
 	template<class T> struct is_ratio: std::false_type{};
 	template<std::intmax_t Numerator, std::intmax_t Denominator> 
 	struct is_ratio<ratio_t<Numerator,Denominator>>: std::true_type{};
