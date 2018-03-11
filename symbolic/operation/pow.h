@@ -10,8 +10,11 @@
 namespace symbolic{
 	template<Ratio RatioT>
 	struct pow_t{RatioT exponent;};
+
 	template<Ratio RatioT>
 	using nth_root_t=pow_t<decltype(inverse(RatioT{}))>;
+
+	using square_t=pow_t<integer_t<2>>;
 
 	//formatting
 	inline std::ostream& operator<<(std::ostream& out, pow_t<auto> const power_operation){return out<<"power<"<<power_operation.exponent<<">";}
@@ -117,14 +120,14 @@ namespace symbolic{
 	int constexpr static_compare(operation_t<pow_t<Ratio>, auto> const& a, operation_t<pow_t<Ratio>, auto> const& b){return b.operation.exponent-a.operation.exponent;}
 
 	//operator*
-	template<Ratio RatioT>
-	auto constexpr operator*(operation_t<pow_t<RatioT>, auto> const& a, operation_t<pow_t<RatioT>, auto> const& b){
+	template<Ratio RatioT, class A, class B> requires !std::is_same<A,B>::value
+	auto constexpr operator*(operation_t<pow_t<RatioT>, A> const& a, operation_t<pow_t<RatioT>, B> const& b){
 		return pow<RatioT>(a.operand()*b.operand());
 	}
 
-	template<class Name>
-	auto constexpr operator*(symbol_t<Name>,symbol_t<Name>){
-		return pow<integer_t<2>>(symbol_t<Name>{});
+	template<Symbol SymbolT> requires !vector::Scalar<SymbolT>
+	auto constexpr operator*(SymbolT,SymbolT){
+		return pow<integer_t<2>>(SymbolT{});
 	}
 
 }
