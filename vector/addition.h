@@ -12,7 +12,6 @@
 namespace vector{
 	//addition definition
 	struct add_operation_t{
-		//group rules
 		static constexpr auto apply(auto const& a, auto const& b){
 			return a+b;
 		}

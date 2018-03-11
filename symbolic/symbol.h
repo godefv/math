@@ -1,5 +1,5 @@
-#ifndef SYMBOL_H
-#define SYMBOL_H 
+#ifndef SYMBOLIC_SYMBOL_H
+#define SYMBOLIC_SYMBOL_H 
 
 #include<type_traits>
 
@@ -12,4 +12,4 @@ namespace symbolic{
 	template<class T> concept bool Symbol=is_symbol<T>::value;
 }
 
-#endif /* SYMBOL_H */
+#endif /* SYMBOLIC_SYMBOL_H */

@@ -1,5 +1,5 @@
-#ifndef TRIGONOMETRY_H
-#define TRIGONOMETRY_H 
+#ifndef SYMBOLIC_TRIGONOMETRY_H
+#define SYMBOLIC_TRIGONOMETRY_H 
 
 #include"symbol.h"
 #include"vector.h"
@@ -67,4 +67,4 @@ namespace symbolic{
 	}
 }
 
-#endif /* TRIGONOMETRY_H */
+#endif /* SYMBOLIC_TRIGONOMETRY_H */
