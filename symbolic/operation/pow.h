@@ -117,7 +117,9 @@ namespace symbolic{
 
 	//commutation rules
 	std::intmax_t constexpr index(pow_t<Ratio>){return 100;}
-	int constexpr static_compare(operation_t<pow_t<Ratio>, auto> const& a, operation_t<pow_t<Ratio>, auto> const& b){return b.operation.exponent-a.operation.exponent;}
+	Ratio{Ratio2}     int constexpr static_compare(operation_t<pow_t<Ratio >, auto> const& a, operation_t<pow_t<Ratio2>, auto> const& b){return a.operation.exponent-b.operation.exponent;}
+	Ratio{RatioT}     int constexpr static_compare(operation_t<pow_t<RatioT>, auto> const& a, operation_t<pow_t<RatioT>, auto> const& b){return static_compare(a.operand(),b.operand());}
+	template<class T> int constexpr static_compare(T const& a, operation_t<pow_t<Ratio>, T> const& b){return -1;}
 
 	//operator*
 	template<Ratio RatioT, class A, class B> requires !std::is_same<A,B>::value
