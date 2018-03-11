@@ -22,6 +22,16 @@ int main(){
 	static_assert(Symbol<decltype(sinh(ratio<1,4>*half_turn))>);
 	static_assert(Symbol<decltype(sinh(x))>);
 
+	check_equal(vector::unit(square(cos(x)))+vector::unit(square(sin(x))), integer<1>);
+	check_equal(vector::unit(square(sin(x)))+vector::unit(square(cos(x))), integer<1>);
+	check_equal(integer<5>*(vector::unit(square(cos(x)))+vector::unit(square(sin(x)))), integer<5>);
+	//check_equal(vector::scalar_wrapper_t{x}*(vector::unit(square(cos(x)))-vector::unit(square(sin(x)))), x);
+
+	check_equal(vector::unit(square(cosh(x)))-vector::unit(square(sinh(x))), integer<1>);
+	check_equal(-vector::unit(square(sinh(x)))+vector::unit(square(cosh(x))), integer<1>);
+	check_equal(integer<5>*(vector::unit(square(cosh(x)))-vector::unit(square(sinh(x)))), integer<5>);
+	//check_equal(vector::scalar_wrapper_t{x}*(vector::unit(square(cosh(x)))-vector::unit(square(sinh(x)))), x);
+
 	return 0;
 }
 

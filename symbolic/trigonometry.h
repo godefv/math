@@ -65,6 +65,18 @@ namespace symbolic{
 	auto constexpr sin(Angle const& angle){
 		return cos(angle_t<ratio_t<1,2>>{}-angle);
 	}
+
+	//trigonometric formulae
+	template<Symbol SymbolT, class ScalarT>
+	auto constexpr operator+(vector::basis_element_t<operation_t<square_t, operation_t<cos_t,SymbolT>>, ScalarT>
+	                        ,vector::basis_element_t<operation_t<square_t, operation_t<sin_t,SymbolT>>, ScalarT>){
+		return ScalarT{};
+	}
+	template<Symbol SymbolT, class ScalarT>
+	auto constexpr operator+(vector::basis_element_t<operation_t<square_t, operation_t<cosh_t,SymbolT>>, ScalarT>
+	                        ,vector::basis_element_t<operation_t<square_t, operation_t<sinh_t,SymbolT>>, decltype(-ScalarT{})>){
+		return ScalarT{};
+	}
 }
 
 #endif /* SYMBOLIC_TRIGONOMETRY_H */
