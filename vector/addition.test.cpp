@@ -17,7 +17,14 @@ static constexpr auto e1=vector::basis_element_t{group::indexed_element_t<1>{}, 
 static constexpr auto e2=vector::basis_element_t{group::indexed_element_t<2>{}, 1.};
 static constexpr auto e3=vector::basis_element_t{group::indexed_element_t<3>{}, 1.};
 
+auto check_vector(vector::Vector){}
+
 int main(){
+	check_vector(e1);
+	check_vector(e1+e2);
+	check_vector(e1-e2);
+	check_vector(2.*e1);
+	check_vector(2.*e1-4.5*e3);
 	//colinear
 	check_equal(e1+2.*e1, 3.*e1);
 	check_equal(-e1, -1.*e1);

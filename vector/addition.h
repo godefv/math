@@ -70,7 +70,7 @@ namespace vector{
 	}
 
 	//concepts
-	template<class T> bool concept Vector=BasisVector<T> || group::Generated<T,add_operation_t> || std::is_same<T,group::identity_t<add_operation_t>>::value;
+	template<class T> bool concept Vector=BasisVector<T> || group::Generated<add_operation_t,T> || std::is_same<T,group::identity_t<add_operation_t>>::value;
 
 	//operators
 	auto constexpr operator-(Vector const& a){
