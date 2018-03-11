@@ -47,11 +47,11 @@ namespace algebra{
 		}
 		//develop product over addition
 		static constexpr auto apply(auto const& a, group::generated_element_t<vector::add_operation_t, auto,auto> const& b){
-			return vector::add_operation_t::apply(apply(a,b.first), apply(a,b.second));
+			return apply(a,b.first)+apply(a,b.second);
 		}
 		template<class B> requires !group::Generated<vector::add_operation_t, B>
 		static constexpr auto apply(group::generated_element_t<vector::add_operation_t, auto,auto> const& a, B const& b){
-			return vector::add_operation_t::apply(apply(a.first,b), apply(a.second,b));
+			return apply(a.first,b)+apply(a.second,b);
 		}
 
 		static constexpr auto inverse(vector::Scalar const& a){return symbolic::integer<1>/a;}

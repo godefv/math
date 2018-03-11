@@ -81,9 +81,6 @@ namespace algebra::geometric{
 		constexpr auto operator/(auto const& a, auto const& b){
 			return a*mult_operation_t::inverse(b);
 		}
-		constexpr auto operator+(auto const& a, auto const& b){
-			return add_operation_t::apply(a,b);
-		}
 		constexpr auto operator-(auto const& a){
 			return add_operation_t::inverse(a);
 		}
