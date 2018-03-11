@@ -74,7 +74,7 @@ namespace vector{
 
 	//concepts
 	template<class T> struct is_basis_vector:std::false_type{};
-	template<class ElementT, Scalar ScalarT> struct is_basis_vector<basis_element_t<ElementT,ScalarT>>:std::true_type{};
+	template<class ElementT, class ScalarT> struct is_basis_vector<basis_element_t<ElementT,ScalarT>>:std::true_type{};
 	template<class T> concept bool BasisVector=is_basis_vector<T>::value;
 }
 
