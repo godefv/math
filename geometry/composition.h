@@ -32,7 +32,7 @@ namespace geometry{
 		}
 	};
 
-	std::ostream& operator<<(std::ostream& out, group::generated_element_t<auto,auto,auto> const& ab){
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<auto,auto,auto> const& ab){
 		return out<<ab.first<<" o "<<ab.second;
 	}
 }

@@ -21,11 +21,7 @@ namespace group::geometric{
 
 	//blade concept
 	struct mult_operation_t;
-	template<class T> concept bool Blade=Direction<T> 
-	                                  || std::is_same<T, identity_t<mult_operation_t>>::value
-	                                  || Minus<mult_operation_t, T>
-	                                  || Generated<mult_operation_t, T>
-	                                  ;
+	template<class T> concept bool Blade=Direction<T> || Generated<mult_operation_t,T>;
 
 	//ordering for commutation
 	Direction{Direction2}
@@ -65,7 +61,7 @@ namespace group::geometric{
 	auto constexpr grade(auto const&){return 0;}
 	auto constexpr grade(Direction const&){return 1;}
 	auto constexpr grade(group::identity_t<mult_operation_t> const&){return 0;}
-	auto constexpr grade(group::generated_element_t<mult_operation_t, auto,auto> const& a){
+	auto constexpr grade(group::generated_by_operation_t<mult_operation_t, auto,auto> const& a){
 		return grade(a.first)+grade(a.second);
 	}
 	auto constexpr grade(group::generated_minus_t<mult_operation_t, auto> const& a){
@@ -98,7 +94,7 @@ namespace group::geometric{
 	constexpr auto hana_inverse=[](auto const& a){return hana::type_c<inverse_t<typename std::decay_t<decltype(a)>::type>>;};
 
 	//formatting
-	std::ostream& operator<<(std::ostream& out, group::generated_element_t<mult_operation_t, auto, auto> const& ab){
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
 	}
 	template<unsigned short i> 

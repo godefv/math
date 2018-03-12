@@ -49,7 +49,7 @@ namespace vector{
 	}
 
 	//concepts
-	template<class T> bool concept Vector=BasisVector<T> || group::Generated<add_operation_t,T> || std::is_same<T,group::identity_t<add_operation_t>>::value;
+	template<class T> bool concept Vector=BasisVector<T> || group::Generated<add_operation_t,T>;
 
 	//operators
 	auto constexpr operator-(Vector const& a){
@@ -81,7 +81,7 @@ namespace vector{
 		return a+(-b);
 	}
 
-	std::ostream& operator<<(std::ostream& out, group::generated_element_t<add_operation_t, auto, auto> const& ab){
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<add_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
 	}
 

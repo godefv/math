@@ -11,13 +11,13 @@ namespace vector{
 		return a;
 	}
 	template<class OperatorT, class A,class B> 
-	constexpr auto reverse(basis_element_t<group::generated_element_t<OperatorT, A,B>, auto> const& ab){
+	constexpr auto reverse(basis_element_t<group::generated_by_operation_t<OperatorT, A,B>, auto> const& ab){
 		return basis_element(group::reverse(ab.element), ab.coordinate);
 	}
 }
 
 namespace algebra{
-	constexpr auto reverse(group::generated_element_t<vector::add_operation_t, auto,auto> const& ab){
+	constexpr auto reverse(group::generated_by_operation_t<vector::add_operation_t, auto,auto> const& ab){
 		return std::decay_t<decltype(ab.operation)>::apply(reverse(ab.first), reverse(ab.second));
 	}
 }

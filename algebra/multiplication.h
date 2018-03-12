@@ -46,11 +46,11 @@ namespace algebra{
 			return vector::basis_element(apply(a.element, b.element), apply(a.coordinate, b.coordinate));
 		}
 		//develop product over addition
-		static constexpr auto apply(auto const& a, group::generated_element_t<vector::add_operation_t, auto,auto> const& b){
+		static constexpr auto apply(auto const& a, group::generated_by_operation_t<vector::add_operation_t, auto,auto> const& b){
 			return apply(a,b.first)+apply(a,b.second);
 		}
-		template<class B> requires !group::Generated<vector::add_operation_t, B>
-		static constexpr auto apply(group::generated_element_t<vector::add_operation_t, auto,auto> const& a, B const& b){
+		template<class B> requires !group::Operation<vector::add_operation_t, B>
+		static constexpr auto apply(group::generated_by_operation_t<vector::add_operation_t, auto,auto> const& a, B const& b){
 			return apply(a.first,b)+apply(a.second,b);
 		}
 

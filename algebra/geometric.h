@@ -58,7 +58,7 @@ namespace algebra::geometric{
 	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
 	auto constexpr grades(group::identity_t<add_operation_t> const&){return grades<>();}
 	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return grades<grade(a.element)>();}
-	auto constexpr grades(group::generated_element_t<add_operation_t, auto,auto> const& a){
+	auto constexpr grades(group::generated_by_operation_t<add_operation_t, auto,auto> const& a){
 		return hana::union_(grades(a.first), grades(a.second));
 	}
 
@@ -70,7 +70,7 @@ namespace algebra::geometric{
 			return a;
 		}
 	}
-	auto constexpr project(group::generated_element_t<add_operation_t, auto,auto> const& a, auto grades){
+	auto constexpr project(group::generated_by_operation_t<add_operation_t, auto,auto> const& a, auto grades){
 		return std::decay_t<decltype(a.operation)>::apply(project(a.first, grades), project(a.second, grades));
 	}
 

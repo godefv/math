@@ -16,7 +16,7 @@ namespace group{
 	int constexpr ordering(generated_inverse_t<auto, auto> const&){
 		return 2;
 	}
-	int constexpr ordering(generated_element_t<auto, auto, auto> const&){
+	int constexpr ordering(generated_by_operation_t<auto, auto, auto> const&){
 		return 3;
 	}
 	int constexpr ordering(generated_minus_t<auto, auto> const&){
@@ -36,7 +36,7 @@ namespace group{
 
 		return static_compare(a.value_before_inverse,b.value_before_inverse);
 	}
-	auto constexpr static_compare(generated_element_t<auto, auto, auto> const& a, generated_element_t<auto, auto, auto> const& b){
+	auto constexpr static_compare(generated_by_operation_t<auto, auto, auto> const& a, generated_by_operation_t<auto, auto, auto> const& b){
 		auto constexpr operation_order=static_compare(a.operation,b.operation);
 		if constexpr(operation_order!=0) return operation_order;
 

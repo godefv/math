@@ -35,7 +35,7 @@ int main(){
 	check_equal(a*a, vector::basis_element_t{group::geometric::one_t{}, a.coordinate*a.coordinate});
 	//commutation
 	static_assert(static_compare(e1,e2)>0);
-	check_equal(a+b, group::generated_element_t{algebra::geometric::add_operation_t{},a,b});
+	check_equal(a+b, group::generated_by_operation_t{algebra::geometric::add_operation_t{},a,b});
 	check_equal(b+a, a+b);
 	check_equal(a+b+a, symbolic::integer<2>*a+b);
 	check_equal(b+a+b, a+symbolic::integer<2>*b);
