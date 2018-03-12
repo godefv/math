@@ -1,13 +1,11 @@
-#ifndef TRANSLATION_H
-#define TRANSLATION_H 
+#ifndef GEOMETRY_TRANSLATION_H
+#define GEOMETRY_TRANSLATION_H 
 
-#include"../vector/basis.h"
-#include"../vector/direction.h"
-#include"../vector/operation.h"
+#include"../vector/addition.h"
 
 namespace geometry{
-	template<class DirectionT, vector::Scalar LengthT=double>
-	struct basis_translation_t: vector::basis_vector_t<DirectionT, LengthT>{};
+	//A translation is a vector
+	template<class T> concept bool Translation=vector::Vector<T>;
 }
 
-#endif /* TRANSLATION_H */
+#endif /* GEOMETRY_TRANSLATION_H */
