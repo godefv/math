@@ -121,13 +121,26 @@ namespace symbolic{
 	Ratio{RatioT}     int constexpr static_compare(operation_t<pow_t<RatioT>, auto> const& a, operation_t<pow_t<RatioT>, auto> const& b){return static_compare(a.operand(),b.operand());}
 	template<class T> int constexpr static_compare(T const& a, operation_t<pow_t<Ratio>, T> const& b){return -1;}
 
+	//concept
+	template<class> struct is_pow:std::false_type{};
+	template<Ratio RatioT, class OperandT> struct is_pow<operation_t<pow_t<RatioT>, OperandT>>:std::true_type{};
+	template<class T> concept bool Pow=is_pow<T>::value;
+
 	//operator*
 	template<Ratio RatioT, class A, class B> requires !std::is_same<A,B>::value
 	auto constexpr operator*(operation_t<pow_t<RatioT>, A> const& a, operation_t<pow_t<RatioT>, B> const& b){
 		return pow<RatioT>(a.operand()*b.operand());
 	}
 
-	template<Symbol SymbolT> requires !vector::Scalar<SymbolT>
+	template<Symbol SymbolT, Ratio RatioT> auto constexpr operator*(operation_t<pow_t<RatioT>, SymbolT>, SymbolT){return pow<decltype(RatioT{}+integer<1>)>(SymbolT{});}
+	template<Symbol SymbolT, Ratio RatioT> auto constexpr operator*(SymbolT, operation_t<pow_t<RatioT>, SymbolT>){return pow<decltype(RatioT{}+integer<1>)>(SymbolT{});}
+
+	template<Ratio Ratio1, Ratio Ratio2, Symbol SymbolT>
+	auto constexpr operator*(operation_t<pow_t<Ratio1>, SymbolT>, operation_t<pow_t<Ratio2>, SymbolT>){
+		return pow<decltype(Ratio1{}+Ratio2{})>(SymbolT{});
+	}
+
+	template<Symbol SymbolT> requires !vector::Scalar<SymbolT> && !Pow<SymbolT>
 	auto constexpr operator*(SymbolT,SymbolT){
 		return pow<integer_t<2>>(SymbolT{});
 	}
