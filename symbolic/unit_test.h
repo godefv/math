@@ -5,10 +5,16 @@
 #include"../unit_test.h"
 #include<iostream>
 
-using x_t=symbolic::symbol_t<struct x_symbol_name_t>; 
+template<char> struct symbol_name_t{};
+using x_t=symbolic::symbol_t<symbol_name_t<'x'>>; 
+using y_t=symbolic::symbol_t<symbol_name_t<'y'>>; 
 x_t x;
-inline bool operator==(x_t,x_t){return true;}
-inline bool operator!=(x_t,x_t){return false;}
-inline std::ostream& operator<<(std::ostream& out,x_t){return out<<"x";}
+y_t y;
+template<char Name> std::ostream& operator<<(std::ostream& out,symbolic::symbol_t<symbol_name_t<Name>>){return out<<Name;}
+
+template<char C1, char C2>
+int constexpr static_compare(symbolic::symbol_t<symbol_name_t<C1>>, symbolic::symbol_t<symbol_name_t<C2>>){
+	return C2-C1;
+}
 
 #endif /* SYMBOLIC_UNIT_TEST_H */
