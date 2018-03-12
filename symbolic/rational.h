@@ -10,6 +10,8 @@ namespace symbolic{
 	template<std::intmax_t Numerator, std::intmax_t Denominator>
 	struct ratio_t: std::ratio<Numerator,Denominator>{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
+		auto constexpr numerator(){return Numerator;}
+		auto constexpr denominator(){return Denominator;}
 	};
 
 	template<std::intmax_t value>
@@ -48,8 +50,7 @@ namespace symbolic{
 
 	//inverse
 	auto constexpr inverse(Ratio a){
-		using type=typename decltype(a)::type;
-		return ratio_t<type::den,type::num>{};
+		return ratio<a.denominator(),a.numerator()>;
 	}
 
 	//operators
@@ -58,26 +59,25 @@ namespace symbolic{
 	Ratio{Ratio2}
 	auto constexpr operator*(Ratio a, Ratio2 b){
 		using result_t=std::ratio_multiply<typename decltype(a)::type, typename decltype(b)::type>;
-		return ratio_t<result_t::num, result_t::den>{};
+		return ratio<result_t::num, result_t::den>;
 	}
 	Ratio{Ratio2}
 	auto constexpr operator/(Ratio a, Ratio2 b){
 		using result_t=std::ratio_divide<typename decltype(a)::type, typename decltype(b)::type>;
-		return ratio_t<result_t::num, result_t::den>{};
+		return ratio<result_t::num, result_t::den>;
 	}
 	Ratio{Ratio2}
 	auto constexpr operator+(Ratio a, Ratio2 b){
 		using result_t=std::ratio_add<typename decltype(a)::type, typename decltype(b)::type>;
-		return ratio_t<result_t::num, result_t::den>{};
+		return ratio<result_t::num, result_t::den>;
 	}
 	Ratio{Ratio2}
 	auto constexpr operator-(Ratio a, Ratio2 b){
 		using result_t=std::ratio_subtract<typename decltype(a)::type, typename decltype(b)::type>;
-		return ratio_t<result_t::num, result_t::den>{};
+		return ratio<result_t::num, result_t::den>;
 	}
-	template<std::intmax_t N1, std::intmax_t D1>
-	auto constexpr operator-(ratio_t<N1,D1>){
-		return ratio_t<-N1, D1>{};
+	auto constexpr operator-(Ratio a){
+		return ratio<-a.numerator(), a.denominator()>;
 	}
 	Ratio{Ratio2}
 	auto constexpr operator<(Ratio a, Ratio2 b){
@@ -103,15 +103,13 @@ namespace symbolic{
 	auto constexpr operator!=(Ratio a, Ratio2 b){
 		return std::ratio_not_equal<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	template<std::intmax_t N1, std::intmax_t D1>
-	std::ostream& operator<<(std::ostream& out, ratio_t<N1,D1>){
-		return out<<N1<<"/"<<D1;
+	std::ostream& operator<<(std::ostream& out, Ratio a){
+		return out<<a.numerator()<<"/"<<a.denominator();
 	}
 
 	//abs
 	auto constexpr abs(Ratio a){
-		using type=typename decltype(a)::type;
-		return ratio_t<(type::num>0)?type::num:-type::num,type::den>{};
+		return ratio<(a.numerator()>0)?a.numerator():-a.numerator(),a.denominator()>;
 	}
 
 	//nth_root
@@ -136,8 +134,11 @@ namespace symbolic{
 
 	template<std::intmax_t N, std::intmax_t D> requires rounded_sqrt(N)*rounded_sqrt(N)==N && rounded_sqrt(D)*rounded_sqrt(D)==D 
 	auto constexpr sqrt(ratio_t<N,D>){
-		return ratio_t<rounded_sqrt(N),rounded_sqrt(D)>{};
+		return ratio<rounded_sqrt(N),rounded_sqrt(D)>;
 	}
+
+	//static_order
+	Ratio{Ratio2} int constexpr static_compare(Ratio const& a, Ratio2 const& b){return (a-b).numerator();}
 }
 
 #endif /* RATIONAL_H */
