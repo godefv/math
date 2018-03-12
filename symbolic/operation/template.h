@@ -28,13 +28,27 @@ namespace symbolic{
 	template<class OperationT, Symbol... OperandsT>
 	struct is_symbol<operation_t<OperationT, OperandsT...>>: std::true_type{};
 
+	//concept
 	template<class> struct is_operation:std::false_type{};
 	template<class OperationT, class... OperandsT>
 	struct is_operation<operation_t<OperationT, OperandsT...>>:std::true_type{};
 	template<class T> concept bool Operation=is_operation<T>::value;
 
-	template<class OperationT, class... OperandsT>
-	auto constexpr check_equal(operation_t<OperationT, OperandsT...> const& a, operation_t<OperationT, OperandsT...> const& b){
+	//comparisons
+	Operation{Operation2}
+	auto constexpr operator==(Operation const& a, Operation2 const& b){
+		return a.operands==b.operands;
+	}
+	Operation{OperationT}
+	auto constexpr operator==(OperationT const& a, OperationT const& b){
+		return a.operands==b.operands;
+	}
+	Operation{Operation2}
+	auto constexpr operator!=(Operation const& a, Operation2 const& b){
+		return !(a.operands==b.operands);
+	}
+	Operation{OperationT}
+	auto constexpr check_equal(OperationT const& a, OperationT const& b){
 		using ::check_equal;
 		std::cout<<"checking "<<a<<" equals "<<b<<" : ";
 		return check_equal(a.operands, b.operands);

@@ -11,8 +11,16 @@ int main(){
 	static_assert(group::Generated<mult_operation_t,decltype(x*y)>);
 	static_assert(Symbol<decltype(x*y)>);
 
+	//operation order
+	check_less(static_compare(pow<2>(x), pow<3>(x)), 0);
+	check_less(static_compare(sin(x), cos(x)), 0);
+	check_less(static_compare(pow<2>(sin(x)), pow<2>(cos(x))), 0);
+	check_less(static_compare(sqrt(y), cos(x)), 0);
+
 	//multiplication
 	unused((x*y)*(y*x));
+	check_equal(cos(x),cos(x));
+	check_equal(cos(x)*sqrt(y)*cos(x)*sqrt(x), cos(x)*cos(x)*sqrt(y)*sqrt(x));
 
 	//pow
 	check_equal(pow<3>(integer<2>),integer<8>);
@@ -27,11 +35,6 @@ int main(){
 
 	check_equal(inverse(x)*x,integer<1>);
 	check_equal(abs(nth_root<2>(x)), nth_root<2>(abs(x)));
-
-	//operation order
-	check_less(static_compare(pow<2>(x), pow<3>(x)), 0);
-	check_less(static_compare(sin(x), cos(x)), 0);
-	check_less(static_compare(pow<2>(sin(x)), pow<2>(cos(x))), 0);
 
 	//formatting
 	std::cout<<exp(integer<3>)<<std::endl;
