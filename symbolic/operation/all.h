@@ -3,6 +3,7 @@
 
 #include"template.h"
 #include"pow.h"
+#include"mult.h"
 #include"../../eval.h"
 
 namespace symbolic{

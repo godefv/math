@@ -44,46 +44,12 @@ namespace symbolic{
 	Operation{Operation2}
 	constexpr int static_compare(Operation const& a, Operation2 const& b){return index(b.operation)-index(a.operation);}
 
-	//mult operation
-	struct mult_operation_t{
-		//commutations rules
-		template<class A,class B> 
-			requires Operation<A>
-			      && Operation<B>
-			      && static_compare(A{},B{})<0
-		static constexpr auto apply(A const& a, B const& b){
-			return apply(b,a);
-		}
-		//group rules
-		template<class A,class B> 
-		static constexpr auto apply(A const& a, B const& b){
-			return group::operation<mult_operation_t>(a,b);
-		}
-		vector::Scalar{Scalar2}
-		static constexpr auto apply(vector::Scalar const& a, Scalar2 const& b){
-			return a*b;
-		}
-
-		//group inverse
-		template<class A>
-		static constexpr auto inverse(A const& a){return group::inverse<mult_operation_t>(a);}
-	};
-	//operators
-	Operation{Operation2}
-	constexpr auto operator*(Operation const& a, Operation2 const& b){
-		return mult_operation_t::apply(a,b);
-	}
-
 	//formatting
 	template<class OperationT, class... OperandsT>
 	std::ostream& operator<<(std::ostream& out, operation_t<OperationT, OperandsT...> const& operation){
 		out<<operation.operation<<"("<<boost::hana::front(operation.operands);
 		boost::hana::for_each(boost::hana::drop_front(operation.operands), [&out](auto const& operand){out<<", "<<operand;});
 		return out<<")";
-	}
-
-	std::ostream& operator<<(std::ostream& out, group::generated_element_t<mult_operation_t, auto, auto> const& ab){
-		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
 	}
 }
 
