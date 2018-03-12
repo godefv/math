@@ -6,6 +6,14 @@ int main(){
 	using namespace symbolic;
 	check_equal(x,x);
 
+	static_assert(Symbol<decltype(nth_root<2>(x))>);
+	static_assert(Symbol<decltype(x*x)>);
+	static_assert(group::Generated<mult_operation_t,decltype(x*y)>);
+	static_assert(Symbol<decltype(x*y)>);
+
+	//multiplication
+	unused((x*y)*(y*x));
+
 	//pow
 	check_equal(pow<3>(integer<2>),integer<8>);
 	check_equal(nth_root<3>(integer<8>),integer<2>);
@@ -40,8 +48,6 @@ int main(){
 	std::cout<<square(sin(sqrt(integer<5>)))<<std::endl;
 	using namespace symbolic::operators;
 	std::cout<<-exp(integer<5>)<<std::endl;
-
-	static_assert(Symbol<decltype(nth_root<2>(x))>);
 
 	return 0;
 }
