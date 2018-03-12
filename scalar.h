@@ -13,16 +13,10 @@ namespace vector{
 	template<class T> scalar_wrapper_t(T a) -> scalar_wrapper_t<T>;
 
 	//concepts
+	template<class T> struct is_scalar_wrapper:std::false_type{};
+	template<class T> struct is_scalar_wrapper<scalar_wrapper_t<T>>:std::true_type{};
 	template<class T> concept bool SimpleScalar=std::is_arithmetic<T>::value || symbolic::Ratio<T>;
-	//template<class T> concept bool BasisVectorScalar=vector::BasisVector<T> && requires(T vector){
-		//requires SimpleScalar<decltype(vector.element)>;
-	//};
-	//template<class T> concept bool VectorScalar=BasisVectorScalar<T> || 
-		//(Vector<T> && requires(T vector){
-			//requires VectorScalar<decltype(vector.first)>;
-			//requires VectorScalar<decltype(vector.second)>;
-		//});
-	template<class T> concept bool Scalar=SimpleScalar<T>;// || VectorScalar<T>;
+	template<class T> concept bool Scalar=SimpleScalar<T> || is_scalar_wrapper<T>::value;
 	template<class T> concept bool Zero=symbolic::is_zero<T>::value;
 	template<class T> concept bool NonZero=!symbolic::is_zero<T>::value;
 	template<class T> concept bool NonZeroScalar=Scalar<T> && !Zero<T>;

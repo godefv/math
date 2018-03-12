@@ -36,10 +36,10 @@ namespace vector{
 		return !(a==b);
 	}
 
-	auto constexpr operator*(Scalar const& a, basis_vector_t<auto, auto> const& b){
+	auto constexpr operator*(SimpleScalar const& a, basis_vector_t<auto, auto> const& b){
 		return basis_vector_t{b.element,a*b.coordinate};
 	}
-	auto constexpr operator*(basis_vector_t<auto, auto> const& a, Scalar const& b){
+	auto constexpr operator*(basis_vector_t<auto, auto> const& a, SimpleScalar const& b){
 		return b*a;
 	}
 

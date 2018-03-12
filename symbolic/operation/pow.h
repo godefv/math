@@ -64,7 +64,7 @@ namespace symbolic{
 		}
 	}
 	template<Ratio RatioT> requires RatioT::den==1 && RatioT::num>1
-	auto constexpr pow(vector::Scalar const& operand){
+	auto constexpr pow(vector::SimpleScalar const& operand){
 		return pow<integer_t<RatioT::num-1>>(operand)*operand;
 	}
 	//look for exact roots

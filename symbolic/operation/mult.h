@@ -19,8 +19,8 @@ namespace symbolic{
 		static constexpr auto apply(A const& a, B const& b){
 			return group::operation<mult_operation_t>(a,b);
 		}
-		vector::Scalar{Scalar2}
-		static constexpr auto apply(vector::Scalar const& a, Scalar2 const& b){
+		vector::SimpleScalar{SimpleScalar2}
+		static constexpr auto apply(vector::SimpleScalar const& a, SimpleScalar2 const& b){
 			return a*b;
 		}
 

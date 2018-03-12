@@ -24,7 +24,6 @@ namespace algebra{
 		static constexpr auto apply(vector::scalar_wrapper_t<auto> const& a, vector::basis_vector_t<auto,auto> const& b){
 			return vector::basis_vector(b.element, apply(a.value,b.coordinate));
 		}
-		static constexpr auto apply( vector::basis_vector_t<auto,auto> const& a, vector::scalar_wrapper_t<auto> const& b){return apply(b,a);}
 		static constexpr auto apply(vector::Scalar const& a, vector::basis_vector_t<auto,auto> const& b){
 			return vector::basis_vector(b.element, a*b.coordinate);
 		}
@@ -40,8 +39,6 @@ namespace algebra{
 		}
 		//operation with basis vectors
 		template<class ElementT1, class ElementT2> 
-			//requires !vector::Scalar<ElementT1>
-				  //&& !vector::Scalar<ElementT2>
 		static constexpr auto apply(vector::basis_vector_t<ElementT1,auto> const& a, vector::basis_vector_t<ElementT2,auto> const& b){
 			return vector::basis_vector(apply(a.element, b.element), apply(a.coordinate, b.coordinate));
 		}
