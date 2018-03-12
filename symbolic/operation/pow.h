@@ -98,6 +98,7 @@ namespace symbolic{
 	//pow() aliases
 	template<std::intmax_t N>
 	auto constexpr pow(auto const& operand){return pow<integer_t<N>>(operand);}
+	auto constexpr inverse(auto const& operand){return pow<-1>(operand);}
 	template<std::intmax_t N>
 	auto constexpr nth_root(auto const& operand){return pow<ratio_t<1,N>>(operand);}
 	auto constexpr square(auto const& operand){return pow<2>(operand);}

@@ -26,25 +26,6 @@ namespace symbolic{
 	DEFINE_OPERATION(asinh, 10)
 #undef DEFINE_OPERATION
 
-	//inverse
-	struct inverse_t{};
-	inline std::ostream& operator<<(std::ostream& out, inverse_t const){return out<<"inverse";} 
-	auto constexpr inverse(auto const& operand){return operation_t{inverse_t{}, operand};} 
-	
-	Symbol{SymbolT}
-	auto constexpr operator*(operation_t<inverse_t,SymbolT>, SymbolT){return integer<1>;} 
-	Symbol{SymbolT}
-	auto constexpr operator*(SymbolT, operation_t<inverse_t,SymbolT>){return integer<1>;} 
-
-	auto constexpr eval(operation_t<inverse_t, auto> const& operand){
-		auto evaluated_operand=eval(operand.operand());
-		if constexpr(std::is_same<decltype(evaluated_operand), double>::value){
-			return 1./evaluated_operand;
-		}else{
-			return inverse(evaluated_operand);
-		}
-	}
-
 	//minus
 	struct minus_t{}; 
 	inline std::ostream& operator<<(std::ostream& out, minus_t const){return out<<"minus";} 
@@ -52,23 +33,9 @@ namespace symbolic{
 	auto constexpr operator-(auto const& a){return operation_t{minus_t{}, a};} 
 	} 
 	auto constexpr eval(operation_t<minus_t, auto> const& operand){
-		auto evaluated_operand=eval(operand.operand());
-		if constexpr(std::is_same<decltype(evaluated_operand), double>::value){
-			return -evaluated_operand;
-		}else{
-			return inverse(evaluated_operand);
-		}
+		return -eval(operand.operand());
 	}
 
-	//pow is put outer not to interfere with inner simplifications
-	template<Ratio RatioT>
-	auto constexpr inverse(operation_t<pow_t<RatioT>,auto> const& operand){
-		return pow<RatioT>(inverse(operand.operand()));
-	} 
-	//abs is put outer not to interfere with inner simplifications
-	auto constexpr inverse(operation_t<abs_t,auto> const& operand){
-		return abs(inverse(operand.operand()));
-	} 
 	//abs is put outer not to interfere with inner simplifications
 	template<Ratio RatioT>
 	auto constexpr pow(operation_t<abs_t,auto> const& operation){
