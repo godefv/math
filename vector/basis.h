@@ -9,41 +9,41 @@
 
 namespace vector{
 	template<class ElementT, class ScalarT=double> requires !Scalar<ElementT>
-	struct basis_element_t{
+	struct basis_vector_t{
 		ElementT element;
 		ScalarT coordinate;
 	};
-	template<class ElementT, class ScalarT> basis_element_t(ElementT,ScalarT)->basis_element_t<ElementT,ScalarT>;
+	template<class ElementT, class ScalarT> basis_vector_t(ElementT,ScalarT)->basis_vector_t<ElementT,ScalarT>;
 
 	template<class ElementT>
-	using unit_t=basis_element_t<ElementT,symbolic::integer_t<1>>;
+	using unit_t=basis_vector_t<ElementT,symbolic::integer_t<1>>;
 	auto constexpr unit(auto const& element){
-		return basis_element_t{element, symbolic::integer<1>};
+		return basis_vector_t{element, symbolic::integer<1>};
 	}
 
-	int constexpr static_compare(basis_element_t<auto,auto> const& a, basis_element_t<auto,auto> const& b){
+	int constexpr static_compare(basis_vector_t<auto,auto> const& a, basis_vector_t<auto,auto> const& b){
 		return static_compare(a.element,b.element);
 	}
 
 	template<class ElementT> 
-	bool constexpr operator==(basis_element_t<ElementT, auto> const& a, basis_element_t<ElementT, auto> const& b){
+	bool constexpr operator==(basis_vector_t<ElementT, auto> const& a, basis_vector_t<ElementT, auto> const& b){
 		return a.coordinate==b.coordinate;
 	}
-	bool constexpr operator==(basis_element_t<auto, auto> const& a, basis_element_t<auto, auto> const& b){
+	bool constexpr operator==(basis_vector_t<auto, auto> const& a, basis_vector_t<auto, auto> const& b){
 		return false;
 	}
-	bool constexpr operator!=(basis_element_t<auto, auto> const& a, basis_element_t<auto, auto> const& b){
+	bool constexpr operator!=(basis_vector_t<auto, auto> const& a, basis_vector_t<auto, auto> const& b){
 		return !(a==b);
 	}
 
-	auto constexpr operator*(Scalar const& a, basis_element_t<auto, auto> const& b){
-		return basis_element_t{b.element,a*b.coordinate};
+	auto constexpr operator*(Scalar const& a, basis_vector_t<auto, auto> const& b){
+		return basis_vector_t{b.element,a*b.coordinate};
 	}
-	auto constexpr operator*(basis_element_t<auto, auto> const& a, Scalar const& b){
+	auto constexpr operator*(basis_vector_t<auto, auto> const& a, Scalar const& b){
 		return b*a;
 	}
 
-	std::ostream& operator<<(std::ostream& out, basis_element_t<auto, auto> const& a){
+	std::ostream& operator<<(std::ostream& out, basis_vector_t<auto, auto> const& a){
 		return out<<a.coordinate<<" * \""<<a.element<<"\"";
 	}
 
@@ -52,29 +52,29 @@ namespace vector{
 	template<class, class=void> 
 	struct is_eval_to_scalar: std::false_type{};
 	template<class ElementT, class ScalarT> 
-	struct is_eval_to_scalar<basis_element_t<ElementT,ScalarT>, std::void_t<decltype(eval(std::declval<ElementT&>())*eval(std::declval<ScalarT&>()))>>: std::true_type{};
+	struct is_eval_to_scalar<basis_vector_t<ElementT,ScalarT>, std::void_t<decltype(eval(std::declval<ElementT&>())*eval(std::declval<ScalarT&>()))>>: std::true_type{};
 
-	auto constexpr eval(basis_element_t<auto,auto> const& a){
+	auto constexpr eval(basis_vector_t<auto,auto> const& a){
 		if constexpr(is_eval_to_scalar<std::decay_t<decltype(a)>>::value){
 			return eval(a.element)*eval(a.coordinate);
 		}else{
-			return basis_element_t{eval(a.element),eval(a.coordinate)};
+			return basis_vector_t{eval(a.element),eval(a.coordinate)};
 		}
 	}
 
 	//operations
-	auto constexpr abs(basis_element_t<auto,auto> const& a){
+	auto constexpr abs(basis_vector_t<auto,auto> const& a){
 		using std::abs;
-		return basis_element_t{abs(a.element),abs(a.coordinate)};
+		return basis_vector_t{abs(a.element),abs(a.coordinate)};
 	}
-	auto constexpr sqrt(basis_element_t<auto,auto> const& a){
+	auto constexpr sqrt(basis_vector_t<auto,auto> const& a){
 		using std::sqrt;
-		return basis_element_t{sqrt(a.element),sqrt(a.coordinate)};
+		return basis_vector_t{sqrt(a.element),sqrt(a.coordinate)};
 	}
 
 	//concepts
 	template<class T> struct is_basis_vector:std::false_type{};
-	template<class ElementT, class ScalarT> struct is_basis_vector<basis_element_t<ElementT,ScalarT>>:std::true_type{};
+	template<class ElementT, class ScalarT> struct is_basis_vector<basis_vector_t<ElementT,ScalarT>>:std::true_type{};
 	template<class T> concept bool BasisVector=is_basis_vector<T>::value;
 }
 

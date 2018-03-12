@@ -57,13 +57,13 @@ namespace algebra::geometric{
 	template<int... Is>
 	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
 	auto constexpr grades(group::identity_t<add_operation_t> const&){return grades<>();}
-	auto constexpr grades(vector::basis_element_t<auto,auto> const& a){return grades<grade(a.element)>();}
+	auto constexpr grades(vector::basis_vector_t<auto,auto> const& a){return grades<grade(a.element)>();}
 	auto constexpr grades(group::generated_by_operation_t<add_operation_t, auto,auto> const& a){
 		return hana::union_(grades(a.first), grades(a.second));
 	}
 
 	auto constexpr project(group::identity_t<add_operation_t> const& a, auto const& grades){return zero;}
-	auto constexpr project(vector::basis_element_t<auto,auto> const& a, auto grades){
+	auto constexpr project(vector::basis_vector_t<auto,auto> const& a, auto grades){
 		if constexpr(hana::find(grades, hana::llong_c<grade(a.element)>)==hana::nothing){
 			return zero;
 		}else{
@@ -97,7 +97,7 @@ namespace algebra::geometric{
 
 	auto constexpr norm(auto const& a){
 		using namespace operators;
-		vector::basis_element_t<group::geometric::one_t, auto> a_square=(a|a);
+		vector::basis_vector_t<group::geometric::one_t, auto> a_square=(a|a);
 		using std::sqrt;
 		using std::abs;
 		return sqrt(abs(a_square.coordinate));
@@ -125,7 +125,7 @@ namespace algebra::geometric{
 			  && eval((BivectorT{}*BivectorT{}).coordinate)>0
 	constexpr auto exp(BivectorT const& a){
 		using namespace operators;
-		vector::basis_element_t<group::geometric::one_t, auto> square=a*a;
+		vector::basis_vector_t<group::geometric::one_t, auto> square=a*a;
 		using std::sqrt;
 		using std::abs;
 		auto angle=sqrt(abs(square.coordinate));
@@ -143,7 +143,7 @@ namespace algebra::geometric{
 			  && eval((BivectorT{}*BivectorT{}).coordinate)<0
 	constexpr auto exp(BivectorT const& a){
 		using namespace operators;
-		vector::basis_element_t<group::geometric::one_t, auto> square=a*a;
+		vector::basis_vector_t<group::geometric::one_t, auto> square=a*a;
 		using std::sqrt;
 		using std::abs;
 		auto angle=sqrt(abs(square.coordinate));

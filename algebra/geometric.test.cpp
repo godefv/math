@@ -31,8 +31,8 @@ int main(){
 	check_equal(-a, symbolic::integer<-1>*a);
 	check_equal(a-a, vector::zero);
 	//product of basis elements
-	check_equal(a*b, vector::basis_element_t{group::geometric::mult_t<e1_t,e2_t>{}, a.coordinate*b.coordinate});
-	check_equal(a*a, vector::basis_element_t{group::geometric::one_t{}, a.coordinate*a.coordinate});
+	check_equal(a*b, vector::basis_vector_t{group::geometric::mult_t<e1_t,e2_t>{}, a.coordinate*b.coordinate});
+	check_equal(a*a, vector::basis_vector_t{group::geometric::one_t{}, a.coordinate*a.coordinate});
 	//commutation
 	static_assert(static_compare(e1,e2)>0);
 	check_equal(a+b, group::generated_by_operation_t{algebra::geometric::add_operation_t{},a,b});
@@ -82,7 +82,7 @@ int main(){
 	auto sqrt_5_element=symbolic::nth_root<2>(symbolic::integer<5>);
 	auto sqrt_5=vector::unit(sqrt_5_element);
 	auto sqrt_5_e1=vector::scalar_wrapper_t{sqrt_5}*e1;
-	check_equal(sqrt_5_e1*sqrt_5_e1, vector::basis_element_t{one.element, symbolic::integer<5>});
+	check_equal(sqrt_5_e1*sqrt_5_e1, vector::basis_vector_t{one.element, symbolic::integer<5>});
 	
 	std::cout<<"symetry   : "<<-(e3*(3.*e3+e1+2.*e2)*e3)<<std::endl;
 	std::cout<<"rotation  : "<<0.5*((e1+e3)*e3*(symbolic::integer<3>*e3+e1+symbolic::integer<2>*e2)*e3*(e1+e3))<<std::endl;

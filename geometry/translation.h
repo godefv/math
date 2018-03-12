@@ -7,7 +7,7 @@
 
 namespace geometry{
 	template<class DirectionT, vector::Scalar LengthT=double>
-	struct basis_translation_t: vector::basis_element_t<DirectionT, LengthT>{};
+	struct basis_translation_t: vector::basis_vector_t<DirectionT, LengthT>{};
 }
 
 #endif /* TRANSLATION_H */

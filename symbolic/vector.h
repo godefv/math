@@ -7,7 +7,7 @@
 
 namespace symbolic{
 	template<Symbol ElementT, Symbol ScalarT>
-	struct is_symbol<vector::basis_element_t<ElementT, ScalarT>>: std::true_type{};
+	struct is_symbol<vector::basis_vector_t<ElementT, ScalarT>>: std::true_type{};
 }
 
 #endif /* SYMBOLIC_VECTOR_H */

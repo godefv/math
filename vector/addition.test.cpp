@@ -7,9 +7,9 @@ template<class A> constexpr auto operator-(A const& a){
 	return vector::add_operation_t::inverse(a);
 }
 
-static constexpr auto e1=vector::basis_element_t{group::indexed_element_t<1>{}, 1.};
-static constexpr auto e2=vector::basis_element_t{group::indexed_element_t<2>{}, 1.};
-static constexpr auto e3=vector::basis_element_t{group::indexed_element_t<3>{}, 1.};
+static constexpr auto e1=vector::basis_vector_t{group::indexed_element_t<1>{}, 1.};
+static constexpr auto e2=vector::basis_vector_t{group::indexed_element_t<2>{}, 1.};
+static constexpr auto e3=vector::basis_vector_t{group::indexed_element_t<3>{}, 1.};
 
 auto check_vector(vector::Vector){}
 

@@ -19,7 +19,7 @@ namespace algebra{
 		if constexpr(std::is_same<decltype(a*a),vector::zero_t>::value){
 			return one+a;
 		}else{
-			vector::basis_element_t<OneElementT, auto> square=a*a;
+			vector::basis_vector_t<OneElementT, auto> square=a*a;
 
 			using std::sqrt;
 			using std::abs;

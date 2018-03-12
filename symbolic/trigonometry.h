@@ -19,7 +19,7 @@ namespace symbolic{
 	}
 
 	template<class RatioT>
-	using angle_t=decltype(vector::basis_element(pi_t{},RatioT{}));
+	using angle_t=decltype(vector::basis_vector(pi_t{},RatioT{}));
 
 	auto constexpr half_turn=angle_t<integer_t<1>>{};
 
@@ -40,12 +40,12 @@ namespace symbolic{
 
 	//first quadrant exact values
 	auto constexpr cos(vector::zero_t){return integer<1>;}
-	auto constexpr cos(angle_t<ratio_t<1,6>>){return vector::basis_element_t{sqrt(integer<3>), ratio<1,2>};}
-	auto constexpr cos(angle_t<ratio_t<1,5>>){return integer<1>+vector::basis_element_t{sqrt(integer<5>), ratio<1,4>};}
-	auto constexpr cos(angle_t<ratio_t<1,4>>){return vector::basis_element_t{sqrt(integer<2>), ratio<1,2>};}
+	auto constexpr cos(angle_t<ratio_t<1,6>>){return vector::basis_vector_t{sqrt(integer<3>), ratio<1,2>};}
+	auto constexpr cos(angle_t<ratio_t<1,5>>){return integer<1>+vector::basis_vector_t{sqrt(integer<5>), ratio<1,4>};}
+	auto constexpr cos(angle_t<ratio_t<1,4>>){return vector::basis_vector_t{sqrt(integer<2>), ratio<1,2>};}
 	auto constexpr cos(angle_t<ratio_t<1,3>>){return ratio<1,2>;}
 	auto constexpr cos(angle_t<ratio_t<1,2>>){return integer<0>;}
-	auto constexpr cos(angle_t<ratio_t<3,5>>){return integer<1>+vector::basis_element_t{sqrt(integer<5>), ratio<-1,4>};}
+	auto constexpr cos(angle_t<ratio_t<3,5>>){return integer<1>+vector::basis_vector_t{sqrt(integer<5>), ratio<-1,4>};}
 	//express every angle in terms of the corresponding first quadrant angle
 	auto constexpr cos(NegativeAngle const& angle){
 		return cos(-angle);
@@ -68,18 +68,18 @@ namespace symbolic{
 
 	//trigonometric formulae
 	template<Symbol SymbolT, class ScalarT>
-	auto constexpr operator+(vector::basis_element_t<operation_t<square_t, operation_t<cos_t,SymbolT>>, ScalarT>
-	                        ,vector::basis_element_t<operation_t<square_t, operation_t<sin_t,SymbolT>>, ScalarT>){
+	auto constexpr operator+(vector::basis_vector_t<operation_t<square_t, operation_t<cos_t,SymbolT>>, ScalarT>
+	                        ,vector::basis_vector_t<operation_t<square_t, operation_t<sin_t,SymbolT>>, ScalarT>){
 		return ScalarT{};
 	}
 	template<Symbol SymbolT, class ScalarT>
-	auto constexpr operator+(vector::basis_element_t<operation_t<square_t, operation_t<cos_t,SymbolT>>, ScalarT>
-	                        ,vector::basis_element_t<operation_t<square_t, operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-SymbolT{})>>, ScalarT>){
+	auto constexpr operator+(vector::basis_vector_t<operation_t<square_t, operation_t<cos_t,SymbolT>>, ScalarT>
+	                        ,vector::basis_vector_t<operation_t<square_t, operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-SymbolT{})>>, ScalarT>){
 		return ScalarT{};
 	}
 	template<Symbol SymbolT, class ScalarT>
-	auto constexpr operator+(vector::basis_element_t<operation_t<square_t, operation_t<cosh_t,SymbolT>>, ScalarT>
-	                        ,vector::basis_element_t<operation_t<square_t, operation_t<sinh_t,SymbolT>>, decltype(-ScalarT{})>){
+	auto constexpr operator+(vector::basis_vector_t<operation_t<square_t, operation_t<cosh_t,SymbolT>>, ScalarT>
+	                        ,vector::basis_vector_t<operation_t<square_t, operation_t<sinh_t,SymbolT>>, decltype(-ScalarT{})>){
 		return ScalarT{};
 	}
 }

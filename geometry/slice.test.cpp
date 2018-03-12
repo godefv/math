@@ -1,9 +1,9 @@
 #include"slice.h"
 #include"../unit_test.h"
 
-static constexpr auto e1=vector::basis_element_t{group::geometric::direction_positive_t<1>{}, 1.};
-static constexpr auto e2=vector::basis_element_t{group::geometric::direction_positive_t<2>{}, 1.};
-static constexpr auto e3=vector::basis_element_t{group::geometric::direction_negative_t<3>{}, 1.};
+static constexpr auto e1=vector::basis_vector_t{group::geometric::direction_positive_t<1>{}, 1.};
+static constexpr auto e2=vector::basis_vector_t{group::geometric::direction_positive_t<2>{}, 1.};
+static constexpr auto e3=vector::basis_vector_t{group::geometric::direction_negative_t<3>{}, 1.};
 
 int main(){
 	auto constexpr slice12 =geometry::plane(e1,e2);
