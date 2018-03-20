@@ -6,7 +6,7 @@
 #include<ratio>
 #include<type_traits>
 
-namespace symbolic{
+namespace math{
 	template<std::intmax_t Numerator, std::intmax_t Denominator>
 	struct ratio_t: std::ratio<Numerator,Denominator>{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
@@ -138,7 +138,7 @@ namespace symbolic{
 	}
 
 	//static_order
-	Ratio{Ratio2} int constexpr static_compare(Ratio const& a, Ratio2 const& b){return (a-b).numerator();}
+	Ratio{Ratio2} int constexpr static_compare(Ratio const& a, Ratio2 const& b){return (b-a).numerator();}
 }
 
 #endif /* RATIONAL_H */

@@ -5,7 +5,7 @@
 
 #include<iostream>
 
-namespace group{
+namespace math::group{
 	//! minus one commutes with every other element and squares to one under Operator 
 	//! minus_t<Operator, A> equals minus one times A under Operator
 	template<class Operator, class A> struct generated_minus_t{

@@ -4,7 +4,7 @@
 #include<type_traits>
 #include<iostream>
 
-namespace group{
+namespace math::group{
 	template<class Operator> struct identity_t{
 		Operator operation;
 	};

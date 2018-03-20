@@ -4,46 +4,20 @@
 #include"inverse.h"
 #include"identity.h"
 #include"minus.h"
-#include"../eval.h"
 
 #include<type_traits>
 #include<cmath>
 
-namespace group{
-	template<class Operator, class A,class B> struct generated_by_operation_t{
-		Operator operation;
+namespace math::group{
+	//generated_by_operation_t
+	template<class OperatorT, class A,class B> struct generated_by_operation_t{
+		OperatorT operation;
 		A first; B second;
 	};
-	template<class Operator, class A,class B> generated_by_operation_t(Operator,A,B)->generated_by_operation_t<Operator,A,B>;
+	template<class OperatorT, class A,class B> generated_by_operation_t(OperatorT,A,B)->generated_by_operation_t<OperatorT,A,B>;
 
-	auto constexpr eval(generated_by_operation_t<auto,auto,auto> const& a){
-		using ::eval;
-		return std::decay_t<decltype(a.operation)>::apply(eval(a.first), eval(a.second));
-	}
-	auto constexpr sqrt(generated_by_operation_t<auto,auto,auto> const& a){
-		if constexpr(a.first==a.second){
-			return a.first;
-		}else{
-			using ::sqrt;
-			return std::decay_t<decltype(a.operation)>::apply(sqrt(a.first), sqrt(a.second));
-		}
-	}
-	auto constexpr abs(generated_by_operation_t<auto,auto,auto> const& a){
-		using ::abs;
-		return std::decay_t<decltype(a.operation)>::apply(abs(a.first), abs(a.second));
-	}
-
-	//concepts
-	template<class Operator, class> struct is_generated_by_operation:std::false_type{};
-	template<class Operator, class A,class B> struct is_generated_by_operation<Operator, generated_by_operation_t<Operator,A,B>>:std::true_type{};
-	template<class Operator, class T> concept bool Operation=is_generated_by_operation<Operator, T>::value;
-
-	template<class Operator, class T> 
-	concept bool Generated=Operation<Operator,T> || Minus<Operator,T> || std::is_same<identity_t<Operator>,T>::value;
-
-	//comparison operators
-	template<class Operator, class A,class B>
-	bool operator==(generated_by_operation_t<Operator, A,B> const& a, generated_by_operation_t<Operator, A,B> const& b){
+	template<class OperatorT, class A,class B>
+	bool operator==(generated_by_operation_t<OperatorT, A,B> const& a, generated_by_operation_t<OperatorT, A,B> const& b){
 		return a.first==b.first && a.second==b.second;
 	}
 	bool operator==(generated_by_operation_t<auto, auto,auto> const& a, generated_by_operation_t<auto, auto,auto> const& b){
@@ -53,61 +27,102 @@ namespace group{
 		return !(a==b);
 	}
 
-	//default operation
-	template<class Operator, class A,class B> 
-	constexpr auto operation(A const& a, B const& b){return generated_by_operation_t{Operator{},a,b};}
-	//operations with identity
-	template<class Operator, class A> 
-	constexpr auto operation(identity_t<Operator> const&, A const& a){return a;}
-	template<class Operator, class A> requires !std::is_same<A,identity_t<Operator>>::value 
-	constexpr auto operation(A const& a, identity_t<Operator> const&){return a;}
-	//operations with inverse //inverse_t<B>,B is covered by A=inverse_t<B>
-	template<class Operator, class A> 
-		requires !std::is_same<A,identity_t<Operator>>::value
-		      && !Operation<Operator, A> //without this, we return identity even with non constexpr arguments, regardless of their value
-	constexpr auto operation(A const&, inverse_t<Operator, A> const&){return identity_t<Operator>{};}
-	//operations with minus
-	template<class Operator, class A,class B> 
-		requires !std::is_same<A, identity_t<Operator>>::value
-		      && !(std::is_same<generated_minus_t<Operator, B>, inverse_t<Operator, A>>::value && !Operation<Operator, A>)
-	constexpr auto operation(A const&, generated_minus_t<Operator, B> const&){
-		return group::minus_t<Operator, decltype(Operator::apply(A{},B{}))>{};
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<auto, auto, auto> const& ab){
+		return out<<typeid(ab.operation).name()<<"("<<ab.first<<", "<<ab.second<<")";
 	}
-	template<class Operator, class A,class B> 
-		requires !std::is_same<A, identity_t<Operator>>::value
-		      && !std::is_same<A, inverse_t<Operator, generated_minus_t<Operator, B>>>::value
-			  && !Minus<Operator,A>
-	constexpr auto operation(generated_minus_t<Operator, B> const&, A const&){
-		return group::minus_t<Operator, decltype(Operator::apply(B{},A{}))>{};
+
+	//concepts
+	template<class OperatorT, class> struct is_generated_by_operation:std::false_type{};
+	template<class OperatorT, class A,class B> struct is_generated_by_operation<OperatorT, generated_by_operation_t<OperatorT,A,B>>:std::true_type{};
+	template<class OperatorT, class T> concept bool Operation=is_generated_by_operation<OperatorT, T>::value;
+
+	template<class OperatorT, class T> 
+	concept bool Generated=Operation<OperatorT,T> 
+	                    || Minus<OperatorT,T> 
+	                    || Power<OperatorT,T> 
+	                    || std::is_same<identity_t<OperatorT>,T>::value;
+
+	//default operation
+	template<class OperatorT, class A,class B> 
+	auto constexpr operation(A const& a, B const& b){return generated_by_operation_t{OperatorT{},a,b};}
+	//operations with identity
+	template<class OperatorT, class A> 
+	auto constexpr operation(identity_t<OperatorT> const&, A const& a){return a;}
+	template<class OperatorT, class A> requires !std::is_same<A,identity_t<OperatorT>>::value 
+	auto constexpr operation(A const& a, identity_t<OperatorT> const&){return a;}
+	//operations with minus
+	template<class OperatorT, class A,class B> 
+		requires !std::is_same<A, identity_t<OperatorT>>::value
+		      && !(std::is_same<generated_minus_t<OperatorT, B>, inverse_t<OperatorT, A>>::value && !Operation<OperatorT, A>)
+	auto constexpr operation(A const&, generated_minus_t<OperatorT, B> const&){
+		return group::minus_t<OperatorT, decltype(OperatorT::apply(A{},B{}))>{};
+	}
+	template<class OperatorT, class A,class B> 
+		requires !std::is_same<A, identity_t<OperatorT>>::value
+		      && !std::is_same<A, inverse_t<OperatorT, generated_minus_t<OperatorT, B>>>::value
+			  && !Minus<OperatorT,A>
+	auto constexpr operation(generated_minus_t<OperatorT, B> const&, A const&){
+		return group::minus_t<OperatorT, decltype(OperatorT::apply(B{},A{}))>{};
 	}
 	//associativity	//put everything in normalized from ((AB)C)D...
-	template<class Operator, class A,class B,class C> 
-		requires !std::is_same<A,identity_t<Operator>>::value
-		      && !(std::is_same<generated_by_operation_t<Operator,B,C>, inverse_t<Operator, A>>::value && !Operation<Operator, A>)
-			  && !Minus<Operator,A>
-	constexpr auto operation(A const& a, generated_by_operation_t<Operator,B,C> const& bc){
-		return Operator::apply(Operator::apply(a, bc.first), bc.second);
+	template<class OperatorT, class A,class B,class C> 
+		requires !std::is_same<A,identity_t<OperatorT>>::value
+		      && !(std::is_same<generated_by_operation_t<OperatorT,B,C>, inverse_t<OperatorT, A>>::value && !Operation<OperatorT, A>)
+			  && !Minus<OperatorT,A>
+	auto constexpr operation(A const& a, generated_by_operation_t<OperatorT,B,C> const& bc){
+		return OperatorT::apply(OperatorT::apply(a, bc.first), bc.second);
 	}
 	//collapse operations as much as possible
-	template<class Operator, class A,class B,class C> 
-		requires !Operation<Operator,B> 
-		      && !Operation<Operator,C> 
-			  && !Minus    <Operator,C>
-			  && !std::is_same<decltype(Operator::apply(B{},C{})), generated_by_operation_t<Operator,B,C>>::value 
-			  && !std::is_same<C,identity_t<Operator>>::value
-	constexpr auto operation(generated_by_operation_t<Operator,A,B> const& ab, C const& c){
-		return Operator::apply(ab.first, Operator::apply(ab.second,c));
+	template<class OperatorT, class A,class B,class C> 
+		requires !Operation<OperatorT,B> 
+		      && !Operation<OperatorT,C> 
+			  && !Minus    <OperatorT,C>
+			  && !std::is_same<decltype(OperatorT::apply(B{},C{})), generated_by_operation_t<OperatorT,B,C>>::value 
+			  && !std::is_same<C,identity_t<OperatorT>>::value
+	auto constexpr operation(generated_by_operation_t<OperatorT,A,B> const& ab, C const& c){
+		return OperatorT::apply(ab.first, OperatorT::apply(ab.second,c));
+	}
+	//(a power x) times (b power x) equals (a times b) power x <= not true if a and b does not commute !
+	//template<Ratio RatioT, class A, class B> requires !std::is_same<A,B>::value
+	//auto constexpr operation(generated_power_t<OperatorT, RatioT, A> const& a, generated_power_t<OperatorT, RatioT, B> const& b){
+		//return power(OperatorT{}, RatioT{}, a.operand*b.operand);
+	//}
+
+	//(a power x) times a = a times (a power x) = a power (a+1)
+	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(generated_power_t<OperatorT, RatioT, SymbolT>, SymbolT){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
+	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(SymbolT, generated_power_t<OperatorT, RatioT, SymbolT>){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
+
+	//(a power x) times (a power y) = a power (x+y)
+	template<class OperatorT, Ratio Ratio1, Ratio Ratio2, Symbol SymbolT>
+	auto constexpr operation(generated_power_t<OperatorT, Ratio1, SymbolT>, generated_power_t<OperatorT, Ratio2, SymbolT>){
+		return power(OperatorT{}, Ratio1{}+Ratio2{}, SymbolT{});
+	}
+
+	//a times a = a power 2
+	template<class OperatorT, Symbol SymbolT> requires !Power<OperatorT,SymbolT>
+	auto constexpr operation(SymbolT,SymbolT){
+		return power(OperatorT{}, integer<2>, SymbolT{});
 	}
 
 	//inverse of product
-	template<class Operator, class A,class B> 
-	constexpr auto inverse(generated_by_operation_t<Operator, A,B> const& ab){
-		return Operator::apply(Operator::inverse(ab.second), Operator::inverse(ab.first));
+	template<class OperatorT, class A,class B> 
+	auto constexpr inverse(OperatorT op, generated_by_operation_t<OperatorT, A,B> const& ab){
+		return OperatorT::apply(inverse(op, ab.second), inverse(op, ab.first));
 	}
 	//inverse of minus A
-	template<class Operator, class A> 
-	constexpr auto inverse(generated_minus_t<Operator, A> const& a){
-		return minus_t<Operator, decltype(Operator::inverse(a.value))>{};
+	template<class OperatorT, class A> 
+	auto constexpr inverse(OperatorT op, generated_minus_t<OperatorT, A> const& a){
+		return minus_t<OperatorT, decltype(inverse(op, a.value))>{};
+	}
+
+	//number of terms in operation
+	template<class OperatorT> 
+	int constexpr number_of_terms(auto const& a){
+		return 1;
+	}
+	template<class OperatorT> 
+	int constexpr number_of_terms(generated_by_operation_t<OperatorT,auto,auto> const& ab){
+		return number_of_terms<OperatorT>(ab.first)+number_of_terms<OperatorT>(ab.second);
 	}
 
 }
