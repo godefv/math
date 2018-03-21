@@ -33,15 +33,21 @@ namespace math::group{
 		return out<<typeid(pow.operator_).name()<<" "<<pow.exponent<<" th power ("<<pow.operand<<")";
 	}
 
+	//overloadable constructor. Typically, addition nth power of x equals n*x
+	template<class OperatorT, Ratio RatioT, class OperandT>
+	auto constexpr generated_power(auto op, Ratio exponent, auto const& operand){
+		return generated_power_t{op,exponent,operand};
+	}
+
 	//default power function
-	template<class OperatorT, Ratio RatioT>
-	auto constexpr power(OperatorT, RatioT, auto const& operand){
-		if constexpr(std::is_same<RatioT,integer_t<0>>::value){
+	template<class OperatorT>
+	auto constexpr power(OperatorT, Ratio exponent, auto const& operand){
+		if constexpr(exponent==integer<0>){
 			return identity_t<OperatorT>{};
-		}else if constexpr(std::is_same<RatioT,integer_t<1>>::value){
+		}else if constexpr(exponent==integer<1>){
 			return operand;
 		}else{
-			return generated_power_t{OperatorT{},RatioT{},operand};
+			return generated_power_t{OperatorT{},exponent,operand};
 		}
 	}
 	//power of identity is identity

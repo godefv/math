@@ -8,7 +8,7 @@
 
 namespace math{
 	struct add_operation_t{
-		static constexpr auto apply(auto const& a, auto const& b){
+		static auto constexpr apply(auto const& a, auto const& b){
 			return a+b;
 		}
 	};
