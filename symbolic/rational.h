@@ -7,7 +7,7 @@
 #include<type_traits>
 
 namespace math{
-	template<std::intmax_t Numerator, std::intmax_t Denominator>
+	template<std::intmax_t Numerator, std::intmax_t Denominator> requires Denominator>=0
 	struct ratio_t: std::ratio<Numerator,Denominator>{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
 		auto constexpr numerator(){return Numerator;}
@@ -48,11 +48,6 @@ namespace math{
 	auto constexpr eval(integer_t<N> const&){return N;}
 	auto constexpr eval(Ratio const& a){return static_cast<double>(a);}
 
-	//inverse
-	auto constexpr inverse(Ratio a){
-		return ratio<a.denominator(),a.numerator()>;
-	}
-
 	//operators
 	auto constexpr operator*(double a, Ratio b){return a*eval(b);}
 	auto constexpr operator*(Ratio a, double b){return eval(a)*b;}
@@ -77,7 +72,7 @@ namespace math{
 		return ratio<result_t::num, result_t::den>;
 	}
 	auto constexpr operator-(Ratio a){
-		return ratio<-a.numerator(), a.denominator()>;
+		return integer<0>-a;
 	}
 	Ratio{Ratio2}
 	auto constexpr operator<(Ratio a, Ratio2 b){
@@ -105,6 +100,11 @@ namespace math{
 	}
 	std::ostream& operator<<(std::ostream& out, Ratio a){
 		return out<<a.numerator()<<"/"<<a.denominator();
+	}
+
+	//inverse
+	auto constexpr inverse(Ratio a){
+		return integer<1>/a;
 	}
 
 	//abs

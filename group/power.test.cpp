@@ -8,6 +8,12 @@ struct dummy_operation_t{
 };
 auto constexpr op=dummy_operation_t{};
 
+namespace math{
+auto constexpr cycle_order(dummy_operation_t, z_t){
+	return 4;
+}
+}
+
 int main(){
 	using namespace math::group;
 	using math::integer;
@@ -21,6 +27,9 @@ int main(){
 	//concept
 	check_equal(Power<dummy_operation_t, decltype(power(op, integer<3>, x))>, true);
 	check_equal(Power<dummy_operation_t, double>, false);
+	//cyclic operands
+	check_equal(power(op, integer<10>, z), power(op, integer<2>, z));
+	check_equal(power(op, integer<-1>, z), power(op, integer<3>, z));
 	return 0;
 }
 

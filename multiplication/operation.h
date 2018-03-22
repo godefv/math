@@ -54,15 +54,14 @@ namespace math{
 	auto constexpr operator*(group::generated_by_operation_t<add_operation_t, auto,auto> const& a, B const& b){
 		return a.first*b+a.second*b;
 	}
+	//factor addition power out (ka)*b=k(a*b)
+	auto constexpr operator*(group::generated_power_t<add_operation_t, Ratio,auto> const& a, auto const& b){
+		return group::power(add_operation_t{}, a.exponent, a.operand*b);
+	}
 
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
-	}
-
-	//addition nth power of x equals n*x
-	auto constexpr generated_power(add_operation_t, Ratio exponent, auto const& operand){
-		return exponent*operand;
 	}
 }
 

@@ -82,23 +82,23 @@ namespace math::group{
 	auto constexpr operation(generated_by_operation_t<OperatorT,A,B> const& ab, C const& c){
 		return OperatorT::apply(ab.first, OperatorT::apply(ab.second,c));
 	}
-	//(a power x) times (b power x) equals (a times b) power x <= not true if a and b does not commute !
+	//(a power x) op (b power x) equals (a op b) power x <= not true if a and b does not commute !
 	//template<Ratio RatioT, class A, class B> requires !std::is_same<A,B>::value
 	//auto constexpr operation(generated_power_t<OperatorT, RatioT, A> const& a, generated_power_t<OperatorT, RatioT, B> const& b){
 		//return power(OperatorT{}, RatioT{}, a.operand*b.operand);
 	//}
 
-	//(a power x) times a = a times (a power x) = a power (a+1)
+	//(a power x) op a = a op (a power x) = a power (a+1)
 	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(generated_power_t<OperatorT, RatioT, SymbolT>, SymbolT){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
 	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(SymbolT, generated_power_t<OperatorT, RatioT, SymbolT>){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
 
-	//(a power x) times (a power y) = a power (x+y)
+	//(a power x) op (a power y) = a power (x+y)
 	template<class OperatorT, Ratio Ratio1, Ratio Ratio2, Symbol SymbolT>
 	auto constexpr operation(generated_power_t<OperatorT, Ratio1, SymbolT>, generated_power_t<OperatorT, Ratio2, SymbolT>){
 		return power(OperatorT{}, Ratio1{}+Ratio2{}, SymbolT{});
 	}
 
-	//a times a = a power 2
+	//a op a = a power 2
 	template<class OperatorT, Symbol SymbolT> requires !Power<OperatorT,SymbolT>
 	auto constexpr operation(SymbolT,SymbolT){
 		return power(OperatorT{}, integer<2>, SymbolT{});

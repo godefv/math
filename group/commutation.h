@@ -84,7 +84,9 @@ namespace math{
 	//}
 	
 	//indexed_element
-	template<int> struct indexed_element_t{};
+	template<int i> struct indexed_element_t{
+		static int constexpr index=i;
+	};
 
 	template<int i>
 	bool constexpr operator==(indexed_element_t<i> const&, indexed_element_t<i> const&){

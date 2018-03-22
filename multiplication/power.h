@@ -6,30 +6,42 @@
 
 namespace math{
 	//exact roots
-	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t left, std::intmax_t right>
-	auto constexpr static_sqrt(integer_t<N> target, integer_t<left>, integer_t<right>){
-		if constexpr(left == right){
-			return group::power(mult_operation_t{}, ratio<1,Exponent>, target);
-		} else {
-			auto constexpr mid = integer<(right+left)/2>;
+	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t begin, std::intmax_t end>
+	auto constexpr static_sqrt(integer_t<N> operand, integer_t<begin>, integer_t<end>){
+		static_assert(begin<=end);
+		//while range is not empty, search it by dichotomy
+		if constexpr(begin!=end){
+			auto constexpr mid = integer<(end+begin)/2>;
 			auto constexpr power=group::power(mult_operation_t{}, integer<Exponent>, mid);
 
-			if constexpr(power == target){
+			if constexpr(power==operand){
 				return mid;
-			}else if constexpr(power > target){
-				return static_sqrt<Exponent>(target, integer<left>, mid);
-			} else {
-				return static_sqrt<Exponent>(target, mid+integer<1>, integer<right>);
+			}else if constexpr(power>operand){
+				return static_sqrt<Exponent>(operand, integer<begin>, mid);
+			}else{
+				return static_sqrt<Exponent>(operand, mid+integer<1>, integer<end>);
 			}
+		//if range is empty, no exact root has been found, so generate a symbolic power
+		}else{
+			return group::generated_power(mult_operation_t{}, ratio<1,Exponent>, operand);
 		}
 	}
-}
 
-namespace math::group{	
 	//power of integers
 	template<Ratio RatioT, std::intmax_t N> requires RatioT::num==1 && RatioT::den>1 && N>1
-	auto constexpr power(mult_operation_t, RatioT, integer_t<N> res){
-		return static_sqrt<RatioT::den>(res, integer<1>, res);
+	auto constexpr generated_power(mult_operation_t, RatioT, integer_t<N> operand){
+		return static_sqrt<RatioT::den>(operand, integer<1>, operand);
+	}
+	//apply inverse if different than power<-1> (only with rational operands for now)
+	template<class OperatorT, Ratio RatioT> requires RatioT::num<0
+	auto constexpr generated_power(OperatorT op, RatioT exponent, Ratio const& operand){
+		return group::power(op, -exponent, inverse(operand));
+	}
+	//power of addition powers (ka)^n = (k^n)(a^n) because k is a scalar
+	template<Ratio Ratio1, Ratio Ratio2>
+	auto constexpr generated_power(mult_operation_t, Ratio1 exponent, group::generated_power_t<add_operation_t, Ratio2, auto> const& pow_ab){
+		using group::power;
+		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
 	}
 }
 
@@ -44,7 +56,10 @@ namespace math{
 	template<class OperandT>
 	using square_t=power_t<integer_t<2>, OperandT>;
 
-	auto constexpr pow(auto const& operand, Ratio exponent){return group::power(mult_operation_t{}, exponent, operand);}
+	auto constexpr pow(auto const& operand, Ratio exponent){
+		using group::power;
+		return power(mult_operation_t{}, exponent, operand);
+	}
 	template<std::intmax_t N>
 	auto constexpr pow(auto const& operand){return pow(operand, integer<N>);}
 	template<std::intmax_t N>
