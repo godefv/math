@@ -3,6 +3,7 @@
 
 #include"../group/operation.h"
 #include"../group/commutation.h"
+#include"../group/power.h"
 
 #include<iostream>
 
@@ -44,6 +45,13 @@ namespace math{
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<add_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
+	}
+
+	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, Ratio, auto> const& kx){
+		return out<<kx.exponent<<"*("<<kx.operand<<")";
+	}
+	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, integer_t<-1>, auto> const& kx){
+		return out<<"-("<<kx.operand<<")";
 	}
 
 }
