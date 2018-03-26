@@ -1,12 +1,5 @@
 #include"power.h"
-#include"../symbolic/unit_test.h"
-
-struct dummy_operation_t{
-	static auto constexpr apply(auto const& a, auto const& b){
-		return a*b;
-	}
-};
-auto constexpr op=dummy_operation_t{};
+#include"unit_test.h"
 
 namespace math{
 auto constexpr cycle_order(dummy_operation_t, z_t){
