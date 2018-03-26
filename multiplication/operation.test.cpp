@@ -8,6 +8,7 @@ int main(){
 	check_equal(integer<2>*x, x*integer<2>);
 	check_equal(inverse(y)*2, 2/y);
 	check_equal(y/2, 0.5*y);
+	check_equal(x*(-y), -(x*y));
 
 	//develop over addition
 	check_equal(2*(x+y), 2*x+2*y);

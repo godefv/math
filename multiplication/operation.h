@@ -58,6 +58,11 @@ namespace math{
 	auto constexpr operator*(group::generated_power_t<add_operation_t, Ratio,auto> const& a, auto const& b){
 		return group::power(add_operation_t{}, a.exponent, a.operand*b);
 	}
+	//factor addition power out a*(kb)=k(a*b)
+	template<class A> requires !group::Power<add_operation_t,A>
+	auto constexpr operator*(A const& a, group::generated_power_t<add_operation_t, Ratio,auto> const& b){
+		return group::power(add_operation_t{}, b.exponent, a*b.operand);
+	}
 
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){

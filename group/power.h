@@ -67,7 +67,7 @@ namespace math::group{
 	//some operand are cyclic
 	//template<class OperatorT> std::uintmax_t constexpr cycle_order(OperatorT,auto);
 	template<class OperatorT, std::intmax_t Exponent, class OperandT> 
-		requires !(0<Exponent && Exponent<cycle_order(OperatorT{},OperandT{}))
+		requires !(0<=Exponent && Exponent<cycle_order(OperatorT{},OperandT{}))
 	auto constexpr power(OperatorT op, integer_t<Exponent>, OperandT const& operand){
 		auto constexpr order=cycle_order(OperatorT{},OperandT{});
 		auto constexpr modulo=Exponent%order;

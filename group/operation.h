@@ -81,7 +81,7 @@ namespace math::group{
 	}
 
 	//a op a = a power 2
-	template<class OperatorT, Symbol SymbolT> requires !Power<OperatorT,SymbolT>
+	template<class OperatorT, Symbol SymbolT> requires !Generated<OperatorT,SymbolT>
 	auto constexpr operation(SymbolT,SymbolT){
 		return power(OperatorT{}, integer<2>, SymbolT{});
 	}
