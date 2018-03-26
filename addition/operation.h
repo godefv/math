@@ -55,6 +55,9 @@ namespace math{
 	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, integer_t<-1>, auto> const& kx){
 		return out<<"-("<<kx.operand<<")";
 	}
+	inline std::ostream& operator<<(std::ostream& out, zero_t){
+		return out<<"zero";
+	}
 
 }
 
