@@ -21,8 +21,12 @@ int main(){
 	check_equal(cos(integer<2>)*sqrt(3)*cos(integer<2>)*sqrt(integer<2>), cos(integer<2>)*cos(integer<2>)*sqrt(3)*sqrt(integer<2>));
 
 	//abs is a morphism over addition
+	check_equal(abs(x+y), abs(x)+abs(y));
 	//abs is a morphism over multiplication
-	//check_equal(abs(nth_root<2>(x)), nth_root<2>(abs(x)));
+	check_equal(abs(x*y), abs(x)*abs(y));
+	check_equal(abs(nth_root<2>(x)), nth_root<2>(abs(x)));
+	//abs is a morphism over both addition and multiplication
+	check_equal(abs(4*x*y+x+2*y), 4*abs(x)*abs(y)+abs(x)+2*abs(y));
 
 	//formatting
 	std::cout<<exp(integer<3>)<<std::endl;

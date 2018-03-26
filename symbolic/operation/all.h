@@ -2,7 +2,9 @@
 #define SYMBOLIC_OPERATION_ALL_H 
 
 #include"template.h"
-#include"../../eval.h"
+#include"../../group/morphism.h"
+#include"../../addition/operation.h"
+#include"../../multiplication/operation.h"
 
 namespace math{
 #define DEFINE_OPERATION(op, op_index) \
@@ -24,12 +26,12 @@ namespace math{
 	DEFINE_OPERATION(asinh, 10)
 #undef DEFINE_OPERATION
 
-	//abs is linear over addition and multiplication
-	//template<Ratio RatioT>
-	//auto constexpr pow(operation_t<abs_t,auto> const& operation){
-		//return abs(pow<RatioT>(operation.operand()));
-	//} 
-	
+	//abs is an endomorphism over the algebra(+,*)
+	auto constexpr abs_endomorphism=group::endomorphism(add_operation_t{}, group::endomorphism(mult_operation_t{}, [](auto const& a){return abs(a);}));
+	template<class T> requires group::Generated<add_operation_t,T> || group::Generated<mult_operation_t,T>
+	auto constexpr abs(T const& a){
+		return abs_endomorphism(a);
+	}
 }
 
 #endif /* SYMBOLIC_OPERATION_ALL_H */

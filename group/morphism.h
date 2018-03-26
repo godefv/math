@@ -10,16 +10,16 @@ namespace math::group{
 		OuterOperatorT outer_operator;
 		FunctorT f;
 
-		auto constexpr operator()(auto const& a){
+		auto constexpr operator()(auto const& a) const{
 			return f(a);
 		}
-		auto constexpr operator()(generated_by_operation_t<InnerOperatorT, auto,auto> const& ab){
+		auto constexpr operator()(generated_by_operation_t<InnerOperatorT, auto,auto> const& ab) const{
 			return OuterOperatorT::apply(operator()(ab.first),operator()(ab.second));
 		}
-		auto constexpr operator()(generated_power_t<InnerOperatorT, Ratio, auto> const& pow){
+		auto constexpr operator()(generated_power_t<InnerOperatorT, Ratio, auto> const& pow) const{
 			return group::power(outer_operator, pow.exponent, operator()(pow.operand));
 		}
-		auto constexpr operator()(identity_t<InnerOperatorT>){
+		auto constexpr operator()(identity_t<InnerOperatorT>) const{
 			return identity_t<OuterOperatorT>{};
 		}
 	};

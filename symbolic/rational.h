@@ -2,6 +2,8 @@
 #define RATIONAL_H 
 
 #include"symbol.h"
+#include"../abs.h"
+
 #include<iostream>
 #include<ratio>
 #include<type_traits>
@@ -109,7 +111,7 @@ namespace math{
 
 	//abs
 	auto constexpr abs(Ratio a){
-		return ratio<(a.numerator()>0)?a.numerator():-a.numerator(),a.denominator()>;
+		return ratio<abs(a.numerator()),a.denominator()>;
 	}
 
 	//nth_root
