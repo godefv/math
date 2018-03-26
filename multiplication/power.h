@@ -5,7 +5,7 @@
 #include"../group/power.h"
 
 namespace math{
-	//exact roots
+	//static square root function for integers
 	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t begin, std::intmax_t end>
 	auto constexpr static_sqrt(integer_t<N> operand, integer_t<begin>, integer_t<end>){
 		static_assert(begin<=end);
@@ -26,8 +26,7 @@ namespace math{
 			return group::generated_power(mult_operation_t{}, ratio<1,Exponent>, operand);
 		}
 	}
-
-	//power of integers
+	//exact roots of rationals
 	template<Ratio RatioT, std::intmax_t N> requires RatioT::num==1 && RatioT::den>1 && N>1
 	auto constexpr generated_power(mult_operation_t, RatioT, integer_t<N> operand){
 		return static_sqrt<RatioT::den>(operand, integer<1>, operand);
@@ -43,9 +42,7 @@ namespace math{
 		using group::power;
 		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
 	}
-}
 
-namespace math{
 	//aliases
 	template<Ratio RatioT, class OperandT>
 	using power_t=group::generated_power_t<mult_operation_t, RatioT, OperandT>;
