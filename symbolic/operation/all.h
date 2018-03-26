@@ -2,11 +2,9 @@
 #define SYMBOLIC_OPERATION_ALL_H 
 
 #include"template.h"
-#include"pow.h"
-#include"mult.h"
 #include"../../eval.h"
 
-namespace symbolic{
+namespace math{
 #define DEFINE_OPERATION(op, op_index) \
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
@@ -26,21 +24,11 @@ namespace symbolic{
 	DEFINE_OPERATION(asinh, 10)
 #undef DEFINE_OPERATION
 
-	//minus
-	struct minus_t{}; 
-	inline std::ostream& operator<<(std::ostream& out, minus_t const){return out<<"minus";} 
-	namespace operators{ 
-	auto constexpr operator-(auto const& a){return operation_t{minus_t{}, a};} 
-	} 
-	auto constexpr eval(operation_t<minus_t, auto> const& operand){
-		return -eval(operand.operand());
-	}
-
-	//abs is put outer not to interfere with inner simplifications
-	template<Ratio RatioT>
-	auto constexpr pow(operation_t<abs_t,auto> const& operation){
-		return abs(pow<RatioT>(operation.operand()));
-	} 
+	//abs is linear over addition and multiplication
+	//template<Ratio RatioT>
+	//auto constexpr pow(operation_t<abs_t,auto> const& operation){
+		//return abs(pow<RatioT>(operation.operand()));
+	//} 
 	
 }
 

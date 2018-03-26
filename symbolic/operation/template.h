@@ -2,14 +2,15 @@
 #define SYMBOLIC_OPERATION_H 
 
 #include"../symbol.h"
+#include"../../group/commutation.h"
 #include"../../unit_test.h"
 #include"../../scalar.h"
-#include"../../group/operation.h"
+
 #include<boost/hana.hpp>
 #include<iostream>
 #include<type_traits>
 
-namespace symbolic{
+namespace math{
 	template<class OperationT, class... OperandsT>
 	struct operation_t{
 		OperationT operation; 
@@ -27,6 +28,9 @@ namespace symbolic{
 
 	template<class OperationT, Symbol... OperandsT>
 	struct is_symbol<operation_t<OperationT, OperandsT...>>: std::true_type{};
+
+	template<class OperationT, Scalar ScalarT> 
+	struct is_scalar<operation_t<OperationT,ScalarT>>:std::true_type{};
 
 	//concept
 	template<class> struct is_operation:std::false_type{};
@@ -56,7 +60,13 @@ namespace symbolic{
 
 	//ordering for commutation
 	Operation{Operation2}
-	constexpr int static_compare(Operation const& a, Operation2 const& b){return index(b.operation)-index(a.operation);}
+	constexpr int static_compare(auto op, Operation const& a, Operation2 const& b){
+		if(index(b.operation)==index(a.operation) && Symbol<decltype(a.operand())> && Symbol<decltype(b.operand())>){
+			return static_compare(op, a.operand(),b.operand());
+		}else{
+			return index(b.operation)-index(a.operation);
+		}
+	}
 
 	//formatting
 	template<class OperationT, class... OperandsT>
@@ -66,5 +76,6 @@ namespace symbolic{
 		return out<<")";
 	}
 }
+
 
 #endif /* SYMBOLIC_OPERATION_H */
