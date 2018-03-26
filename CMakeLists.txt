@@ -51,6 +51,7 @@ math_add_test(group/operation)
 math_add_test(addition/operation)
 math_add_test(multiplication/operation)
 math_add_test(multiplication/power)
+math_add_test(geometry/algebra/definition)
 
 #math_add_test(group/geometric)
 #math_add_test(group/ordering)
