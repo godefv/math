@@ -48,21 +48,6 @@ int main(){
 	//reverse
 	check_equal(reverse(e1*e2), e2*e1);
 	check_equal(reverse(one+e1*e2), one+e2*e1);
-	//wedge
-	{auto constexpr e1e2=algebra::geometric::group_wedge_operation_t::apply(e1_t{}, e2_t{}); unused(e1e2);}
-	{auto constexpr e1e2=e1^e2; unused(e1e2);}
-	check_equal(e1^e1, zero);
-	check_equal(e1^e2, e1*e2);
-	check_equal(e1^n1, e1*n1);
-	check_equal(e1^(e2+e1), e1*e2);
-	//dot
-	{auto constexpr e1e2=algebra::geometric::group_dot_operation_t::apply(e1_t{}, e2_t{}); unused(e1e2);}
-	{auto constexpr e1e2=e1|e2; unused(e1e2);}
-	check_equal(e1|e1, one);
-	check_equal(e1|e2, zero);
-	check_equal(e1|n1, zero);
-	check_equal(e1|(e2+e1), one);
-	check_equal((e1^e2)|(e1^e2), -one);
  
 	auto sqrt_5_element=symbolic::nth_root<2>(symbolic::integer<5>);
 	auto sqrt_5=vector::unit(sqrt_5_element);

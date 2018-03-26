@@ -53,6 +53,8 @@ math_add_test(multiplication/operation)
 math_add_test(multiplication/power)
 math_add_test(geometry/algebra/definition)
 math_add_test(geometry/algebra/grade)
+math_add_test(geometry/algebra/dot_product)
+math_add_test(geometry/algebra/wedge_product)
 
 #math_add_test(group/geometric)
 #math_add_test(group/ordering)

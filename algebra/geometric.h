@@ -16,30 +16,6 @@ namespace algebra::geometric{
 	using vector::zero;
 	static auto constexpr one=vector::unit_t<group::geometric::one_t>{};
 
-	//wedge operation
-	struct group_wedge_operation_t{
-		group::geometric::Blade{Blade2}
-		static auto constexpr apply(group::geometric::Blade a, Blade2 b){
-			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==grade(a)+grade(b)){
-				return group::geometric::mult_operation_t::apply(a,b);
-			}else{
-				return zero;
-			}
-		}
-		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
-	};
-	//dot operation
-	struct group_dot_operation_t{
-		group::geometric::Blade{Blade2}
-		static auto constexpr apply(group::geometric::Blade a, Blade2 b){
-			if constexpr(grade(group::geometric::mult_operation_t::apply(a,b))==std::abs(grade(a)-grade(b))){
-				return group::geometric::mult_operation_t::apply(a,b);
-			}else{
-				return zero;
-			}
-		}
-		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
-	};
 
 	struct group_mult_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
@@ -66,12 +42,6 @@ namespace algebra::geometric{
 		}
 		constexpr auto operator-(auto const& a, auto const& b){
 			return a+(-b);
-		}
-		constexpr auto operator^(auto const& a, auto const& b){
-			return wedge_operation_t::apply(a,b);
-		}
-		constexpr auto operator|(auto const& a, auto const& b){
-			return dot_operation_t::apply(a,b);
 		}
 	}
 
