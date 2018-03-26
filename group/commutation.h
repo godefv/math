@@ -2,7 +2,6 @@
 #define GROUP_COMMUTATION_H 
 
 #include"identity.h"
-#include"minus.h"
 #include"inverse.h"
 #include"operation.h"
 #include"../scalar.h"
@@ -26,10 +25,6 @@ namespace math{
 	template<class OperatorT>
 	int constexpr sort_index(OperatorT, auto const&){
 		return 200;
-	}
-	template<class OperatorT>
-	int constexpr sort_index(OperatorT, group::generated_minus_t<OperatorT, auto> const&){
-		return 300;
 	}
 	template<class OperatorT>
 	int constexpr sort_index(OperatorT op, group::generated_power_t<OperatorT, Ratio, auto> const& pow){
@@ -75,12 +70,6 @@ namespace math{
 		//if(first_order!=0) return first_order;
 
 		//return static_compare(a.second, b.second);
-	//}
-	//auto constexpr static_compare(generated_minus_t<auto, auto> const& a, generated_minus_t<auto, auto> const& b){
-		//auto constexpr operation_order=static_compare(a.operation,b.operation);
-		//if constexpr(operation_order!=0) return operation_order;
-
-		//return static_compare(a.value, b.value);
 	//}
 	
 	//indexed_element

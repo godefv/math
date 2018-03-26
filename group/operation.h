@@ -3,7 +3,6 @@
 
 #include"inverse.h"
 #include"identity.h"
-#include"minus.h"
 
 #include<type_traits>
 #include<cmath>
@@ -38,7 +37,6 @@ namespace math::group{
 
 	template<class OperatorT, class T> 
 	concept bool Generated=Operation<OperatorT,T> 
-	                    || Minus<OperatorT,T> 
 	                    || Power<OperatorT,T> 
 	                    || std::is_same<identity_t<OperatorT>,T>::value;
 
@@ -50,25 +48,10 @@ namespace math::group{
 	auto constexpr operation(identity_t<OperatorT> const&, A const& a){return a;}
 	template<class OperatorT, class A> requires !std::is_same<A,identity_t<OperatorT>>::value 
 	auto constexpr operation(A const& a, identity_t<OperatorT> const&){return a;}
-	//operations with minus
-	template<class OperatorT, class A,class B> 
-		requires !std::is_same<A, identity_t<OperatorT>>::value
-		      && !(std::is_same<generated_minus_t<OperatorT, B>, inverse_t<OperatorT, A>>::value && !Operation<OperatorT, A>)
-	auto constexpr operation(A const&, generated_minus_t<OperatorT, B> const&){
-		return group::minus_t<OperatorT, decltype(OperatorT::apply(A{},B{}))>{};
-	}
-	template<class OperatorT, class A,class B> 
-		requires !std::is_same<A, identity_t<OperatorT>>::value
-		      && !std::is_same<A, inverse_t<OperatorT, generated_minus_t<OperatorT, B>>>::value
-			  && !Minus<OperatorT,A>
-	auto constexpr operation(generated_minus_t<OperatorT, B> const&, A const&){
-		return group::minus_t<OperatorT, decltype(OperatorT::apply(B{},A{}))>{};
-	}
 	//associativity	//put everything in normalized from ((AB)C)D...
 	template<class OperatorT, class A,class B,class C> 
 		requires !std::is_same<A,identity_t<OperatorT>>::value
 		      && !(std::is_same<generated_by_operation_t<OperatorT,B,C>, inverse_t<OperatorT, A>>::value && !Operation<OperatorT, A>)
-			  && !Minus<OperatorT,A>
 	auto constexpr operation(A const& a, generated_by_operation_t<OperatorT,B,C> const& bc){
 		return OperatorT::apply(OperatorT::apply(a, bc.first), bc.second);
 	}
@@ -76,7 +59,6 @@ namespace math::group{
 	template<class OperatorT, class A,class B,class C> 
 		requires !Operation<OperatorT,B> 
 		      && !Operation<OperatorT,C> 
-			  && !Minus    <OperatorT,C>
 			  && !std::is_same<decltype(OperatorT::apply(B{},C{})), generated_by_operation_t<OperatorT,B,C>>::value 
 			  && !std::is_same<C,identity_t<OperatorT>>::value
 	auto constexpr operation(generated_by_operation_t<OperatorT,A,B> const& ab, C const& c){
@@ -108,11 +90,6 @@ namespace math::group{
 	template<class OperatorT, class A,class B> 
 	auto constexpr inverse(OperatorT op, generated_by_operation_t<OperatorT, A,B> const& ab){
 		return OperatorT::apply(inverse(op, ab.second), inverse(op, ab.first));
-	}
-	//inverse of minus A
-	template<class OperatorT, class A> 
-	auto constexpr inverse(OperatorT op, generated_minus_t<OperatorT, A> const& a){
-		return minus_t<OperatorT, decltype(inverse(op, a.value))>{};
 	}
 
 	//number of terms in operation

@@ -1,5 +1,4 @@
 #include"generate.h"
-#include"minus.h"
 #include"geometric.h"
 #include"concept.h"
 #include"../unit_test.h"
@@ -31,8 +30,6 @@ static void test_mult_operations(){
 	check_equal(one, inverse(one));
 	check_equal(one*e1, e1);
 	check_equal(e1*one, e1);
-	//minus
-	check_equal(inverse(-e1), -inverse(e1));
 	//associativity 
 	check_equal(e2*(e1*e2), (e2*e1)*e2);
 	//1(12)
