@@ -13,6 +13,7 @@ namespace math{
 	};
 	using one_t=group::identity_t<mult_operation_t>;
 	auto constexpr one=one_t{};
+	template<> struct is_scalar<one_t>:std::true_type{};
 
 	template<class T> requires !group::Generated<mult_operation_t,T>
 	auto constexpr inverse(mult_operation_t, T const& a){

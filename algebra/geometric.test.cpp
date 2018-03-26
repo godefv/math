@@ -48,21 +48,6 @@ int main(){
 	//reverse
 	check_equal(reverse(e1*e2), e2*e1);
 	check_equal(reverse(one+e1*e2), one+e2*e1);
-	//grades
-	using algebra::geometric::grades;
-	static_assert(grades(one)            == grades<0>());
-	static_assert(grades(e1)             == grades<1>());
-	static_assert(grades(e1*e1)          == grades<0>());
-	static_assert(grades(e1*e2)          == grades<2>());
-	static_assert(grades(e1*e2+e1*e3)    == grades<2>());
-	static_assert(grades(e1*e2*e3)       == grades<3>());
-	static_assert(grades(one+e2+e1*e2*e3)== grades<0,1,3>());
-	//project
-	check_equal(algebra::geometric::project(e1*e1, grades<2>()), zero);
-	check_equal(algebra::geometric::project(one+e1, grades<1>()), e1);
-	check_equal(algebra::geometric::project(one+e1, grades<0>()), one);
-	check_equal(algebra::geometric::project(one+e1+e1*e2, grades<0,2>()), one+e1*e2);
-	check_equal(algebra::geometric::project(one+e1+e1*e2, grades<0,3>()), one);
 	//wedge
 	{auto constexpr e1e2=algebra::geometric::group_wedge_operation_t::apply(e1_t{}, e2_t{}); unused(e1e2);}
 	{auto constexpr e1e2=e1^e2; unused(e1e2);}

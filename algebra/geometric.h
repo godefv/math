@@ -54,26 +54,6 @@ namespace algebra::geometric{
 	namespace hana=boost::hana;
 	using namespace hana::literals;
 
-	template<int... Is>
-	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
-	auto constexpr grades(group::identity_t<add_operation_t> const&){return grades<>();}
-	auto constexpr grades(vector::basis_vector_t<auto,auto> const& a){return grades<grade(a.element)>();}
-	auto constexpr grades(group::generated_by_operation_t<add_operation_t, auto,auto> const& a){
-		return hana::union_(grades(a.first), grades(a.second));
-	}
-
-	auto constexpr project(group::identity_t<add_operation_t> const& a, auto const& grades){return zero;}
-	auto constexpr project(vector::basis_vector_t<auto,auto> const& a, auto grades){
-		if constexpr(hana::find(grades, hana::llong_c<grade(a.element)>)==hana::nothing){
-			return zero;
-		}else{
-			return a;
-		}
-	}
-	auto constexpr project(group::generated_by_operation_t<add_operation_t, auto,auto> const& a, auto grades){
-		return std::decay_t<decltype(a.operation)>::apply(project(a.first, grades), project(a.second, grades));
-	}
-
 	namespace operators{
 		constexpr auto operator*(auto const& a, auto const& b){
 			return mult_operation_t::apply(a,b);

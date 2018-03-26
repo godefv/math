@@ -22,12 +22,16 @@ void print_type(auto const& a){
 }
 
 void check_equal(auto const& a, auto const& b){
-	std::cerr<<"different types: "<<std::endl;
-	std::cerr<<"  "<<typeid(a).name()<<std::endl;
-	std::cerr<<"≠ "<<typeid(b).name()<<std::endl;
-	std::cerr<<"  "<<a<<std::endl;
-	std::cerr<<"≠ "<<b<<std::endl;
-	std::exit(1);
+	if(a==b){
+		std::cerr<<a<<" == "<<b<<std::endl;
+	}else{
+		std::cerr<<"different types: "<<std::endl;
+		std::cerr<<"  "<<typeid(a).name()<<std::endl;
+		std::cerr<<"≠ "<<typeid(b).name()<<std::endl;
+		std::cerr<<"  "<<a<<std::endl;
+		std::cerr<<"≠ "<<b<<std::endl;
+		std::exit(1);
+	}
 }
 template<class T>
 void check_equal(T const& a, T const& b){

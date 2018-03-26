@@ -3,11 +3,13 @@
 
 #include"../../multiplication/operation.h"
 #include"../../multiplication/power.h"
+#include"../../scalar.h"
+
 #include<type_traits>
 
 namespace math::geometry{
 	//directions definition
-	template<unsigned short i> struct direction_positive_t:indexed_element_t<i>{};
+	template<unsigned short i> struct direction_positive_t:indexed_element_t< i>{};
 	template<unsigned short i> struct direction_negative_t:indexed_element_t<-i>{};
 
 	//direction concept
@@ -16,14 +18,28 @@ namespace math::geometry{
 	template<unsigned short i> struct is_direction_t<direction_negative_t<i>>: std::true_type{};
 	template<class A> concept bool Direction=is_direction_t<A>::value;
 
-	//blade concept
-	template<class> struct is_blade_t: std::false_type{};
-	template<Direction DirectionT> struct is_blade_t<DirectionT>: std::true_type{};
+	//Blade concept
+	template<class> struct is_blade: std::false_type{};
+	template<Direction DirectionT> struct is_blade<DirectionT>: std::true_type{};
+	template<Scalar    ScalarT   > struct is_blade<ScalarT   >: std::true_type{};
 	
-	template<class T> concept bool Blade=is_blade_t<T>::value;
+	template<class T> concept bool Blade=is_blade<T>::value;
 	
 	template<Blade BladeT, Direction DirectionT> 
-	struct is_blade_t<group::generated_by_operation_t<mult_operation_t,BladeT,DirectionT>>: std::true_type{};
+	struct is_blade<group::generated_by_operation_t<mult_operation_t,BladeT,DirectionT>>: std::true_type{};
+	template<Blade BladeT, Ratio RatioT> 
+	struct is_blade<group::generated_power_t<add_operation_t,RatioT,BladeT>>: std::true_type{};
+
+	//MultiVector concept
+	template<class> struct is_multivector: std::false_type{};
+	template<Blade BladeT> struct is_multivector<BladeT>: std::true_type{};
+	
+	template<class T> concept bool MultiVector=is_multivector<T>::value;
+	
+	template<MultiVector MultiVectorT, Blade BladeT> 
+	struct is_multivector<group::generated_by_operation_t<add_operation_t,MultiVectorT,BladeT>>: std::true_type{};
+	template<MultiVector MultiVectorT, Ratio RatioT> 
+	struct is_multivector<group::generated_power_t<add_operation_t,RatioT,MultiVectorT>>: std::true_type{};
 }
 
 namespace math{

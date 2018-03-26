@@ -4,6 +4,7 @@
 #include"../group/operation.h"
 #include"../group/commutation.h"
 #include"../group/power.h"
+#include"../scalar.h"
 
 #include<iostream>
 
@@ -15,6 +16,7 @@ namespace math{
 	};
 	using zero_t=group::identity_t<add_operation_t>;
 	auto constexpr zero=zero_t{};
+	template<> struct is_scalar<zero_t>:std::true_type{};
 
 	template<class T> requires !group::Generated<add_operation_t,T>
 	auto constexpr inverse(add_operation_t, T const& a){

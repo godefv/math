@@ -77,11 +77,6 @@ requires group::Group<T, one_t, mult_operation_t, inverse_t>
 int main(){
 	test_mult_operations();
 
-	check_equal(grade(e1), 1);
-	check_equal(grade(e3), 1);
-	check_equal(grade(e1*e2), 2);
-	check_equal(grade(e1*e3), 2);
-
 #if COMPUTE_FULL_GROUPS
 	check_mult_group_element<decltype(geometric_group_2d)>((e1_t*)nullptr);
 	check_mult_group_element<decltype(geometric_group_2d)>((mult_t<e1_t, e2_t>*)nullptr);
