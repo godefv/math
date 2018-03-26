@@ -3,6 +3,11 @@
 
 int main(){
 	using math::integer;
+	//inverse
+	check_equal(inverse(inverse(x)), x);
+	check_equal(x*inverse(x), math::one);
+	check_equal(inverse(x)*x, math::one);
+
 	//scalars commute
 	check_equal(2*x, x*2);
 	check_equal(integer<2>*x, x*integer<2>);
