@@ -3,6 +3,7 @@
 
 #include"identity.h"
 #include"../symbolic/rational.h"
+#include"../scalar.h"
 
 namespace math::group{
 	template<class OperatorT, Ratio RatioT, class OperandT>
@@ -89,6 +90,7 @@ namespace math::group{
 
 namespace math{
 	template<class OperatorT, Ratio RatioT, Symbol SymbolT> struct is_symbol<group::generated_power_t<OperatorT,RatioT,SymbolT>>:std::true_type{};
+	template<class OperatorT, Ratio RatioT, Scalar ScalarT> struct is_scalar<group::generated_power_t<OperatorT,RatioT,ScalarT>>:std::true_type{};
 }
 
 #endif /* GROUP_POWER_H */
