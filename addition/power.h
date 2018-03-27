@@ -13,6 +13,12 @@ namespace math{
 	auto constexpr generated_power(add_operation_t, Symbol exponent, Ratio ratio){
 		return exponent*ratio;
 	}
+
+	//eval
+	auto constexpr eval(group::generated_power_t<add_operation_t,auto,auto> const& pow){
+		return eval(pow.exponent)*eval(pow.operand);
+	}
+
 }
 
 #endif /* ADDITION_POWER_H */

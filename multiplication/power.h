@@ -4,6 +4,8 @@
 #include"operation.h"
 #include"../group/power.h"
 
+#include<cmath>
+
 namespace math{
 	//static square root function for integers
 	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t begin, std::intmax_t end>
@@ -66,6 +68,11 @@ namespace math{
 	auto constexpr nth_root(auto const& operand){return pow(operand, ratio<1,N>);}
 	auto constexpr square(auto const& operand){return pow<2>(operand);}
 	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
+
+	//eval
+	auto constexpr eval(group::generated_power_t<mult_operation_t,auto,auto> const& pow){
+		return std::pow(eval(pow.operand), eval(pow.exponent));
+	}
 
 	//formatting
 	inline std::ostream& operator<<(std::ostream& out, power_t<Ratio,auto> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}

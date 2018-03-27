@@ -31,6 +31,11 @@ namespace math::group{
 		return out<<typeid(ab.operation).name()<<"("<<ab.first<<", "<<ab.second<<")";
 	}
 
+	template<class OperatorT>
+	auto constexpr eval(generated_by_operation_t<OperatorT,auto,auto> const& ab){
+		return OperatorT::apply(eval(ab.first), eval(ab.second));
+	}
+
 	//concepts
 	template<class OperatorT, class> struct is_generated_by_operation:std::false_type{};
 	template<class OperatorT, class A,class B> struct is_generated_by_operation<OperatorT, generated_by_operation_t<OperatorT,A,B>>:std::true_type{};
