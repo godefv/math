@@ -9,6 +9,10 @@ namespace math{
 		return group::power(add_operation_t{}, exponent, ab.first)
 		      +group::power(add_operation_t{}, exponent, ab.second);
 	}
+	//rationals
+	auto constexpr generated_power(add_operation_t, Symbol exponent, Ratio ratio){
+		return exponent*ratio;
+	}
 }
 
 #endif /* ADDITION_POWER_H */
