@@ -2,7 +2,7 @@
 #define GEOMETRY_ALGEBRA_UNIT_TEST_H 
 
 #include"definition.h"
-#include"../../unit_test.h"
+#include"../../symbolic/unit_test.h"
 
 //generators
 using e1_t=math::geometry::direction_positive_t<1>;

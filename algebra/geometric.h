@@ -13,50 +13,6 @@
 #include<cmath>
 
 namespace algebra::geometric{
-	using vector::zero;
-	static auto constexpr one=vector::unit_t<group::geometric::one_t>{};
-
-
-	struct group_mult_operation_t{
-		static auto constexpr apply(auto const& a, auto const& b){return a*b;}
-		static auto constexpr inverse(auto const& a){using ::inverse; return inverse(a);}
-	};
-
-	using   add_operation_t= vector::add_operation_t;
-	using  mult_operation_t=algebra::mult_operation_t<group_mult_operation_t>;
-	using wedge_operation_t=algebra::mult_operation_t<group_wedge_operation_t>;
-	using   dot_operation_t=algebra::mult_operation_t<group_dot_operation_t>;
-
-	namespace hana=boost::hana;
-	using namespace hana::literals;
-
-	namespace operators{
-		constexpr auto operator*(auto const& a, auto const& b){
-			return mult_operation_t::apply(a,b);
-		}
-		constexpr auto operator/(auto const& a, auto const& b){
-			return a*mult_operation_t::inverse(b);
-		}
-		constexpr auto operator-(auto const& a){
-			return add_operation_t::inverse(a);
-		}
-		constexpr auto operator-(auto const& a, auto const& b){
-			return a+(-b);
-		}
-	}
-
-	auto constexpr norm(auto const& a){
-		using namespace operators;
-		vector::basis_vector_t<group::geometric::one_t, auto> a_square=(a|a);
-		using std::sqrt;
-		using std::abs;
-		return sqrt(abs(a_square.coordinate));
-	}
-
-	auto constexpr normalized(auto const& a){
-		using namespace operators;
-		return a/vector::scalar_wrapper_t{norm(a)};
-	}
 
 	template<class BivectorT> 
 		requires boost::hana::value(grades(BivectorT{})==grades<2>()) 
