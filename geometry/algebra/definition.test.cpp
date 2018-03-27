@@ -18,7 +18,10 @@ int main(){
 	check_equal(one*e1, e1);
 	check_equal(e1*one, e1);
 	//minus
+	std::cout<<"\nminus:"<<std::endl;
 	check_equal(inverse(-e1), -inverse(e1));
+	check_equal((-e2)*e2, -(e2*e2));
+	check_equal((-(e1*e2))*(e1*e2), -((e1*e2)*(e1*e2)));
 	//associativity 
 	check_equal(e2*(e1*e2), (e2*e1)*e2);
 	//1(12)
@@ -26,6 +29,7 @@ int main(){
 	//(12)2
 	check_equal((e1*e2)*e2, e1);
 	//commutativity
+	std::cout<<"\ncommutativity:"<<std::endl;
 	//21
 	static_assert(static_compare(e2,e1)<0);
 	check_equal(e1*e2, -(e2*e1));

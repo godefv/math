@@ -43,7 +43,7 @@ namespace math::group{
 	template<class OperatorT>
 	auto constexpr power(OperatorT, Ratio exponent, auto const& operand){
 		if constexpr(exponent==integer<0>){
-			return identity_t<OperatorT>{};
+			return identity(OperatorT{});
 		}else if constexpr(exponent==integer<1>){
 			return operand;
 		}else{

@@ -9,6 +9,9 @@ namespace math::group{
 		Operator operation;
 	};
 
+	//overloadable constructor
+	template<class OperatorT> auto constexpr identity(OperatorT){return identity_t<OperatorT>{};}
+
 	template<class ElementT, class IdentityT, class OperatorT>
 	concept bool AbsorbsIdentityElement=std::is_same<decltype(OperatorT::apply(ElementT{},IdentityT{})), ElementT>::value
 	                                 && std::is_same<decltype(OperatorT::apply(IdentityT{},ElementT{})), ElementT>::value

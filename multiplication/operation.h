@@ -45,21 +45,23 @@ namespace math{
 		}
 	};
 
-	using one_t=group::identity_t<mult_operation_t>;
+	//one
+	auto constexpr identity(mult_operation_t){return integer<1>;}
+	using one_t=integer_t<1>;
 	auto constexpr one=one_t{};
-	template<> struct is_scalar<one_t>:std::true_type{};
 
+	//default inverse is inverse of multiplication
 	template<class T> requires !group::Generated<mult_operation_t,T>
 	auto constexpr inverse(mult_operation_t, T const& a){
 		return inverse(a);
 	}
+	template<class T> requires std::is_arithmetic<T>::value
+	auto constexpr inverse(T const& a){return 1./a;}
 
-	//by default, use group operations
+	//by default, use group operations and bilinear rules
 	auto constexpr inverse(auto const& a){
 		return group::inverse(mult_operation_t{}, a);
 	}
-	template<class T> requires std::is_arithmetic<T>::value
-	auto constexpr inverse(T const& a){return 1./a;}
 	auto constexpr operator*(auto const& a, auto const& b){
 		return bilinear_operation_t<mult_operation_t>::apply(a,b);
 	}
@@ -81,9 +83,6 @@ namespace math{
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
-	}
-	inline std::ostream& operator<<(std::ostream& out, one_t){
-		return out<<"one";
 	}
 }
 

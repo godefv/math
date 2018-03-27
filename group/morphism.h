@@ -20,7 +20,7 @@ namespace math::group{
 			return group::power(outer_operator, pow.exponent, operator()(pow.operand));
 		}
 		auto constexpr operator()(identity_t<InnerOperatorT>) const{
-			return identity_t<OuterOperatorT>{};
+			return identity(OuterOperatorT{});
 		}
 	};
 	template<class InnerOperatorT, class OuterOperatorT, class FunctorT>
