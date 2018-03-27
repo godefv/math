@@ -15,22 +15,27 @@ namespace math{
 	struct symbol_t{};
 
 	//operators
-	inline bool operator==(symbol_t<auto>,symbol_t<auto>){return true;}
-	inline bool operator!=(symbol_t<auto>,symbol_t<auto>){return false;}
+	template<class NameT>
+	bool operator==(symbol_t<NameT>,symbol_t<NameT>){return true;}
+	bool operator==(symbol_t<auto> a,symbol_t<auto> b){return false;}
+	bool operator!=(symbol_t<auto> a,symbol_t<auto> b){return !(a==b);}
 
 	//Symbol concept, is_symbol<> can be specialized to make a type a Symbol
 	template<class T> struct is_symbol: std::false_type{};
 	template<class Name> struct is_symbol<symbol_t<Name>>: std::true_type{};
 	template<class T> concept bool Symbol=is_symbol<T>::value;
 
-	//!Template to make symbol names from a single letter
-	template<char> struct symbol_name_t{};
+	//!Template to make symbol names from letters
+	template<char...> struct symbol_name_t{};
 
-	template<char letter>
-	auto constexpr symbol=symbol_t<symbol_name_t<letter>>{};
+	template<char... letters>
+	auto constexpr symbol=symbol_t<symbol_name_t<letters...>>{};
+
+	template<class CharT, CharT... letters>
+	auto constexpr operator""_symbol(){return symbol<letters...>;}
 
 	//formatting
-	template<char Name> std::ostream& operator<<(std::ostream& out,symbol_t<symbol_name_t<Name>>){return out<<Name;}
+	template<char... Name> std::ostream& operator<<(std::ostream& out,symbol_t<symbol_name_t<Name...>>){return (out<<...<<Name);}
 }
 
 #endif /* SYMBOLIC_SYMBOL_H */
