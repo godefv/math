@@ -6,14 +6,14 @@
 #include"../scalar.h"
 
 namespace math::group{
-	template<class OperatorT, Ratio RatioT, class OperandT>
+	template<class OperatorT, Scalar ExponentT, class OperandT>
 	struct generated_power_t{
 		OperatorT operator_;
-		RatioT exponent;
+		ExponentT exponent;
 		OperandT operand;
 	};
-	template<class OperatorT, Ratio RatioT, class OperandT>
-	generated_power_t(OperatorT,RatioT,OperandT)->generated_power_t<OperatorT,RatioT,OperandT>;
+	template<class OperatorT, Scalar ExponentT, class OperandT>
+	generated_power_t(OperatorT,ExponentT,OperandT)->generated_power_t<OperatorT,ExponentT,OperandT>;
 
 	//comparison of powers
 	template<class OperatorT, class OperandT>
@@ -30,12 +30,12 @@ namespace math::group{
 	}
 
 	//formatting
-	std::ostream& operator<<(std::ostream& out, generated_power_t<auto, Ratio, auto> const& pow){
+	std::ostream& operator<<(std::ostream& out, generated_power_t<auto, Scalar, auto> const& pow){
 		return out<<typeid(pow.operator_).name()<<" "<<pow.exponent<<" th power ("<<pow.operand<<")";
 	}
 
 	//overloadable constructor. Typically, x**2=-1
-	auto constexpr generated_power(auto op, Ratio exponent, auto const& operand){
+	auto constexpr generated_power(auto op, auto exponent, auto const& operand){
 		return generated_power_t{op,exponent,operand};
 	}
 
@@ -59,14 +59,14 @@ namespace math::group{
 		return operand;
 	}
 	//power of power is a power
-	template<class OperatorT, Ratio RatioT>
-	auto constexpr power(OperatorT op, RatioT ratio, generated_power_t<OperatorT,Ratio,auto> const& operand){
+	template<class OperatorT, Ratio ExponentT>
+	auto constexpr power(OperatorT op, ExponentT ratio, generated_power_t<OperatorT,Ratio,auto> const& operand){
 		return power(op, ratio*operand.exponent, operand.operand);
 	} 
 	//some powers can be processed immediatly
-	template<class OperatorT, Integer RatioT, Ratio OperandT> requires RatioT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
-	auto constexpr power(OperatorT op, RatioT, OperandT const& operand){
-		return OperatorT::apply(power(op, integer_t<RatioT::num-1>{}, operand), operand);
+	template<class OperatorT, Integer ExponentT, Ratio OperandT> requires ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
+	auto constexpr power(OperatorT op, ExponentT, OperandT const& operand){
+		return OperatorT::apply(power(op, integer_t<ExponentT::num-1>{}, operand), operand);
 	}
 	//some operand are cyclic
 	//template<class OperatorT> std::uintmax_t constexpr cycle_order(OperatorT,auto);
@@ -87,13 +87,13 @@ namespace math::group{
 
 	//concept
 	template<class OperatorT, class> struct is_power:std::false_type{};
-	template<class OperatorT, Ratio RatioT, class OperandT> struct is_power<OperatorT, generated_power_t<OperatorT,RatioT, OperandT>>:std::true_type{};
+	template<class OperatorT, Scalar ExponentT, class OperandT> struct is_power<OperatorT, generated_power_t<OperatorT,ExponentT, OperandT>>:std::true_type{};
 	template<class OperatorT, class T> concept bool Power=is_power<OperatorT, T>::value;
 }
 
 namespace math{
-	template<class OperatorT, Ratio RatioT, Symbol SymbolT> struct is_symbol<group::generated_power_t<OperatorT,RatioT,SymbolT>>:std::true_type{};
-	template<class OperatorT, Ratio RatioT, Scalar ScalarT> struct is_scalar<group::generated_power_t<OperatorT,RatioT,ScalarT>>:std::true_type{};
+	template<class OperatorT, Symbol ExponentT, Symbol SymbolT> struct is_symbol<group::generated_power_t<OperatorT,ExponentT,SymbolT>>:std::true_type{};
+	template<class OperatorT, Scalar ExponentT, Scalar ScalarT> struct is_scalar<group::generated_power_t<OperatorT,ExponentT,ScalarT>>:std::true_type{};
 }
 
 #endif /* GROUP_POWER_H */
