@@ -53,6 +53,9 @@ namespace math{
 	template<class OperandT>
 	using square_t=power_t<integer_t<2>, OperandT>;
 
+	template<class OperandT>
+	using sqrt_t=nth_root_t<integer_t<2>, OperandT>;
+
 	auto constexpr pow(auto const& operand, Ratio exponent){
 		using group::power;
 		return power(mult_operation_t{}, exponent, operand);
