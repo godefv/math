@@ -22,13 +22,17 @@ int main(){
 	check_equal(cosh(integer<2>)+sinh(integer<2>), sinh(integer<2>)+cosh(integer<2>));
 	check_equal(pow<2>(cosh(integer<2>))-pow<2>(sinh(integer<2>)), -pow<2>(sinh(integer<2>))+pow<2>(cosh(integer<2>)));
 
-	//abs is a morphism over addition
+	//abs is a morphism over addition, except it applies on addition exponent
+	check_equal(abs(-x), abs(x));
 	check_equal(abs(x+y), abs(x)+abs(y));
+	check_equal(abs(-x+y), abs(x)+abs(y));
+	check_equal(abs(2*x-y), 2*abs(x)+abs(y));
 	//abs is a morphism over multiplication
 	check_equal(abs(x*y), abs(x)*abs(y));
 	check_equal(abs(nth_root<2>(x)), nth_root<2>(abs(x)));
-	//abs is a morphism over both addition and multiplication
-	check_equal(abs(4*x*y+x+2*y), 4*abs(x)*abs(y)+abs(x)+2*abs(y));
+	//abs is a morphism over both addition and multiplication, except it applies on addition exponent
+	check_equal(abs(4*x*(-y)-x-2*y), 4*abs(x)*abs(y)+abs(x)+2*abs(y));
+	check_equal(abs(-one), one);
 
 	//formatting
 	std::cout<<exp(integer<3>)<<std::endl;

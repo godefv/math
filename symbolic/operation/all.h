@@ -26,11 +26,21 @@ namespace math{
 	DEFINE_OPERATION(asinh, 10)
 #undef DEFINE_OPERATION
 
-	//abs is an endomorphism over the algebra(+,*)
-	auto constexpr abs_endomorphism=group::endomorphism(add_operation_t{}, group::endomorphism(mult_operation_t{}, [](auto const& a){return abs(a);}));
+	//abs is an endomorphism over *
+	auto constexpr abs_endomorphism=group::endomorphism(mult_operation_t{}, [](auto const& a){return abs(a);});
 	template<class T> requires group::Generated<add_operation_t,T> || group::Generated<mult_operation_t,T>
 	auto constexpr abs(T const& a){
 		return abs_endomorphism(a);
+	}
+	//abs(kx)=abs(k)abs(x)
+	auto constexpr abs(group::generated_power_t<add_operation_t,auto,auto> const& pow){
+		return abs(pow.exponent)*abs(pow.operand);
+	}
+	auto constexpr abs(group::generated_by_operation_t<add_operation_t,auto,auto> const& ab){
+		return abs(ab.first)+abs(ab.second);
+	}
+	auto constexpr abs(zero_t){
+		return zero;
 	}
 }
 
