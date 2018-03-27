@@ -44,6 +44,12 @@ namespace math{
 		using group::power;
 		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
 	}
+	//expand powers of multiplication or addition a^n = a(a^(n-1)) with a=xy or x+y 
+	//this gives a chance to apply commutation rules, and expands (a+b)^n
+	template<Ratio RatioT, class T> requires RatioT::num>0 && RatioT::den==1 && (group::Operation<mult_operation_t,T> || group::Operation<add_operation_t,T>)
+	auto constexpr generated_power(mult_operation_t, RatioT exponent, T const& a){
+		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
+	}
 
 	//aliases
 	template<Ratio RatioT, class OperandT>

@@ -29,9 +29,12 @@ int main(){
 	check_equal(pow<4>(nth_root<3>(x)), pow(x, ratio<4,3>));
 	check_equal(pow<4>(nth_root<2>(x)), pow<2>(x));
 
-	//multiplication power of addition power (ka)^n = (k^n)(a^n) because k is a scalar
+	//(ka)^n = (k^n)(a^n) because k is a scalar
 	check_equal(pow<2>(x+x),x*x+x*x+x*x+x*x);
 	check_equal(pow<-1>(-x),-pow<-1>(x));
+
+	//powers of products
+	check_equal(pow<2>(x*y),x*y*x*y);
 
 	//formatting
 	std::cout<<"\nformatting:\n"<<std::endl;
