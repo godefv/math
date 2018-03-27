@@ -1,26 +1,18 @@
 #include"definition.h"
-#include"../../symbolic/unit_test.h"
-
-//generators
-using e1_t=math::geometry::direction_positive_t<1>;
-using e2_t=math::geometry::direction_positive_t<2>;
-using e3_t=math::geometry::direction_negative_t<3>;
-static constexpr auto e1=e1_t{};
-static constexpr auto e2=e2_t{};
-static constexpr auto e3=e3_t{};
-using math::one;
+#include"unit_test.h"
 
 int main(){
+	using math::one;
 	//powers
 	check_equal(e1*e1, one);
 	check_equal(e2*e2, one);
 	//inverse of generators
 	check_equal(inverse(e1),  e1);
-	check_equal(inverse(e3), -e3);
+	check_equal(inverse(n1), -n1);
 	check_equal(inverse(e1*e2), inverse(e2)*inverse(e1));
 	//inverse of inverse
 	check_equal(inverse(inverse(e1)), e1);
-	check_equal(inverse(inverse(e3)), e3);
+	check_equal(inverse(inverse(n1)), n1);
 	//identity
 	check_equal(one, inverse(one));
 	check_equal(one*e1, e1);
