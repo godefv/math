@@ -4,13 +4,13 @@
 #include"definition.h"
 #include"dot_product.h"
 #include"../../symbolic/operation/all.h"
+#include"../../scalar.h"
 
 #include<cmath>
 
 namespace math::geometry{
 	auto constexpr norm(MultiVector const& a){
-		auto a_square=(a|a);
-		static_assert(grade(a_square)==0);
+		Scalar a_square=(a|a);
 		using std::sqrt;
 		using std::abs;
 		return sqrt(abs(a_square));
