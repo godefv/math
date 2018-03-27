@@ -1,4 +1,5 @@
 #include"operation.h"
+#include"power.h"
 #include"../symbolic/unit_test.h"
 
 int main(){
