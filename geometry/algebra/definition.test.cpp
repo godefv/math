@@ -3,10 +3,15 @@
 
 int main(){
 	using math::one;
+	using math::zero;
 	using math::integer;
 	//powers
-	check_equal(e1*e1, one);
-	check_equal(e2*e2, one);
+	check_equal(square(e1), one);
+	check_equal(square(e2), one);
+	check_equal(square(e1*e2), -one);
+	check_equal(square(e1*n1), one);
+	check_equal(square((e1+n1)*e2), zero);
+
 	//inverse of generators
 	check_equal(inverse(e1),  e1);
 	check_equal(inverse(n1), -n1);

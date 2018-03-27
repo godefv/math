@@ -25,8 +25,8 @@ namespace math::geometry{
 	
 	template<class T> concept bool Blade=is_blade<T>::value;
 	
-	template<Blade BladeT, Direction DirectionT> 
-	struct is_blade<group::generated_by_operation_t<mult_operation_t,BladeT,DirectionT>>: std::true_type{};
+	template<Blade Blade1, Blade Blade2> 
+	struct is_blade<group::generated_by_operation_t<mult_operation_t,Blade1,Blade2>>: std::true_type{};
 	template<Blade BladeT, class ExponentT> 
 	struct is_blade<group::generated_power_t<add_operation_t,ExponentT,BladeT>>: std::true_type{};
 
@@ -43,7 +43,7 @@ namespace math::geometry{
 }
 
 namespace math{
-	//a blade is a symbol
+	//a blade is a symbol <= wrong, an int is a blade
 	template<geometry::Blade BladeT> struct is_symbol<BladeT>: std::true_type{};
 }
 

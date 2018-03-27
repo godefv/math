@@ -18,9 +18,6 @@ namespace math::geometry{
 		return grade(a.operand);
 	}
 
-	//KBlade concept
-	template<Blade T, int K> concept bool KBlade=(grade(T{})==K);
-
 	namespace hana=boost::hana;
 
 	//!Convenience function to make a set of grades.
@@ -39,6 +36,9 @@ namespace math::geometry{
 	//KVector concept
 	template<MultiVector T, int K> concept bool KVector=hana::value(grades(T{})==grades<K>());
 	template<class T> concept bool BiVector=KVector<T,2>;
+	//KBlade concept
+	template<class T, int K> concept bool KBlade=KVector<T,K> && Scalar<std::decay_t<decltype(T{}*T{})>>;
+
 
 	//project multivector onto a set of grades
 	auto constexpr project(Blade const& blade, auto grades){

@@ -38,7 +38,8 @@ int main(){
 	check_equal(KBlade<std::decay_t<decltype(e1*e2*e3           )>, 2>   , false);
 	check_equal(KBlade<std::decay_t<decltype(integer<5>*e1*e2*e3)>, 2>   , false);
 	check_equal(KBlade<std::decay_t<decltype(e1+e2              )>, 2>   , false);
-	check_equal(KBlade<std::decay_t<decltype(e1*(e2+e3)         )>, 2>   , false);
+	check_equal(KBlade<std::decay_t<decltype(e1*(e2+e3)         )>, 2>   , true);
+	check_equal(KBlade<std::decay_t<decltype(e1*e2+e3*n1        )>, 2>   , false);
 
 	using math::geometry::BiVector;
 	std::cout<<"\nBiVector concept:"<<std::endl;
@@ -50,6 +51,7 @@ int main(){
 	check_equal(BiVector<std::decay_t<decltype(integer<5>*e1*e2*e3)>>    , false);
 	check_equal(BiVector<std::decay_t<decltype(e1+e2)>>                  , false);
 	check_equal(BiVector<std::decay_t<decltype(e1*(e2+e3))>>             , true);
+	check_equal(BiVector<std::decay_t<decltype(e1*e2+e3*n1)>>            , true);
 
 	return 0;
 }
