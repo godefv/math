@@ -40,20 +40,23 @@ namespace math::group{
 	}
 
 	//default power function
-	template<class OperatorT>
-	auto constexpr power(OperatorT, Ratio exponent, auto const& operand){
-		if constexpr(exponent==integer<0>){
-			return identity(OperatorT{});
-		}else if constexpr(exponent==integer<1>){
-			return operand;
-		}else{
-			return generated_power(OperatorT{},exponent,operand);
-		}
+	template<class OperandT>
+	auto constexpr power(auto op, auto const& exponent, OperandT const& operand){
+		return generated_power(op,exponent,operand);
 	}
 	//power of identity is identity
-	template<class OperatorT, Ratio RatioT>
-	auto constexpr power(OperatorT, RatioT, identity_t<OperatorT> const& identity){
+	template<class OperatorT> requires true //gives priority to this overload
+	auto constexpr power(OperatorT, auto, identity_t<OperatorT> const& identity){
 		return identity;
+	}
+	//special powers
+	template<class OperatorT, class OperandT> requires !std::is_same<OperandT,identity_t<OperatorT>>::value
+	auto constexpr power(OperatorT op, integer_t<0>, OperandT const&){
+		return identity(op);
+	}
+	template<class OperatorT, class OperandT> requires !std::is_same<OperandT,identity_t<OperatorT>>::value
+	auto constexpr power(OperatorT, integer_t<1>, OperandT const& operand){
+		return operand;
 	}
 	//power of power is a power
 	template<class OperatorT, Ratio RatioT>
@@ -61,8 +64,8 @@ namespace math::group{
 		return power(op, ratio*operand.exponent, operand.operand);
 	} 
 	//some powers can be processed immediatly
-	template<class OperatorT, Ratio RatioT> requires RatioT::den==1 && RatioT::num>1
-	auto constexpr power(OperatorT op, RatioT, Ratio const& operand){
+	template<class OperatorT, Integer RatioT, Ratio OperandT> requires RatioT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
+	auto constexpr power(OperatorT op, RatioT, OperandT const& operand){
 		return OperatorT::apply(power(op, integer_t<RatioT::num-1>{}, operand), operand);
 	}
 	//some operand are cyclic

@@ -15,9 +15,9 @@ namespace math{
 		}
 	};
 	//zero
-	using zero_t=group::identity_t<add_operation_t>;
+	auto constexpr identity(add_operation_t){return integer<0>;}
+	using zero_t=integer_t<0>;
 	auto constexpr zero=zero_t{};
-	template<> struct is_scalar<zero_t>:std::true_type{};
 
 	//inverse
 	template<class T> requires !group::Generated<add_operation_t,T>
@@ -68,9 +68,6 @@ namespace math{
 	}
 	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, integer_t<-1>, auto> const& kx){
 		return out<<"-("<<kx.operand<<")";
-	}
-	inline std::ostream& operator<<(std::ostream& out, zero_t){
-		return out<<"zero";
 	}
 
 }

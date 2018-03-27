@@ -39,7 +39,7 @@ namespace math::group{
 	template<class OperatorT, class T> 
 	concept bool Generated=Operation<OperatorT,T> 
 	                    || Power<OperatorT,T> 
-	                    || std::is_same<identity_t<OperatorT>,T>::value;
+	                    || std::is_same<generated_identity_t<OperatorT>,T>::value;
 
 	//default operation
 	template<class OperatorT, class A,class B> 
