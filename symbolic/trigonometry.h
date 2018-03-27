@@ -14,6 +14,7 @@ namespace math{
 	using pi_t=std::decay_t<decltype(pi)>;
 	auto constexpr eval(pi_t){return 3.14159265358979323846;}
 	auto constexpr abs(pi_t const& a){return a;}
+	template<> struct is_scalar<pi_t>:std::true_type {};
 
 	template<class RatioT>
 	using angle_t=decltype(pi*RatioT{});
