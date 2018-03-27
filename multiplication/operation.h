@@ -3,7 +3,7 @@
 
 #include"../group/operation.h"
 #include"../group/commutation.h"
-#include"../addition/operation.h"
+#include"../addition/all.h"
 
 namespace math{
 	//!Template for bilinear operations.
@@ -18,6 +18,7 @@ namespace math{
 		static auto constexpr apply(auto const&, zero_t){return zero;}
 		//operation with rational
 		static auto constexpr apply(Ratio ratio, auto const& a){return group::power(add_operation_t{}, ratio, a);}
+		static auto constexpr apply(auto const& a, Ratio ratio){return group::power(add_operation_t{}, ratio, a);}
 		//develop product over addition
 		static auto constexpr apply(auto const& a, group::generated_by_operation_t<add_operation_t, auto,auto> const& b){
 			return DerivedOperatorT::apply(a,b.first)+DerivedOperatorT::apply(a,b.second);

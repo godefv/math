@@ -19,6 +19,8 @@ int main(){
 	check_equal(pow<2>(cos(2))*sqrt(2)        , sqrt(2)*pow<2>(cos(2))        );
 	check_equal(cos(2)*sqrt(3)*cos(2)*sqrt(2) , cos(2)*cos(2)*sqrt(3)*sqrt(2) );
 	check_equal(cos(integer<2>)*sqrt(3)*cos(integer<2>)*sqrt(integer<2>), cos(integer<2>)*cos(integer<2>)*sqrt(3)*sqrt(integer<2>));
+	check_equal(cosh(integer<2>)+sinh(integer<2>), sinh(integer<2>)+cosh(integer<2>));
+	check_equal(pow<2>(cosh(integer<2>))-pow<2>(sinh(integer<2>)), -pow<2>(sinh(integer<2>))+pow<2>(cosh(integer<2>)));
 
 	//abs is a morphism over addition
 	check_equal(abs(x+y), abs(x)+abs(y));

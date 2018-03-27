@@ -3,8 +3,8 @@
 
 #include"template.h"
 #include"../../group/morphism.h"
-#include"../../addition/operation.h"
-#include"../../multiplication/operation.h"
+#include"../../addition/all.h"
+#include"../../multiplication/all.h"
 
 namespace math{
 #define DEFINE_OPERATION(op, op_index) \

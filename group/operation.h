@@ -3,6 +3,7 @@
 
 #include"inverse.h"
 #include"identity.h"
+#include"../symbolic/symbol.h"
 
 #include<type_traits>
 #include<cmath>
@@ -64,11 +65,6 @@ namespace math::group{
 	auto constexpr operation(generated_by_operation_t<OperatorT,A,B> const& ab, C const& c){
 		return OperatorT::apply(ab.first, OperatorT::apply(ab.second,c));
 	}
-	//(a power x) op (b power x) equals (a op b) power x <= not true if a and b does not commute !
-	//template<Ratio RatioT, class A, class B> requires !std::is_same<A,B>::value
-	//auto constexpr operation(generated_power_t<OperatorT, RatioT, A> const& a, generated_power_t<OperatorT, RatioT, B> const& b){
-		//return power(OperatorT{}, RatioT{}, a.operand*b.operand);
-	//}
 
 	//(a power x) op a = a op (a power x) = a power (a+1)
 	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(generated_power_t<OperatorT, RatioT, SymbolT>, SymbolT){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
@@ -102,6 +98,10 @@ namespace math::group{
 		return number_of_terms<OperatorT>(ab.first)+number_of_terms<OperatorT>(ab.second);
 	}
 
+}
+
+namespace math{
+	template<class OperatorT, Symbol A, Symbol B> struct is_symbol<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
 }
 
 #endif /* OPERATION_H */

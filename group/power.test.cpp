@@ -1,4 +1,5 @@
 #include"power.h"
+#include"commutation.h"
 #include"unit_test.h"
 
 namespace math{
@@ -23,6 +24,9 @@ int main(){
 	//cyclic operands
 	check_equal(power(op, integer<10>, z), power(op, integer<2>, z));
 	check_equal(power(op, integer<-1>, z), power(op, integer<3>, z));
+	//commutation
+	check_less(static_compare(plus_op, power(op,integer<3>,x), power(op,integer<2>,x)), 0);
+	           
 	return 0;
 }
 

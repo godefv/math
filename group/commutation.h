@@ -49,8 +49,13 @@ namespace math{
 
 	//powers
 	template<class OperatorT, Ratio Ratio2>
-	int constexpr static_compare(OperatorT op, group::generated_power_t<OperatorT, Ratio, auto> const& a, group::generated_power_t<OperatorT, Ratio2, auto> const& b){
-		return static_compare(op, a.operand, b.operand);
+	int constexpr static_compare(auto op, group::generated_power_t<OperatorT, Ratio, auto> const& a, group::generated_power_t<OperatorT, Ratio2, auto> const& b){
+		auto operand_order=static_compare(op, a.operand, b.operand);
+		if(operand_order!=0){
+		   return operand_order;
+		}else{
+			return (b.exponent-a.exponent).numerator();
+		}
 	}
 
 	//auto constexpr static_compare(identity_t<auto> const& a, identity_t<auto> const& b){

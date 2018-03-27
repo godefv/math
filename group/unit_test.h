@@ -17,4 +17,11 @@ auto constexpr operator*(auto const& a, auto const& b){
 	return math::group::operation<dummy_operation_t>(a,b);
 }
 
+struct dummy_plus_operation_t{
+	static auto constexpr apply(auto const& a, auto const& b){
+		return a+b;
+	}
+};
+auto constexpr plus_op=dummy_plus_operation_t{};
+
 #endif /* GROUP_UNIT_TEST_H */
