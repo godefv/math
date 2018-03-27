@@ -14,14 +14,20 @@ namespace math{
 			return a+b;
 		}
 	};
+	//zero
 	using zero_t=group::identity_t<add_operation_t>;
 	auto constexpr zero=zero_t{};
 	template<> struct is_scalar<zero_t>:std::true_type{};
 
+	//inverse
 	template<class T> requires !group::Generated<add_operation_t,T>
 	auto constexpr inverse(add_operation_t, T const& a){
 		return -a;
 	}
+
+	//minus_t
+	template<class T>
+	using minus_t=group::generated_power_t<add_operation_t, integer_t<-1>, T>;
 
 	//by default, use group operations
 	auto constexpr operator-(auto const& a){
@@ -43,6 +49,14 @@ namespace math{
    	auto constexpr operator+(A const& a, B const& b){
    		return b+a;
    	}
+	//collapse ka+klb as k(a+lb) if a+lb can be processed
+	template<class A, class B, Symbol ExponentA, Symbol ExponentB> 
+		requires !std::is_same<decltype(A{}+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))
+		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))>
+							  >::value 
+	auto constexpr operator+(group::generated_power_t<add_operation_t,ExponentA,A> const& ka, group::generated_power_t<add_operation_t,ExponentB,B> const& kb){
+		return group::power(add_operation_t{}, ExponentA{}, ka.operand+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, kb.operand));
+	}
 
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<add_operation_t, auto, auto> const& ab){
