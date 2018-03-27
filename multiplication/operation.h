@@ -19,14 +19,7 @@ namespace math{
 		//operation with rational
 		static auto constexpr apply(Ratio ratio, auto const& a){return group::power(add_operation_t{}, ratio, a);}
 		static auto constexpr apply(auto const& a, Ratio ratio){return group::power(add_operation_t{}, ratio, a);}
-		//develop product over addition
-		static auto constexpr apply(auto const& a, group::generated_by_operation_t<add_operation_t, auto,auto> const& b){
-			return DerivedOperatorT::apply(a,b.first)+DerivedOperatorT::apply(a,b.second);
-		}
-		template<class B> requires !group::Operation<add_operation_t, B>
-		static auto constexpr apply(group::generated_by_operation_t<add_operation_t, auto,auto> const& a, B const& b){
-			return DerivedOperatorT::apply(a.first,b)+DerivedOperatorT::apply(a.second,b);
-		}
+
 		//factor addition power out (ka)*b=k(a*b)
 		static auto constexpr apply(group::generated_power_t<add_operation_t, Ratio,auto> const& a, auto const& b){
 			return group::power(add_operation_t{}, a.exponent, DerivedOperatorT::apply(a.operand,b));
@@ -35,6 +28,16 @@ namespace math{
 		template<class A> requires !group::Power<add_operation_t,A>
 		static auto constexpr apply(A const& a, group::generated_power_t<add_operation_t, Ratio,auto> const& b){
 			return group::power(add_operation_t{}, b.exponent, DerivedOperatorT::apply(a,b.operand));
+		}
+		
+		//develop product over addition
+		template<class A> requires !group::Power<add_operation_t,A>
+		static auto constexpr apply(A const& a, group::generated_by_operation_t<add_operation_t, auto,auto> const& b){
+			return DerivedOperatorT::apply(a,b.first)+DerivedOperatorT::apply(a,b.second);
+		}
+		template<class B> requires !group::Operation<add_operation_t, B> && !group::Power<add_operation_t,B>
+		static auto constexpr apply(group::generated_by_operation_t<add_operation_t, auto,auto> const& a, B const& b){
+			return DerivedOperatorT::apply(a.first,b)+DerivedOperatorT::apply(a.second,b);
 		}
 	};
 
