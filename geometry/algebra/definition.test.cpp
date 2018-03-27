@@ -3,6 +3,7 @@
 
 int main(){
 	using math::one;
+	using math::integer;
 	//powers
 	check_equal(e1*e1, one);
 	check_equal(e2*e2, one);
@@ -48,6 +49,29 @@ int main(){
 	//(21)(12)
 	check_equal((e2*e1)*(e1*e2), ((e2*e1)*e1)*e2);
 	check_equal((e2*e1)*(e1*e2), one);
+
+	//concepts
+	using math::geometry::Blade;
+	std::cout<<"\nBlade concept:"<<std::endl;
+	check_equal(Blade<int>                                               , true);
+	check_equal(Blade<e1_t>                                              , true);
+	check_equal(Blade<e2_t>                                              , true);
+	check_equal(Blade<std::decay_t<decltype(e1*e2)>>                     , true);
+	check_equal(Blade<std::decay_t<decltype(e1*e2*e3)>>                  , true);
+	check_equal(Blade<std::decay_t<decltype(integer<5>*e1*e2*e3)>>       , true);
+	check_equal(Blade<std::decay_t<decltype(e1+e2)>>                     , false);
+	check_equal(Blade<std::decay_t<decltype(e1*(e2+e3))>>                , false);
+
+	using math::geometry::MultiVector;
+	std::cout<<"\nMultiVector concept:"<<std::endl;
+	check_equal(MultiVector<int>                                         , true);
+	check_equal(MultiVector<e1_t>                                        , true);
+	check_equal(MultiVector<e2_t>                                        , true);
+	check_equal(MultiVector<std::decay_t<decltype(e1*e2)>>               , true);
+	check_equal(MultiVector<std::decay_t<decltype(e1*e2*e3)>>            , true);
+	check_equal(MultiVector<std::decay_t<decltype(integer<5>*e1*e2*e3)>> , true);
+	check_equal(MultiVector<std::decay_t<decltype(e1+e2)>>               , true);
+	check_equal(MultiVector<std::decay_t<decltype(e1*(e2+e3))>>          , true);
 
 	return 0;
 }

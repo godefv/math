@@ -27,8 +27,8 @@ namespace math::geometry{
 	
 	template<Blade BladeT, Direction DirectionT> 
 	struct is_blade<group::generated_by_operation_t<mult_operation_t,BladeT,DirectionT>>: std::true_type{};
-	template<Blade BladeT, Ratio RatioT> 
-	struct is_blade<group::generated_power_t<add_operation_t,RatioT,BladeT>>: std::true_type{};
+	template<Blade BladeT, class ExponentT> 
+	struct is_blade<group::generated_power_t<add_operation_t,ExponentT,BladeT>>: std::true_type{};
 
 	//MultiVector concept
 	template<class> struct is_multivector: std::false_type{};
@@ -38,8 +38,8 @@ namespace math::geometry{
 	
 	template<MultiVector MultiVectorT, Blade BladeT> 
 	struct is_multivector<group::generated_by_operation_t<add_operation_t,MultiVectorT,BladeT>>: std::true_type{};
-	template<MultiVector MultiVectorT, Ratio RatioT> 
-	struct is_multivector<group::generated_power_t<add_operation_t,RatioT,MultiVectorT>>: std::true_type{};
+	template<MultiVector MultiVectorT, class ExponentT> 
+	struct is_multivector<group::generated_power_t<add_operation_t,ExponentT,MultiVectorT>>: std::true_type{};
 }
 
 namespace math{
