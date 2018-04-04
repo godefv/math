@@ -43,8 +43,8 @@ namespace math::geometry{
 }
 
 namespace math{
-	//a blade is a symbol <= wrong, an int is a blade
-	template<geometry::Blade BladeT> struct is_symbol<BladeT>: std::true_type{};
+	//a direction is a symbol
+	template<geometry::Direction DirectionT> struct is_symbol<DirectionT>: std::true_type{};
 }
 
 namespace math::geometry{
