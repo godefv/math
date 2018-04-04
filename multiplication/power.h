@@ -8,9 +8,8 @@
 
 namespace math{
 	//static square root function for integers
-	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t begin, std::intmax_t end>
+	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t begin, std::intmax_t end> requires begin<=end
 	auto constexpr static_sqrt(integer_t<N> operand, integer_t<begin>, integer_t<end>){
-		static_assert(begin<=end);
 		//while range is not empty, search it by dichotomy
 		if constexpr(begin!=end){
 			auto constexpr mid = integer<(end+begin)/2>;
@@ -28,10 +27,15 @@ namespace math{
 			return group::generated_power(mult_operation_t{}, ratio<1,Exponent>, operand);
 		}
 	}
+	template<std::intmax_t Exponent, std::intmax_t N>
+	auto constexpr static_sqrt(integer_t<N> operand){
+		return static_sqrt<Exponent>(operand, integer<1>, operand+integer<1>);
+	}
+
 	//exact roots of rationals
-	template<Ratio RatioT, std::intmax_t N> requires RatioT::num==1 && RatioT::den>1 && N>1
-	auto constexpr generated_power(mult_operation_t, RatioT, integer_t<N> operand){
-		return static_sqrt<RatioT::den>(operand, integer<1>, operand);
+	template<Ratio ExponentT, Ratio RatioT> requires ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same<RatioT,integer_t<1>>::value
+	auto constexpr generated_power(mult_operation_t, ExponentT, RatioT){
+		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}
 	//apply inverse if different than power<-1> (only with rational operands for now)
 	template<class OperatorT, Ratio RatioT> requires RatioT::num<0

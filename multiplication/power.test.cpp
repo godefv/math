@@ -20,6 +20,8 @@ int main(){
 	check_equal(nth_root<2>(integer<25>), integer<5>);
 	check_equal(nth_root<2>(integer<4>), integer<2>);
 	check_equal(nth_root<2>(integer<2>)*nth_root<2>(integer<2>), integer<2>);
+	check_equal(nth_root<2>(ratio<25,4>), ratio<5,2>);
+	check_equal(nth_root<2>(ratio<1,4>), ratio<1,2>);
 
 	//special powers
 	check_equal(pow<1>(x),x);
