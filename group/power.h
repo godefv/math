@@ -59,7 +59,7 @@ namespace math::group{
 		return operand;
 	}
 	//power of power is a power
-	template<class OperatorT, Ratio ExponentT>
+	template<class OperatorT, Ratio ExponentT> requires !std::is_same<ExponentT,integer_t<1>>::value
 	auto constexpr power(OperatorT op, ExponentT ratio, generated_power_t<OperatorT,Ratio,auto> const& operand){
 		return power(op, ratio*operand.exponent, operand.operand);
 	} 
