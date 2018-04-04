@@ -38,8 +38,8 @@ namespace math{
 		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}
 	//apply inverse if different than power<-1> (only with rational operands for now)
-	template<class OperatorT, Ratio RatioT> requires RatioT::num<0
-	auto constexpr generated_power(OperatorT op, RatioT exponent, Ratio const& operand){
+	template<class OperatorT, Ratio ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(Integer<OperandT> && !Integer<ExponentT>)
+	auto constexpr generated_power(OperatorT op, ExponentT exponent, OperandT const& operand){
 		return group::power(op, -exponent, inverse(operand));
 	}
 	//power of addition powers (ka)^n = (k^n)(a^n) because k is a scalar

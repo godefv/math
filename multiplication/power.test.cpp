@@ -22,6 +22,7 @@ int main(){
 	check_equal(nth_root<2>(integer<2>)*nth_root<2>(integer<2>), integer<2>);
 	check_equal(nth_root<2>(ratio<25,4>), ratio<5,2>);
 	check_equal(nth_root<2>(ratio<1,4>), ratio<1,2>);
+	check_equal(pow<-1>(integer<-1>),integer<-1>);
 
 	//special powers
 	check_equal(pow<1>(x),x);
@@ -37,6 +38,9 @@ int main(){
 
 	//powers of products
 	check_equal(pow<2>(x*y),x*y*x*y);
+
+	//inverse
+	check_equal(inverse(nth_root<2>(integer<2>)), pow(integer<2>, ratio<-1,2>));
 
 	//formatting
 	std::cout<<"\nformatting:\n"<<std::endl;
