@@ -42,8 +42,7 @@ void check_equal(A const& a, B const& b){
 	}
 }
 
-template<class T>
-void check_less(T const& a, T const& b){
+void check_less(auto const& a, auto const& b){
 	if(a>=b){
 		std::cerr<<a<<" >= "<<b<<std::endl;
 		std::exit(1);
