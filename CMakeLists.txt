@@ -64,6 +64,6 @@ math_add_test(symbolic/operation)
 math_add_test(symbolic/trigonometry)
 math_add_test(symbolic/rational)
 
-#math_add_test(geometry/slice)
+math_add_test(geometry/slice)
 #math_add_test(geometry/rotation)
 #math_add_test(symbolic/exponential)

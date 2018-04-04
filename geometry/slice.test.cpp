@@ -1,13 +1,9 @@
 #include"slice.h"
-#include"../unit_test.h"
-
-static constexpr auto e1=vector::basis_vector_t{group::geometric::direction_positive_t<1>{}, 1.};
-static constexpr auto e2=vector::basis_vector_t{group::geometric::direction_positive_t<2>{}, 1.};
-static constexpr auto e3=vector::basis_vector_t{group::geometric::direction_negative_t<3>{}, 1.};
+#include"algebra/unit_test.h"
 
 int main(){
-	auto constexpr slice12 =geometry::plane(e1,e2);
-	auto constexpr slice132=geometry::slice_t(e1,e3,e2);
+	auto constexpr slice12 =math::geometry::plane(e1,e2);
+	auto constexpr slice132=math::geometry::slice_t(e1,n1,e2);
 
 	auto constexpr blade12 =slice12 .blade(); unused(blade12);
 	auto constexpr blade132=slice132.blade(); unused(blade132);
