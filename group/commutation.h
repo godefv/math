@@ -15,8 +15,12 @@ namespace math{
 	int constexpr sort_index(auto, SimpleScalar const&){
 		return 10;
 	}
-	int constexpr sort_index(auto, symbol_t<auto> const&){
+	template<Scalar ScalarT> requires !SimpleScalar<ScalarT>
+	int constexpr sort_index(auto, ScalarT const&){
 		return 20;
+	}
+	int constexpr sort_index(auto, symbol_t<auto> const&){
+		return 30;
 	}
 	template<class Operator1, class Operator2> requires !std::is_same<Operator1,Operator2>::value
 	int constexpr sort_index(Operator1, group::generated_by_operation_t<Operator2, auto,auto> const&){

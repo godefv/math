@@ -107,6 +107,7 @@ namespace math::group{
 
 namespace math{
 	template<class OperatorT, Symbol A, Symbol B> struct is_symbol<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
+	template<class OperatorT, Scalar A, Scalar B> struct is_scalar<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
 }
 
 #endif /* OPERATION_H */

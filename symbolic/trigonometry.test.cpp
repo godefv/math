@@ -13,10 +13,17 @@ namespace math{
 int main(){
 	using namespace math;
 	//concepts
+	std::cout<<"Symbol concept"<<std::endl;
 	check_equal(Symbol<decltype(ratio<1,4>*half_turn)>, true);
 	check_equal(Symbol<decltype(sinh(ratio<1,4>*half_turn))>, true);
 	check_equal(Symbol<decltype(sinh(x))>, true);
 	check_equal(Symbol<decltype(k*pi)>, true);
+	std::cout<<"Scalar concept"<<std::endl;
+	check_equal(Scalar<decltype(ratio<1,4>*half_turn)>, true);
+	check_equal(Scalar<decltype(sinh(ratio<1,4>*half_turn))>, true);
+	check_equal(Scalar<decltype(sinh(x))>, false);
+	check_equal(Scalar<decltype(sinh(k*pi))>, true);
+	std::cout<<"Angle concept"<<std::endl;
 	check_equal(Angle<pi_t>, true);
 	check_equal(Angle<angle_t<ratio_t<1,4>>>, true);
 	check_equal(Angle<decltype(k*pi)>, true);
