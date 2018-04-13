@@ -4,6 +4,7 @@
 #include"inverse.h"
 #include"identity.h"
 #include"../symbolic/symbol.h"
+#include"../eval.h"
 
 #include<type_traits>
 #include<cmath>
@@ -33,6 +34,7 @@ namespace math::group{
 
 	template<class OperatorT>
 	auto constexpr eval(generated_by_operation_t<OperatorT,auto,auto> const& ab){
+		using ::eval;
 		return OperatorT::apply(eval(ab.first), eval(ab.second));
 	}
 

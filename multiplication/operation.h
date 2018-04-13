@@ -58,13 +58,13 @@ namespace math{
 	using one_t=integer_t<1>;
 	auto constexpr one=one_t{};
 
+	template<class T> requires std::is_arithmetic<T>::value
+	auto constexpr inverse(T const& a){return 1./a;}
 	//default inverse is inverse of multiplication
 	template<class T> requires !group::Generated<mult_operation_t,T>
 	auto constexpr inverse(mult_operation_t, T const& a){
 		return inverse(a);
 	}
-	template<class T> requires std::is_arithmetic<T>::value
-	auto constexpr inverse(T const& a){return 1./a;}
 
 	//by default, use group operations and bilinear rules
 	auto constexpr inverse(auto const& a){

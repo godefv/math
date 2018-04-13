@@ -70,9 +70,8 @@ int main(){
 
 	std::cout<<e1+n1<<"->"; check_equal(rotation1(e1+n1), n1-e2); 
 	std::cout<<e2   <<"->"; check_equal(rotation1(e2   ), e1   ); 
-	//check_equal(rotation2(e1), );
-	//std::cout<<e1   <<"->"<<rotation2(e1)<<" = "<<eval(rotation2(e1))<<std::endl;
-	//std::cout<<n1   <<"->"<<rotation2(n1)<<" = "<<eval(rotation2(n1))<<std::endl;
+	std::cout<<e1   <<"->"<<rotation2(e1)<<" = "<<eval(rotation2(e1))<<std::endl;
+	std::cout<<n1   <<"->"<<rotation2(n1)<<" = "<<eval(rotation2(n1))<<std::endl;
 
 	//auto constexpr rotation14=(rotation1,rotation4);
 	//auto constexpr rotation14_inverse=geometry::compose_operation_t::inverse(rotation14);
