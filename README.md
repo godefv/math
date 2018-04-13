@@ -13,13 +13,17 @@ This is a c++ math library. It provides :
 * **coordinate free geometry** 
 
   Never again write something like `Vector3d{1., 2., 0.}` and then the compiler doesn't know in which frame those coordinates are (and maybe you don't either).
-  Instead, use meaningful directions like `1.*up+2.*east+0.*north`. But here `0.*north` is superfluous, so just write `up+2*east`. And if you have several frames, don't bother changing frame explicitly, just write `1.3*my_frame_x + 2.4*my_other_frame_z`. 
+  Instead, use meaningful directions like `1.*up+2.*east+0.*north`. 
+
+  But here `0.*north` is superfluous, so just write `up+2*east`, which takes less memory and is faster to process at runtime because ony 2 numbers will be used instead of 3. The library will take care of returning the best types in terms of memory and geometric signification for every math operation or function.
+
+  And if you have several frames, don't bother changing frame explicitly, just define your new frames in terms of the previous ones and use adequate frame vectors directly : `1.3*my_frame_x + 2.4*my_other_frame_z`. 
 
 # Implementation
 
 ## strong typing
 Mathematical objects and expressions are represented by c++ types. Operations on those types are made by constexpr functions.
-It can effectively turn your compiler into a symbolic math software. The resulting program would only print the result that have been computed at compile time.
+It can effectively turn your compiler into a symbolic math software, in which case the resulting program would only print the result that have been computed at compile time.
 
 ## extensible dimensions
 No need to specify in advance a space in which to work, new types are generated if new dimensions appear in an expression. If you write `auto a=3*x+4*y`, `a` stores two values in a type generated from the expression `"double*x+double*y"`. Then, writing `a+2.5*z` will just generate a larger type holding three values (assuming `z` is not a combination of `x` and `y`).
