@@ -34,10 +34,14 @@ int main(){
 	check_equal(e1*(e1*e2), e2);
 	//(12)2
 	check_equal((e1*e2)*e2, e1);
-	//commutativity
-	std::cout<<"\ncommutativity:"<<std::endl;
+	//addition commutativity
+	std::cout<<"\naddition commutativity:"<<std::endl;
+	check_equal(e1-e2, -e2+e1);
+	check_equal(n1-e2, -e2+n1);
+	//multiplication commutativity
+	std::cout<<"\nmultiplication commutativity:"<<std::endl;
 	//21
-	static_assert(static_compare(e2,e1)<0);
+	static_assert(static_compare(math::mult_operation_t{},e2,e1)<0);
 	check_equal(e1*e2, -(e2*e1));
 	check_equal(e2*e1, -(e1*e2));
 	//(12)1

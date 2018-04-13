@@ -2,13 +2,12 @@
 #define GEOMETRY_ROTATION_H 
 
 #include"slice.h"
-#include"../symbolic/trigonometry.h"
-#include"../algebra/exponential.h"
-#include"../algebra/geometric.h"
-#include"../algebra/reverse.h"
+#include"algebra/exponential.h"
+#include"../multiplication/reverse.h"
+
 #include<type_traits>
 
-namespace geometry{
+namespace math::geometry{
 	//rotation in a single plane
 	template<class Direction1, class Direction2, class AngleT=double>
 	struct simple_rotation_t{
@@ -16,17 +15,14 @@ namespace geometry{
 		AngleT angle;
 
 		auto constexpr bivector() const{
-			using algebra::geometric::operators::operator*;
-			return vector::scalar_wrapper_t{angle}*plane.blade();
+			return angle*plane.blade();
 		}
 		auto constexpr rotor() const{
-			using algebra::geometric::operators::operator*;
-			return algebra::geometric::exp(symbolic::ratio<1,2>*bivector());
+			return exp(ratio<1,2>*bivector());
 		}
 		auto constexpr operator()(auto const& a) const{
 			auto R=rotor();
-			using algebra::geometric::operators::operator*;
-			return algebra::geometric::project(R*a*reverse(R), algebra::geometric::grades(a));
+			return project(R*a*reverse(R), grades(a));
 		}
 	};
 
@@ -43,8 +39,7 @@ namespace geometry{
 		RotorT rotor_;
 		auto constexpr rotor() const{return rotor_;}
 		auto constexpr operator()(auto const& a) const{
-			using namespace algebra::geometric::operators;
-			return algebra::geometric::project(rotor*a*reverse(rotor), algebra::geometric::grades(a));
+			return project(rotor_*a*reverse(rotor_), grades(a));
 		}
 	};
 

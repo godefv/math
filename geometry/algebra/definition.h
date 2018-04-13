@@ -50,10 +50,10 @@ namespace math{
 namespace math::geometry{
 	//ordering for commutation
 	Direction{Direction2}
-	constexpr int static_compare(Direction const& a, Direction2 const& b){return b.index-a.index;}
+	constexpr int static_compare(auto, Direction const& a, Direction2 const& b){return b.index-a.index;}
 
 	//anticommutation rule : directions are assumed to be orthogonal
-	template<Direction A, Direction B> requires static_compare(A{},B{})<0
+	template<Direction A, Direction B> requires static_compare(mult_operation_t{}, A{},B{})<0
 	auto constexpr operator*(A const& a, B const& b){
 		return -(b*a);
 	}
