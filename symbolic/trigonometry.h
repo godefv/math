@@ -63,36 +63,12 @@ namespace math{
 	auto constexpr sin(Angle const& angle){
 		return cos(angle_t<ratio_t<1,2>>{}-angle);
 	}
-	//template<class AngleT, class SinT> is_sin
 
 	//cos²+sin²=1
-	template<class Func2AngleT, class FuncT, Symbol AngleT> concept bool Func2Angle=
-		   Vector<Func2AngleT, square_t<operation_t<FuncT,AngleT>> > 
-		&& Symbol<decltype(coordinate(square_t<operation_t<FuncT,AngleT>>{}, Func2AngleT{}))>
-		;
-	template<class Cos2T, class Sin2T, Symbol AngleT> concept bool Cos2Sin2=
-		      Func2Angle<Cos2T,cos_t,AngleT>
-		&& ( (Func2Angle<Sin2T,sin_t,AngleT                                    > && coordinate(square_t<operation_t<sin_t,AngleT                                    >>{}, Sin2T{})==coordinate(square_t<operation_t<cos_t,AngleT>>{}, Cos2T{})) 
-		   ||(Func2Angle<Sin2T,cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})> && coordinate(square_t<operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})>>{}, Sin2T{})==coordinate(square_t<operation_t<cos_t,AngleT>>{}, Cos2T{})) 
-		   );
-	//Cos2Sin2{Cos2T, Sin2T, AngleT} <= alas, AngleT cannot be deduced
-	//auto constexpr operator+(Cos2T, Sin2T){
-		//return coordinate(sqare_t<operation_t<cos_t,AngleT>>{}, Cos2T{});
-	//}
 	template<Symbol AngleT>
 	auto constexpr operator+(square_t<operation_t<cos_t,AngleT>>
 	                        ,square_t<operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})>>){
 		return integer<1>;
-	}
-	template<Symbol AngleT, Symbol SymbolT>
-	auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, SymbolT, square_t<operation_t<cos_t,AngleT>> >
-	                        ,group::generated_by_operation_t<mult_operation_t, SymbolT, square_t<operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})>> >){
-		return SymbolT{};
-	}
-	template<Symbol AngleT, Symbol SymbolT>
-	auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, square_t<operation_t<cos_t,AngleT                                    >>, SymbolT >
-	                        ,group::generated_by_operation_t<mult_operation_t, square_t<operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})>>, SymbolT >){
-		return SymbolT{};
 	}
 	//ch²-sh²=1
 	template<Symbol AngleT>
@@ -109,6 +85,11 @@ namespace math{
 	auto constexpr operator+(        group::generated_by_operation_t<mult_operation_t, square_t<operation_t<cosh_t,AngleT>>, SymbolT >
 	                        ,minus_t<group::generated_by_operation_t<mult_operation_t, square_t<operation_t<sinh_t,AngleT>>, SymbolT >>){
 		return SymbolT{};
+	}
+	template<Symbol AngleT, Symbol Symbol1, Symbol Symbol2>
+	auto constexpr operator+(        group::generated_by_operation_t<mult_operation_t, group::generated_by_operation_t<mult_operation_t, square_t<operation_t<cosh_t,AngleT>>, Symbol1 >, Symbol2 >
+	                        ,minus_t<group::generated_by_operation_t<mult_operation_t, group::generated_by_operation_t<mult_operation_t, square_t<operation_t<sinh_t,AngleT>>, Symbol1 >, Symbol2 >>){
+		return Symbol1{}*Symbol2{};
 	}
 }
 

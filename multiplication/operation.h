@@ -17,6 +17,8 @@ namespace math{
 		static auto constexpr apply(zero_t, auto const&){return zero;}
 		static auto constexpr apply(auto const&, zero_t){return zero;}
 		//operation with rational
+		//TODO: one line should be enough
+		//TODO: any Scalar&&Symbol should obey this, not just Ratio
 		static auto constexpr apply(Ratio ratio, auto const& a){return group::power(add_operation_t{}, ratio, a);}
 		static auto constexpr apply(auto const& a, Ratio ratio){return group::power(add_operation_t{}, ratio, a);}
 
@@ -30,15 +32,17 @@ namespace math{
 			return group::power(add_operation_t{}, b.exponent, DerivedOperatorT::apply(a,b.operand));
 		}
 		
-		//develop product over addition
+		//develop product over addition a(b+c)=ab+ac
 		template<class A> requires !group::Power<add_operation_t,A>
-		static auto constexpr apply(A const& a, group::generated_by_operation_t<add_operation_t, auto,auto> const& b){
-			return DerivedOperatorT::apply(a,b.first)+DerivedOperatorT::apply(a,b.second);
+		static auto constexpr apply(A const& a, group::generated_by_operation_t<add_operation_t, auto,auto> const& bc){
+			return DerivedOperatorT::apply(a,bc.first)+DerivedOperatorT::apply(a,bc.second);
 		}
-		template<class B> requires !group::Operation<add_operation_t, B> && !group::Power<add_operation_t,B>
-		static auto constexpr apply(group::generated_by_operation_t<add_operation_t, auto,auto> const& a, B const& b){
-			return DerivedOperatorT::apply(a.first,b)+DerivedOperatorT::apply(a.second,b);
+		//develop product over addition (a+b)c=ac+bc
+		template<class C> requires !group::Operation<add_operation_t, C> && !group::Power<add_operation_t,C>
+		static auto constexpr apply(group::generated_by_operation_t<add_operation_t, auto,auto> const& ab, C const& c){
+			return DerivedOperatorT::apply(ab.first,c)+DerivedOperatorT::apply(ab.second,c);
 		}
+
 	};
 
 	//multiplication uses bilinear rules, then operator*
@@ -82,6 +86,19 @@ namespace math{
    	auto constexpr operator*(A const& a, B const& b){
    		return b*a;
    	}
+
+	//contract ab+ac=a(b+c) if (b+c) can be processed
+	template<Symbol A, class B, class C> requires !std::is_same<decltype(B{}+C{}), group::generated_by_operation_t<add_operation_t,B,C>>::value 
+	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,B> const& ab, group::generated_by_operation_t<mult_operation_t, A,C> const& ac){
+		using ::operator+;
+		return A{}*(ab.second+ac.second);
+	}
+	//contract ac+bc=(a+b)c if (a+b) can be processed
+	template<class A, class B, Symbol C> requires !std::is_same<decltype(A{}+B{}), group::generated_by_operation_t<add_operation_t,A,B>>::value 
+	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_by_operation_t<mult_operation_t, B,C> const& bc){
+		using ::operator+;
+		return (ac.first+bc.first)*C{};
+	}
 
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){

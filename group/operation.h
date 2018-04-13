@@ -61,7 +61,7 @@ namespace math::group{
 	auto constexpr operation(A const& a, generated_by_operation_t<OperatorT,B,C> const& bc){
 		return OperatorT::apply(OperatorT::apply(a, bc.first), bc.second);
 	}
-	//collapse operations as much as possible
+	//contract (ab)c=a(bc) if (bc) can be processed
 	template<class OperatorT, class A,class B,class C> 
 		requires !Operation<OperatorT,B> 
 		      && !Operation<OperatorT,C> 
