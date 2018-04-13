@@ -17,15 +17,15 @@ namespace math::group{
 
 	//comparison of powers
 	template<class OperatorT, class OperandT>
-	bool operator==(generated_power_t<OperatorT,Ratio, OperandT> const& a, generated_power_t<OperatorT,Ratio, OperandT> const& b){
+	bool operator==(generated_power_t<OperatorT,Scalar, OperandT> const& a, generated_power_t<OperatorT,Scalar, OperandT> const& b){
 		return a.exponent==b.exponent && a.operand==b.operand;
 	}
 	template<class OperatorT>
-	bool operator==(generated_power_t<OperatorT,Ratio, auto> const&, generated_power_t<OperatorT,Ratio, auto> const&){
+	bool operator==(generated_power_t<OperatorT,Scalar, auto> const&, generated_power_t<OperatorT,Scalar, auto> const&){
 		return false;
 	}
 	template<class OperatorT>
-	bool operator!=(generated_power_t<OperatorT,Ratio, auto> const& a, generated_power_t<OperatorT,Ratio, auto> const& b){
+	bool operator!=(generated_power_t<OperatorT,Scalar, auto> const& a, generated_power_t<OperatorT,Scalar, auto> const& b){
 		return !(a==b);
 	}
 

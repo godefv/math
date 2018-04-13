@@ -15,7 +15,7 @@ namespace math{
 
 	template<class DirectionT, Vector<DirectionT> VectorT, Scalar ScalarT> struct is_vector<DirectionT, group::generated_by_operation_t<mult_operation_t,ScalarT,VectorT>>:std::true_type{};
 	template<class DirectionT, Vector<DirectionT> VectorT, Scalar ScalarT> struct is_vector<DirectionT, group::generated_by_operation_t<mult_operation_t,VectorT,ScalarT>>:std::true_type{};
-	template<class DirectionT, Vector<DirectionT> VectorT, Ratio  RatioT > struct is_vector<DirectionT, group::generated_power_t<add_operation_t,RatioT,VectorT>>:std::true_type{};
+	template<class DirectionT, Vector<DirectionT> VectorT, Scalar  ScalarT > struct is_vector<DirectionT, group::generated_power_t<add_operation_t,ScalarT,VectorT>>:std::true_type{};
 
 	template<class DirectionT>
 	auto constexpr coordinate(DirectionT, zero_t){
@@ -34,7 +34,7 @@ namespace math{
 		return coordinate(d, vector.first)*vector.second;
 	}
 	template<class DirectionT, Vector<DirectionT> VectorT>
-	auto constexpr coordinate(DirectionT d, group::generated_power_t<add_operation_t,Ratio,VectorT> const& vector){
+	auto constexpr coordinate(DirectionT d, group::generated_power_t<add_operation_t,Scalar,VectorT> const& vector){
 		return vector.exponent*coordinate(d, vector.operand);
 	}
 

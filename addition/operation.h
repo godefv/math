@@ -67,10 +67,10 @@ namespace math{
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
 	}
 
-	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, Ratio, auto> const& kx){
+	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, Scalar, auto> const& kx){
 		return out<<kx.exponent<<"*("<<kx.operand<<")";
 	}
-	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, integer_t<-1>, auto> const& kx){
+	std::ostream& operator<<(std::ostream& out, minus_t<auto> const& kx){
 		return out<<"-("<<kx.operand<<")";
 	}
 

@@ -14,7 +14,7 @@ namespace math::geometry{
 	auto constexpr grade(group::generated_by_operation_t<mult_operation_t, Blade,Blade2> const& a){
 		return grade(a.first)+grade(a.second);
 	}
-	auto constexpr grade(group::generated_power_t<add_operation_t, Ratio, Blade> const& a){
+	auto constexpr grade(group::generated_power_t<add_operation_t, Scalar, Blade> const& a){
 		return grade(a.operand);
 	}
 
