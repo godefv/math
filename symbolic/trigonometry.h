@@ -76,21 +76,6 @@ namespace math{
 	                        ,minus_t<square_t<operation_t<sinh_t,AngleT>>>){
 		return integer<1>;
 	}
-	template<Symbol AngleT, Symbol SymbolT>
-	auto constexpr operator+(        group::generated_by_operation_t<mult_operation_t, SymbolT, square_t<operation_t<cosh_t,AngleT>> >
-	                        ,minus_t<group::generated_by_operation_t<mult_operation_t, SymbolT, square_t<operation_t<sinh_t,AngleT>> >>){
-		return SymbolT{};
-	}
-	template<Symbol AngleT, Symbol SymbolT>
-	auto constexpr operator+(        group::generated_by_operation_t<mult_operation_t, square_t<operation_t<cosh_t,AngleT>>, SymbolT >
-	                        ,minus_t<group::generated_by_operation_t<mult_operation_t, square_t<operation_t<sinh_t,AngleT>>, SymbolT >>){
-		return SymbolT{};
-	}
-	template<Symbol AngleT, Symbol Symbol1, Symbol Symbol2>
-	auto constexpr operator+(        group::generated_by_operation_t<mult_operation_t, group::generated_by_operation_t<mult_operation_t, square_t<operation_t<cosh_t,AngleT>>, Symbol1 >, Symbol2 >
-	                        ,minus_t<group::generated_by_operation_t<mult_operation_t, group::generated_by_operation_t<mult_operation_t, square_t<operation_t<sinh_t,AngleT>>, Symbol1 >, Symbol2 >>){
-		return Symbol1{}*Symbol2{};
-	}
 }
 
 #endif /* SYMBOLIC_TRIGONOMETRY_H */

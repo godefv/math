@@ -19,16 +19,17 @@ namespace math{
 		//operation with rational
 		//TODO: one line should be enough
 		//TODO: any Scalar&&Symbol should obey this, not just Ratio
-		static auto constexpr apply(Ratio ratio, auto const& a){return group::power(add_operation_t{}, ratio, a);}
-		static auto constexpr apply(auto const& a, Ratio ratio){return group::power(add_operation_t{}, ratio, a);}
+		static auto constexpr apply(Ratio k, auto const& a){return group::power(add_operation_t{}, k, a);}
+		template<class T> requires !Ratio<T>
+		static auto constexpr apply(T const& a, Ratio k){return group::power(add_operation_t{}, k, a);}
 
 		//factor addition power out (ka)*b=k(a*b)
-		static auto constexpr apply(group::generated_power_t<add_operation_t, Ratio,auto> const& a, auto const& b){
+		static auto constexpr apply(group::generated_power_t<add_operation_t, Scalar,auto> const& a, auto const& b){
 			return group::power(add_operation_t{}, a.exponent, DerivedOperatorT::apply(a.operand,b));
 		}
 		//factor addition power out a*(kb)=k(a*b)
 		template<class A> requires !group::Power<add_operation_t,A>
-		static auto constexpr apply(A const& a, group::generated_power_t<add_operation_t, Ratio,auto> const& b){
+		static auto constexpr apply(A const& a, group::generated_power_t<add_operation_t, Scalar,auto> const& b){
 			return group::power(add_operation_t{}, b.exponent, DerivedOperatorT::apply(a,b.operand));
 		}
 		
@@ -100,6 +101,15 @@ namespace math{
 		return (ac.first+bc.first)*C{};
 	}
 
+	//contract ab+kac=a(b+kc) if (b+kc) can be processed
+	//contract ac+kbc=(a+kb)c if (a+kb) can be processed
+	template<class A, class B, Symbol C, class K> requires !std::is_same<decltype(A{}+K{}*B{}), group::generated_by_operation_t<add_operation_t,A,group::generated_power_t<add_operation_t,K,B>>>::value 
+	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_power_t<add_operation_t, K, group::generated_by_operation_t<mult_operation_t, B,C>> const& kbc){
+		using ::operator+;
+		return (ac.first+kbc.exponent*kbc.operand.first)*C{};
+	}
+
+	
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") * ("<<ab.second<<")";

@@ -62,6 +62,15 @@ namespace math{
 		return group::power(add_operation_t{}, ExponentA{}, ka.operand+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, kb.operand));
 	}
 
+	//collapse ka+b as k(a+b/k) if a+b/k can be processed
+	template<class A, class B, Symbol K> 
+		requires !std::is_same<decltype(A{}+group::power(add_operation_t{}, integer<1>/K{}, B{}))
+		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>
+							  >::value 
+	auto constexpr operator+(group::generated_power_t<add_operation_t,K,A> const& ka, B const& b){
+		return group::power(add_operation_t{}, ka.exponent, ka.operand+group::power(add_operation_t{}, integer<1>/ka.exponent, b));
+	}
+
 	//formatting
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<add_operation_t, auto, auto> const& ab){
 		return out<<"("<<ab.first<<") + ("<<ab.second<<")";
