@@ -33,31 +33,31 @@ namespace math{
 	}
 
 	//exact roots of rationals
-	template<Ratio ExponentT, Ratio RatioT> requires ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same<RatioT,integer_t<1>>::value
+	template<SimpleScalar ExponentT, Ratio RatioT> requires ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same<RatioT,integer_t<1>>::value
 	auto constexpr generated_power(mult_operation_t, ExponentT, RatioT){
 		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}
 	//apply inverse if different than power<-1> (only with rational operands for now)
-	template<class OperatorT, Ratio ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(Integer<OperandT> && !Integer<ExponentT>)
+	template<class OperatorT, SimpleScalar ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(Integer<OperandT> && !Integer<ExponentT>)
 	auto constexpr generated_power(OperatorT op, ExponentT exponent, OperandT const& operand){
 		return group::power(op, -exponent, inverse(operand));
 	}
 	//power of addition powers (ka)^n = (k^n)(a^n) because k is a scalar
-	template<Ratio Ratio1, Ratio Ratio2>
-	auto constexpr generated_power(mult_operation_t, Ratio1 exponent, group::generated_power_t<add_operation_t, Ratio2, auto> const& pow_ab){
+	template<SimpleScalar Exponent1, SimpleScalar Exponent2>
+	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<add_operation_t, Exponent2, auto> const& pow_ab){
 		using group::power;
 		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
 	}
 	//expand powers of multiplication or addition a^n = a(a^(n-1)) with a=xy or x+y 
 	//this gives a chance to apply commutation rules, and expands (a+b)^n
-	template<Ratio RatioT, class T> requires RatioT::num>0 && RatioT::den==1 && (group::Operation<mult_operation_t,T> || group::Operation<add_operation_t,T>)
-	auto constexpr generated_power(mult_operation_t, RatioT exponent, T const& a){
+	template<SimpleScalar ExponentT, class T> requires ExponentT::num>0 && ExponentT::den==1 && (group::Operation<mult_operation_t,T> || group::Operation<add_operation_t,T>)
+	auto constexpr generated_power(mult_operation_t, ExponentT exponent, T const& a){
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
 	}
 
 	//aliases
-	template<Ratio RatioT, class OperandT>
-	using power_t=group::generated_power_t<mult_operation_t, RatioT, OperandT>;
+	template<SimpleScalar ExponentT, class OperandT>
+	using power_t=group::generated_power_t<mult_operation_t, ExponentT, OperandT>;
 
 	template<Ratio RatioT, class OperandT>
 	using nth_root_t=power_t<decltype(inverse(RatioT{})), OperandT>;
@@ -85,18 +85,18 @@ namespace math{
 	}
 
 	//formatting
-	inline std::ostream& operator<<(std::ostream& out, power_t<Ratio,auto> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}
+	inline std::ostream& operator<<(std::ostream& out, power_t<SimpleScalar,auto> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}
 
 	using namespace std::string_view_literals;
 	std::string_view constexpr exponent_string(integer_t<2>){return "²"sv;}
 	std::string_view constexpr exponent_string(integer_t<3>){return "³"sv;}
 	std::string_view constexpr exponent_string(integer_t<4>){return "⁴"sv;}
-	template<Ratio RatioT> requires requires(){exponent_string(RatioT{});}
-	inline std::ostream& operator<<(std::ostream& out, power_t<RatioT, auto> const& pow){
+	template<SimpleScalar ExponentT> requires requires(){exponent_string(ExponentT{});}
+	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, auto> const& pow){
 		return out<<"("<<pow.operand<<")"<<exponent_string(pow.exponent);
 	}
-	template<Ratio RatioT> requires !requires(){exponent_string(RatioT{});} && requires(){exponent_string(inverse(RatioT{}));} 
-	inline std::ostream& operator<<(std::ostream& out, power_t<RatioT, auto> const& pow){
+	template<SimpleScalar ExponentT> requires !requires(){exponent_string(ExponentT{});} && requires(){exponent_string(inverse(ExponentT{}));} 
+	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, auto> const& pow){
 		return out<<exponent_string(inverse(pow.exponent))<<"√("<<pow.operand<<")";
 	}
 }

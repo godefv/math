@@ -61,7 +61,7 @@ namespace math{
 	//ordering for commutation
 	Operation{Operation2}
 	constexpr int static_compare(auto op, Operation const& a, Operation2 const& b){
-		if(index(b.operation)==index(a.operation) && Symbol<decltype(a.operand())> && Symbol<decltype(b.operand())>){
+		if(index(b.operation)==index(a.operation)){
 			return static_compare(op, a.operand(),b.operand());
 		}else{
 			return index(b.operation)-index(a.operation);

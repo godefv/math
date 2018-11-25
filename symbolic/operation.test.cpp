@@ -31,7 +31,8 @@ int main(){
 	check_equal(abs(x*y), abs(x)*abs(y));
 	check_equal(abs(nth_root<2>(x)), nth_root<2>(abs(x)));
 	//abs is a morphism over both addition and multiplication, except it applies on addition exponent
-	check_equal(abs(4*x*(-y)-x-2*y), 4*abs(x)*abs(y)+abs(x)+2*abs(y));
+	check_equal(abs(-2*x), 2*abs(x));
+	check_equal(abs(4*x*(-y)-x-2*y), 4l*abs(x)*abs(y)+abs(x)+2l*abs(y));
 	check_equal(abs(-one), one);
 
 	//formatting

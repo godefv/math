@@ -8,7 +8,7 @@
 namespace math{
 	//!A Scalar is a type representing a mathematical expression, the product of which with anything commutes.
 
-	template<class T> concept bool SimpleScalar=std::is_arithmetic<T>::value || Ratio<T>;
+	template<class T> concept bool SimpleScalar=Number<T> || Ratio<T>;
 
 	template<class T> struct is_scalar:std::false_type{};
 	template<SimpleScalar SimpleScalarT> struct is_scalar<SimpleScalarT>:std::true_type{};

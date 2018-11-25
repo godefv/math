@@ -16,7 +16,7 @@ namespace math::group{
 		auto constexpr operator()(generated_by_operation_t<InnerOperatorT, auto,auto> const& ab) const{
 			return OuterOperatorT::apply(operator()(ab.first),operator()(ab.second));
 		}
-		auto constexpr operator()(generated_power_t<InnerOperatorT, Ratio, auto> const& pow) const{
+		auto constexpr operator()(generated_power_t<InnerOperatorT, SimpleScalar, auto> const& pow) const{
 			return group::power(outer_operator, pow.exponent, operator()(pow.operand));
 		}
 		auto constexpr operator()(identity_t<InnerOperatorT>) const{

@@ -74,13 +74,13 @@ namespace math::group{
 	}
 
 	//(a power x) op a = a op (a power x) = a power (a+1)
-	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(generated_power_t<OperatorT, RatioT, SymbolT>, SymbolT){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
-	template<class OperatorT, Symbol SymbolT, Ratio RatioT> auto constexpr operation(SymbolT, generated_power_t<OperatorT, RatioT, SymbolT>){return power(OperatorT{}, RatioT{}+integer<1>, SymbolT{});}
+	template<class OperatorT, Symbol SymbolT, SimpleScalar ExponentT> auto constexpr operation(generated_power_t<OperatorT, ExponentT, SymbolT>, SymbolT){return power(OperatorT{}, ExponentT{}+integer<1>, SymbolT{});}
+	template<class OperatorT, Symbol SymbolT, SimpleScalar ExponentT> auto constexpr operation(SymbolT, generated_power_t<OperatorT, ExponentT, SymbolT>){return power(OperatorT{}, ExponentT{}+integer<1>, SymbolT{});}
 
 	//(a power x) op (a power y) = a power (x+y)
-	template<class OperatorT, Ratio Ratio1, Ratio Ratio2, Symbol SymbolT>
-	auto constexpr operation(generated_power_t<OperatorT, Ratio1, SymbolT>, generated_power_t<OperatorT, Ratio2, SymbolT>){
-		return power(OperatorT{}, Ratio1{}+Ratio2{}, SymbolT{});
+	template<class OperatorT, SimpleScalar Exponent1, SimpleScalar Exponent2, Symbol SymbolT>
+	auto constexpr operation(generated_power_t<OperatorT, Exponent1, SymbolT>, generated_power_t<OperatorT, Exponent2, SymbolT>){
+		return power(OperatorT{}, Exponent1{}+Exponent2{}, SymbolT{});
 	}
 
 	//a op a = a power 2

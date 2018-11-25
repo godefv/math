@@ -30,14 +30,25 @@ namespace math{
 	int constexpr sort_index(OperatorT, auto const&){
 		return 200;
 	}
+
 	template<class OperatorT>
-	int constexpr sort_index(OperatorT op, group::generated_power_t<OperatorT, Ratio, auto> const& pow){
-		return sort_index(op, pow.operand);
+	auto constexpr sort_as(OperatorT, auto const& a){
+		return a;
+	}
+	template<class OperatorT>
+	auto constexpr sort_as(OperatorT op, group::generated_power_t<OperatorT, SimpleScalar, auto> const& pow){
+		return sort_as(op, pow.operand);
 	}
 
 	template<class OperatorT>
 	int constexpr static_compare(OperatorT op, auto const& a, auto const& b){
 		return sort_index(op, b)-sort_index(op, a);
+	}
+	template<class OperatorT, class T1, class T2>
+		requires !std::is_same<decltype(sort_as(OperatorT{},std::declval<T1>())), T1>::value
+		      || !std::is_same<decltype(sort_as(OperatorT{},std::declval<T2>())), T2>::value
+	int constexpr static_compare(OperatorT op, T1 const& a, T2 const& b){
+		return static_compare(op, sort_as(op, a), sort_as(op, b));
 	}
 
 	//symbol_t
@@ -52,8 +63,8 @@ namespace math{
 	}
 
 	//powers
-	template<class OperatorT, Ratio Ratio2>
-	int constexpr static_compare(auto op, group::generated_power_t<OperatorT, Ratio, auto> const& a, group::generated_power_t<OperatorT, Ratio2, auto> const& b){
+	template<class OperatorT, Ratio Exponent2>
+	int constexpr static_compare(auto op, group::generated_power_t<OperatorT, Ratio, auto> const& a, group::generated_power_t<OperatorT, Exponent2, auto> const& b){
 		auto operand_order=static_compare(op, a.operand, b.operand);
 		if(operand_order!=0){
 		   return operand_order;

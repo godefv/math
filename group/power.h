@@ -59,8 +59,9 @@ namespace math::group{
 		return operand;
 	}
 	//power of power is a power
-	template<class OperatorT, Ratio ExponentT> requires !std::is_same<ExponentT,integer_t<1>>::value
-	auto constexpr power(OperatorT op, ExponentT ratio, generated_power_t<OperatorT,Ratio,auto> const& operand){
+	template<class OperatorT, Scalar ExponentT, Scalar ScalarT> 
+		requires !std::is_same<ExponentT,integer_t<1>>::value
+	auto constexpr power(OperatorT op, ExponentT ratio, generated_power_t<OperatorT,ScalarT,auto> const& operand){
 		return power(op, ratio*operand.exponent, operand.operand);
 	} 
 	//some powers can be processed immediatly
@@ -81,7 +82,7 @@ namespace math::group{
 
 	//inverse
 	template<class OperatorT>
-	auto constexpr inverse(OperatorT, generated_power_t<OperatorT,Ratio,auto> const& pow){
+	auto constexpr inverse(OperatorT, generated_power_t<OperatorT,SimpleScalar,auto> const& pow){
 		return power(pow.operator_, -pow.exponent, pow.operand);
 	}
 

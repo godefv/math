@@ -10,12 +10,13 @@ namespace math{
 		      +group::power(add_operation_t{}, exponent, ab.second);
 	}
 	//rationals
-	auto constexpr generated_power(add_operation_t, auto exponent, Ratio ratio){
-		return exponent*ratio;
+	auto constexpr generated_power(add_operation_t, auto exponent, SimpleScalar scalar){
+		return exponent*scalar;
 	}
 
 	//eval
 	auto constexpr eval(group::generated_power_t<add_operation_t,auto,auto> const& pow){
+		using ::eval;
 		return eval(pow.exponent)*eval(pow.operand);
 	}
 

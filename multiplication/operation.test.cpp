@@ -18,6 +18,7 @@ int main(){
 	check_equal(inverse(y)*2, 2/y);
 	check_equal(y/2, 0.5*y);
 	check_equal(x*(-y), -(x*y));
+	check_equal(integer<4>*(2.0*x), 8.0*x);
 
 	//develop over addition
 	check_equal(2*(x+y), 2*x+2*y);
@@ -37,6 +38,7 @@ int main(){
 	check_equal(power(math::mult_operation_t{}, integer<3>, x),power(math::mult_operation_t{}, integer<2>, x)*x);
 	check_equal(power(math::mult_operation_t{}, integer<5>, x),power(math::mult_operation_t{}, integer<2>, x)*power(math::mult_operation_t{}, integer<3>, x));
 	check_equal(power(math::mult_operation_t{}, integer<6>, x),x*x*x*x*x*x);
+	check_equal(power(math::mult_operation_t{}, math::ratio<1,2>, integer<3>)*math::ratio<1,2>, math::ratio<1,2>*power(math::mult_operation_t{}, math::ratio<1,2>, integer<3>));
 
 	//addition nth power of x equals n*x
 	check_equal(x+x, math::integer<2>*x);

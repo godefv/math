@@ -27,6 +27,8 @@ namespace math{
 	auto ratio=ratio_t<Numerator, Denominator>{};
 	
 	//concepts
+	template<class T> concept bool Number=std::is_arithmetic<T>::value;
+
 	template<std::intmax_t Numerator, std::intmax_t Denominator> 
 	struct is_symbol<ratio_t<Numerator,Denominator>>: std::true_type{};
 
@@ -44,6 +46,7 @@ namespace math{
 	template<class T> struct is_zero:std::false_type{};
 	template<std::intmax_t Denominator> struct is_zero<ratio_t<0,Denominator>>:std::true_type{};
 	template<class T> concept bool Zero=is_zero<T>::value;
+	template<class T> concept bool NonZeroRatio=Ratio<T> && !Zero<T>;
 
 	//eval
 	template<std::intmax_t N>
@@ -51,8 +54,10 @@ namespace math{
 	auto constexpr eval(Ratio const& a){return static_cast<double>(a);}
 
 	//operators
-	auto constexpr operator*(double a, Ratio b){return a*eval(b);}
-	auto constexpr operator*(Ratio a, double b){return eval(a)*b;}
+	auto constexpr operator*(Number, Zero){return integer<0>;}
+	auto constexpr operator*(Zero, Number){return integer<0>;}
+	auto constexpr operator*(Number a, NonZeroRatio b){return a*eval(b);}
+	auto constexpr operator*(NonZeroRatio a, Number b){return eval(a)*b;}
 	Ratio{Ratio2}
 	auto constexpr operator*(Ratio a, Ratio2 b){
 		using result_t=std::ratio_multiply<typename decltype(a)::type, typename decltype(b)::type>;

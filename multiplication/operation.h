@@ -14,14 +14,25 @@ namespace math{
 			return group::operation<DerivedOperatorT>(a,b);
 		}
 		//operation with zero
-		static auto constexpr apply(zero_t, auto const&){return zero;}
-		static auto constexpr apply(auto const&, zero_t){return zero;}
-		//operation with rational
+		static auto constexpr apply(Zero, auto const&){return zero;}
+		static auto constexpr apply(auto const&, Zero){return zero;}
+		//operation with scalar
 		//TODO: one line should be enough
-		//TODO: any Scalar&&Symbol should obey this, not just Ratio
-		static auto constexpr apply(Ratio k, auto const& a){return group::power(add_operation_t{}, k, a);}
-		template<class T> requires !Ratio<T>
-		static auto constexpr apply(T const& a, Ratio k){return group::power(add_operation_t{}, k, a);}
+		template<NonZeroScalar ScalarT, class T> 
+			requires !group::Generated<DerivedOperatorT,ScalarT>
+			      && (!Symbol<ScalarT> || SimpleScalar<ScalarT>)
+			      && !Zero<T>
+		static auto constexpr apply(ScalarT k, T const& a){
+			return group::power(add_operation_t{}, k, a);
+		}
+		template<NonZeroScalar ScalarT, class T> 
+			requires !group::Generated<DerivedOperatorT,ScalarT>
+			      && (!Symbol<ScalarT> || SimpleScalar<ScalarT>)
+			      && !Zero<T>
+		          && (!Scalar<T> || group::Generated<DerivedOperatorT,T>)
+		static auto constexpr apply(T const& a, ScalarT k){
+			return group::power(add_operation_t{}, k, a);
+		}
 
 		//factor addition power out (ka)*b=k(a*b)
 		static auto constexpr apply(group::generated_power_t<add_operation_t, Scalar,auto> const& a, auto const& b){
