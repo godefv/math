@@ -11,6 +11,9 @@ int main(){
 	check_equal(square(e1*e2), -one);
 	check_equal(square(e1*n1), one);
 	check_equal(square((e1+n1)*e2), zero);
+	check_equal(square(1.2*e1*e2), -1.2*1.2);
+	check_equal(square(1.2*e1*n1), 1.2*1.2);
+	//check_equal(square(1.2*(e1+n1)*e2) , zero);
 
 	//inverse of generators
 	check_equal(inverse(e1),  e1);
