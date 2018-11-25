@@ -65,7 +65,7 @@ namespace math::group{
 		return power(op, ratio*operand.exponent, operand.operand);
 	} 
 	//some powers can be processed immediatly
-	template<class OperatorT, Integer ExponentT, Ratio OperandT> requires ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
+	template<class OperatorT, Integer ExponentT, SimpleScalar OperandT> requires ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
 	auto constexpr power(OperatorT op, ExponentT, OperandT const& operand){
 		return OperatorT::apply(power(op, integer_t<ExponentT::num-1>{}, operand), operand);
 	}
