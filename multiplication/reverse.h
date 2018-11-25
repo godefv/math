@@ -14,7 +14,7 @@ namespace math{
 	constexpr auto reverse(group::generated_by_operation_t<add_operation_t, auto,auto> const& ab){
 		return reverse(ab.first)+reverse(ab.second);
 	}
-	constexpr auto reverse(group::generated_power_t<add_operation_t, Ratio, auto> const& kx){
+	constexpr auto reverse(group::generated_power_t<add_operation_t, SimpleScalar, auto> const& kx){
 		return kx.exponent*reverse(kx.operand);
 	}
 }

@@ -42,6 +42,11 @@ namespace math{
 	auto constexpr abs(zero_t){
 		return zero;
 	}
+
+	//reverse
+	constexpr auto reverse(operation_t<exp_t,auto> const& op){
+		return exp(reverse(op.operand()));
+	}
 }
 
 #endif /* SYMBOLIC_OPERATION_ALL_H */

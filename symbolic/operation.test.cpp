@@ -35,6 +35,9 @@ int main(){
 	check_equal(abs(4*x*(-y)-x-2*y), 4l*abs(x)*abs(y)+abs(x)+2l*abs(y));
 	check_equal(abs(-one), one);
 
+	//reverse of exp is exp of reverse
+	check_equal(reverse(exp(x*y)), exp(y*x));
+
 	//formatting
 	std::cout<<exp(integer<3>)<<std::endl;
 	std::cout<<sin(integer<3>)<<std::endl;
