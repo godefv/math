@@ -24,6 +24,9 @@ int main(){
 	check_equal(2*(x+y), 2*x+2*y);
 	check_equal(z*(x+y), z*x+z*y);
 	check_equal(y*(x+y), y*x+y*y);
+	check_equal((x+y)*z, x*z+y*z);
+	check_equal((1+3*x)*(1+3*x), 1+6*x+9*x*x);
+	//check_equal((z+y)*(x+y), z*x+z*y+y*x+y*y);
 
 	//multiplying by zero gives zero
 	check_equal(2*math::zero, math::zero);

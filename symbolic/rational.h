@@ -49,8 +49,8 @@ namespace math{
 	template<class T> concept bool NonZeroRatio=Ratio<T> && !Zero<T>;
 
 	//eval
-	template<std::intmax_t N>
-	auto constexpr eval(integer_t<N> const&){return N;}
+	//template<std::intmax_t N>
+	//auto constexpr eval(integer_t<N> const&){return N;}
 	auto constexpr eval(Ratio const& a){return static_cast<double>(a);}
 
 	//operators

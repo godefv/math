@@ -54,6 +54,10 @@ namespace math{
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, T const& a){
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
 	}
+	//powers of runtime values
+	auto constexpr generated_power(mult_operation_t, SimpleScalar const& exponent, Number const& operand){
+		return std::pow(operand, eval(exponent));
+	}
 
 	//aliases
 	template<SimpleScalar ExponentT, class OperandT>

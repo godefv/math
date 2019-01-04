@@ -8,6 +8,10 @@
 #include<type_traits>
 
 namespace math::geometry{
+	auto constexpr apply_rotation(auto const& rotation, auto const& operand){
+		auto R=rotation.rotor();
+		return project(R*operand*reverse(R), grades(operand));
+	}
 	//rotation in a single plane
 	template<class Direction1, class Direction2, class AngleT=double>
 	struct simple_rotation_t{
@@ -21,8 +25,7 @@ namespace math::geometry{
 			return exp(ratio<1,2>*bivector());
 		}
 		auto constexpr operator()(auto const& a) const{
-			auto R=rotor();
-			return project(R*a*reverse(R), grades(a));
+			return apply_rotation(*this, a);
 		}
 	};
 
@@ -39,7 +42,7 @@ namespace math::geometry{
 		RotorT rotor_;
 		auto constexpr rotor() const{return rotor_;}
 		auto constexpr operator()(auto const& a) const{
-			return project(rotor_*a*reverse(rotor_), grades(a));
+			return apply_rotation(*this, a);
 		}
 	};
 
@@ -57,6 +60,14 @@ namespace math::geometry{
 	template<class RotorT>
 	struct is_rotation<rotation_t<RotorT>>:std::true_type{};
 	template<class T> concept bool Rotation=is_rotation<T>::value;
+
+	//inverse
+	auto constexpr inverse(simple_rotation_t<auto,auto,auto> const& a){
+		return simple_rotation_t{a.plane, -a.angle};
+	}
+	auto constexpr inverse(rotation_t<auto> const& a){
+		return rotation_t{reverse(a.rotor())};
+	}
 
 }
 

@@ -24,6 +24,11 @@ int main(){
 	check_equal(nth_root<2>(ratio<1,4>), ratio<1,2>);
 	check_equal(pow<-1>(integer<-1>),integer<-1>);
 
+	//powers of runtime values
+	check_equal(pow<3>(2),8);
+	//check_equal(nth_root<2>(25), 5); //std::pow returns floats, TODO: fix this
+	check_equal(nth_root<2>(25.), 5.);
+
 	//special powers
 	check_equal(pow<1>(x),x);
 	check_equal(pow<2>(x),x*x);
