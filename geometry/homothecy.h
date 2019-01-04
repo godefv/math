@@ -3,7 +3,7 @@
 
 #include<type_traits>
 
-namespace geometry{
+namespace math::geometry{
 	template<class ScalarT=double>
 	struct homothecy_t{
 		ScalarT ratio;

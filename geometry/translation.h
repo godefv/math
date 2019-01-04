@@ -1,11 +1,9 @@
 #ifndef GEOMETRY_TRANSLATION_H
 #define GEOMETRY_TRANSLATION_H 
 
-#include"../vector/addition.h"
-
-namespace geometry{
-	//A translation is a vector
-	template<class T> concept bool Translation=vector::Vector<T>;
+namespace math::geometry{
+	//A translation is TODO
+	template<class T> concept bool Translation=true;
 }
 
 #endif /* GEOMETRY_TRANSLATION_H */
