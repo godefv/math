@@ -79,8 +79,8 @@ namespace math::group{
 
 	//(a power x) op (a power y) = a power (x+y)
 	template<class OperatorT, SimpleScalar Exponent1, SimpleScalar Exponent2, Symbol SymbolT>
-	auto constexpr operation(generated_power_t<OperatorT, Exponent1, SymbolT>, generated_power_t<OperatorT, Exponent2, SymbolT>){
-		return power(OperatorT{}, Exponent1{}+Exponent2{}, SymbolT{});
+	auto constexpr operation(generated_power_t<OperatorT, Exponent1, SymbolT> const& ax, generated_power_t<OperatorT, Exponent2, SymbolT> const& ay){
+		return power(OperatorT{}, ax.exponent+ay.exponent, SymbolT{});
 	}
 
 	//a op a = a power 2

@@ -22,6 +22,7 @@ int main(){
 	check_equal(power(op, integer<3>, x),x*power(op, integer<2>, x));
 	check_equal(power(op, integer<3>, x),power(op, integer<2>, x)*x);
 	check_equal(power(op, integer<5>, x),power(op, integer<2>, x)*power(op, integer<3>, x));
+	check_equal(power(op, 5, x),power(op, 2, x)*power(op, 3, x));
 	check_equal(power(op, integer<6>, x),x*x*x*x*x*x);
 
 	//other
