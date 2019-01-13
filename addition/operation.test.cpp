@@ -1,5 +1,4 @@
 #include"operation.h"
-#include"commutation.h"
 #include"power.h"
 #include"../group/unit_test.h"
 
