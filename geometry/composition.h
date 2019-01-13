@@ -15,7 +15,7 @@ namespace math::geometry{
 	};
 	//identity
 	struct identity_t:group::identity_t<compose_operation_t>{
-		auto constexpr operator()(auto const& a){
+		auto constexpr operator()(auto const& a) const{
 			return a;
 		}
 	};
