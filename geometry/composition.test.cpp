@@ -10,6 +10,10 @@ int main(){
 	//auto constexpr rotation3=math::geometry::simple_rotation_t{math::geometry::plane(e0,n1), ratio<1,2>*half_turn};
 	auto constexpr rotation4=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), ratio<3,7>*half_turn};
 	//auto constexpr rotation5=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), 1.2*half_turn};
+	
+	auto constexpr translation1=math::geometry::translation_t{e0};
+
+	auto constexpr homothecy1=math::geometry::homothecy_t{4.2};
 
 	//identity
 	check_equal(math::geometry::identity(e0), e0);
@@ -24,6 +28,9 @@ int main(){
 	check_equal(rotation4(rotation1(e1)), rotation14(e1));
 	check_equal(rotation4(rotation1(n1)), rotation14(n1));
 	//check_equal(rotation4(rotation1(x)), (rotation1,rotation4)(x));
+
+	//rotation,translation,homothecy
+	std::cout<<(rotation1,translation1,homothecy1)<<std::endl;
 
 	return 0;
 }

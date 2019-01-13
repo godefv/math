@@ -8,7 +8,7 @@
 #include<type_traits>
 
 namespace math::geometry{
-	auto constexpr apply_rotation(auto const& rotation, auto const& operand){
+	auto constexpr apply_rotation(auto const& rotation, MultiVector const& operand){
 		auto R=rotation.rotor();
 		return project(R*operand*reverse(R), grades(operand));
 	}

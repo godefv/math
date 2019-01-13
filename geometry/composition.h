@@ -56,7 +56,7 @@ namespace math::geometry{
 		return out<<"identity";
 	}
 
-	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<auto,auto,auto> const& ab){
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<compose_operation_t,auto,auto> const& ab){
 		return out<<ab.first<<" then "<<ab.second;
 	}
 }
