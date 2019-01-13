@@ -13,13 +13,10 @@ int main(){
 
 	auto constexpr rotation14=(rotation1,rotation4);
 	auto constexpr rotation14_inverse=inverse(rotation14);
-	std::cout<<rotation14<<std::endl;
-	std::cout<<rotation14_inverse<<std::endl;
-	check_equal((rotation14_inverse,rotation14), geometry::identity);
-	////using group::geometric::x;
-	////check_equal(rotation4(rotation1(x)), (rotation1,rotation4)(x));
-	//check_equal(rotation4(rotation1(e0)), (rotation1,rotation4)(e0));
-	//check_equal(rotation4(rotation1(e1)), (rotation1,rotation4)(e1));
+	check_equal((rotation14_inverse,rotation14), math::geometry::identity);
+	check_equal(rotation4(rotation1(e0)), rotation14(e0));
+	check_equal(rotation4(rotation1(e1)), rotation14(e1));
+	//check_equal(rotation4(rotation1(x)), (rotation1,rotation4)(x));
 
 	return 0;
 }

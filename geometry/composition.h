@@ -14,7 +14,7 @@ namespace math::geometry{
 		}
 	};
 	//identity
-	struct identity_t{
+	struct identity_t:group::identity_t<compose_operation_t>{
 		auto constexpr operator()(auto const& a){
 			return a;
 		}
@@ -43,7 +43,7 @@ namespace math::geometry{
 			//return simple_rotation_t{};
 		//}else{
 		if constexpr(grades(ab_rotor)==grades<0>()){
-			return group::identity_t<compose_operation_t>{};
+			return identity;
 		}else{
 			return rotation_t{ab_rotor};
 			//return group::operation<compose_operation_t>(a,b);
