@@ -55,24 +55,28 @@ int main(){
 	auto constexpr rotation3=math::geometry::simple_rotation_t{math::geometry::plane(e0,n1), ratio<1,2>*half_turn};
 	auto constexpr rotation4=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), ratio<3,7>*half_turn};
 	auto constexpr rotation5=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), 1.2*half_turn};
+	auto constexpr rotation6=math::geometry::simple_rotation_t{math::geometry::plane(e0+e1,e2), ratio<3,7>*half_turn};
 
 	test_bivector(rotation1);
 	test_bivector(rotation2);
 	test_bivector(rotation3);
 	test_bivector(rotation4);
 	test_bivector(rotation5);
+	test_bivector(rotation6);
 
 	test_rotor(rotation1);
 	test_rotor(rotation2);
 	test_rotor(rotation3);
 	test_rotor(rotation4);
 	test_rotor(rotation5);
+	test_rotor(rotation6);
 
 	test_rotation(rotation1);
 	test_rotation(rotation2);
 	test_rotation(rotation3);
 	test_rotation(rotation4);
 	//test_rotation(rotation5); //rounding errors
+	test_rotation(rotation6);
 
 	std::cout<<e1+n1<<"->"; check_equal(rotation1(e1+n1), n1-e2); 
 	std::cout<<e2   <<"->"; check_equal(rotation1(e2   ), e1   ); 

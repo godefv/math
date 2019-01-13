@@ -88,10 +88,10 @@ namespace math{
 		//auto constexpr operation_order=static_compare(a.operation,b.operation);
 		//if constexpr(operation_order!=0) return operation_order;
 
-		auto first_order=static_compare(op, a.first,b.first);
-		if(first_order!=0) return first_order;
+		auto second_order=static_compare(op, a.second,b.second);
+		if(second_order!=0) return second_order;
 
-		return static_compare(op, a.second, b.second);
+		return static_compare(op, a.first, b.first);
 	}
 	
 	//indexed_element
