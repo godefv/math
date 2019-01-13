@@ -63,6 +63,11 @@ int main(){
 	check_equal(y*x+(-z*x), m*x);
 	check_equal(y*x-z*x, m*x);
 	
+	//commutation
+	check_equal(static_compare(math::add_operation_t{}, x*y, y*z)>0, true);
+	check_equal(x*y+y*z+x*y, math::integer<2>*x*y+y*z);
+	check_equal(-math::integer<2>*x*y+-math::integer<2>*y*z+math::integer<2>*x*y, -math::integer<2>*y*z);
+
 	return 0;
 }
 

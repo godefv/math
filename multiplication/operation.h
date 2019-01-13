@@ -107,6 +107,7 @@ namespace math{
 	}
 	//contract ac+bc=(a+b)c if (a+b) can be processed
 	template<class A, class B, Symbol C> requires !std::is_same<decltype(A{}+B{}), group::generated_by_operation_t<add_operation_t,A,B>>::value 
+	                                           && !std::is_same<A,B>::value //so that this template is exclusive with the above template
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_by_operation_t<mult_operation_t, B,C> const& bc){
 		using ::operator+;
 		return (ac.first+bc.first)*C{};
