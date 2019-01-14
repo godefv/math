@@ -12,8 +12,11 @@ int main(){
 	//auto constexpr rotation5=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), 1.2*half_turn};
 	
 	auto constexpr translation1=math::geometry::translation_t{e0};
+	auto constexpr translation2=math::geometry::translation_t{e0+e1};
 
-	auto constexpr homothecy1=math::geometry::homothecy_t{4.2};
+	auto constexpr homothecy1=math::geometry::homothecy_t{ratio<2,3>};
+	auto constexpr homothecy2=math::geometry::homothecy_t{ratio<1,4>};
+	//auto constexpr homothecy3=math::geometry::homothecy_t{4.2};
 
 	//identity
 	check_equal(math::geometry::identity(e0), e0);
@@ -29,8 +32,16 @@ int main(){
 	check_equal(rotation4(rotation1(n1)), rotation14(n1));
 	//check_equal(rotation4(rotation1(x)), (rotation1,rotation4)(x));
 
+	//translation,translation
+	check_equal((translation1,translation2), math::geometry::translation_t{math::integer<2>*e0+e1});
+	
+	//homothecy,homothecy
+	check_equal((homothecy1,homothecy2), math::geometry::homothecy_t{ratio<1,6>});
+
 	//rotation,translation,homothecy
 	std::cout<<(rotation1,translation1,homothecy1)<<std::endl;
+	std::cout<<(rotation1,translation1,homothecy1,rotation1)<<std::endl; //TODO: commutation rules
+	//std::cout<<(rotation1,translation1,homothecy1)(e1)<<std::endl; //TODO: implement this
 
 	return 0;
 }

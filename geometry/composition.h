@@ -46,11 +46,23 @@ namespace math::geometry{
 			return identity;
 		}else{
 			return rotation_t{ab_rotor};
-			//return group::operation<compose_operation_t>(a,b);
 		}
 		//}
 	}
 
+	//composition - translations
+	Translation{Translation2}
+	auto constexpr operator,(Translation const& a, Translation2 const& b){
+		return translation_t{a.vector+b.vector};
+	}
+	
+	//composition - homothecys
+	Homothecy{Homothecy2}
+	auto constexpr operator,(Homothecy const& a, Homothecy2 const& b){
+		return homothecy_t{a.ratio*b.ratio};
+	}
+	
+	
 	//formatting
 	inline std::ostream& operator<<(std::ostream& out, identity_t){
 		return out<<"identity";

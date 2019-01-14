@@ -17,6 +17,14 @@ namespace math::geometry{
 		return out<<"translation{"<<t.vector<<"}";
 	}
 
+	bool constexpr operator==(translation_t<auto> const& a, translation_t<auto> const& b){
+		return a.vector==b.vector;
+	}
+	bool constexpr operator!=(translation_t<auto> const& a, translation_t<auto> const& b){
+		return !(a==b);
+	}
+	//std::strong_equality operator<=>(translation_t const&, translation_t const&) = default;
+
 	template<class> struct is_translation:std::false_type{};
 	template<KVector<1> VectorT>
 	struct is_translation<translation_t<VectorT>>:std::true_type{};
