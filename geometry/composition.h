@@ -1,9 +1,7 @@
 #ifndef GEOMETRY_COMPOSITION_H
 #define GEOMETRY_COMPOSITION_H 
 
-#include"rotation.h"
-#include"homothecy.h"
-#include"translation.h"
+#include"transform.h"
 
 #include<iostream>
 
@@ -56,12 +54,24 @@ namespace math::geometry{
 		return translation_t{a.vector+b.vector};
 	}
 	
-	//composition - homothecys
+	//composition - homothecies
 	Homothecy{Homothecy2}
 	auto constexpr operator,(Homothecy const& a, Homothecy2 const& b){
 		return homothecy_t{a.ratio*b.ratio};
 	}
 	
+   	//composition - put homothecies first
+   	auto constexpr operator,(Rotation const& a, Homothecy const& b){
+   		return b,a;
+   	}
+   	auto constexpr operator,(Translation const& a, Homothecy const& b){
+   		return b,b(a);
+   	}
+	
+   	//composition - put translations after rotations
+   	auto constexpr operator,(Translation const& a, Rotation const& b){
+   		return b,b(a);
+   	}
 	
 	//formatting
 	inline std::ostream& operator<<(std::ostream& out, identity_t){
@@ -70,6 +80,11 @@ namespace math::geometry{
 
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<compose_operation_t,auto,auto> const& ab){
 		return out<<ab.first<<" then "<<ab.second;
+	}
+
+	//apply
+	auto constexpr apply(generated_by_composition_t<auto,auto> const& ab, KVector<1> const& operand){
+		return ab.second(ab.first(operand));
 	}
 }
 

@@ -38,10 +38,14 @@ int main(){
 	//homothecy,homothecy
 	check_equal((homothecy1,homothecy2), math::geometry::homothecy_t{ratio<1,6>});
 
-	//rotation,translation,homothecy
-	std::cout<<(rotation1,translation1,homothecy1)<<std::endl;
-	std::cout<<(rotation1,translation1,homothecy1,rotation1)<<std::endl; //TODO: commutation rules
-	//std::cout<<(rotation1,translation1,homothecy1)(e1)<<std::endl; //TODO: implement this
+	//homotheciy,rotation
+	check_equal((rotation1,homothecy1), (homothecy1,rotation1));
+
+	//homothecy,translation
+	check_equal((translation1,homothecy1), (homothecy1,math::geometry::translation_t{homothecy1(translation1.vector)}));
+
+	//rotation,translation
+	check_equal((translation1,rotation1), (rotation1,math::geometry::translation_t{rotation1(translation1.vector)}));
 
 	return 0;
 }

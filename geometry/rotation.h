@@ -2,16 +2,13 @@
 #define GEOMETRY_ROTATION_H 
 
 #include"slice.h"
+#include"apply.h"
 #include"algebra/exponential.h"
 #include"../multiplication/reverse.h"
 
 #include<type_traits>
 
 namespace math::geometry{
-	auto constexpr apply_rotation(auto const& rotation, MultiVector const& operand){
-		auto R=rotation.rotor();
-		return project(R*operand*reverse(R), grades(operand));
-	}
 	//rotation in a single plane
 	template<KVector<1> Direction1, KVector<1> Direction2, class AngleT=double>
 	struct simple_rotation_t{
@@ -25,7 +22,7 @@ namespace math::geometry{
 			return exp(ratio<1,2>*bivector());
 		}
 		auto constexpr operator()(auto const& a) const{
-			return apply_rotation(*this, a);
+			return apply(*this, a);
 		}
 	};
 
@@ -42,7 +39,7 @@ namespace math::geometry{
 		RotorT rotor_;
 		auto constexpr rotor() const{return rotor_;}
 		auto constexpr operator()(auto const& a) const{
-			return apply_rotation(*this, a);
+			return apply(*this, a);
 		}
 	};
 
@@ -69,6 +66,31 @@ namespace math::geometry{
 		return rotation_t{reverse(a.rotor())};
 	}
 
+	//multivector
+	auto constexpr multivector(Rotation const& a){
+		return a.rotor();
+	}
+
+	//apply
+	auto constexpr apply(Rotation const& rotation, MultiVector const& operand){
+		auto R=rotation.rotor();
+		return project(R*operand*reverse(R), grades(operand));
+	}
+	template<class T> requires requires(T x){multivector(x);}
+	auto constexpr apply(Rotation const& rotation, T const& operand){
+		return T{apply(rotation, multivector(operand))};
+	}
+
+	//comparison operators
+	Rotation{Rotation2}
+	bool constexpr operator==(Rotation const& a, Rotation2 const& b){
+		return a.rotor()==b.rotor();
+	}
+	Rotation{Rotation2}
+	bool constexpr operator!=(Rotation const& a, Rotation2 const& b){
+		return !(a==b);
+	}
+	
 }
 
 #endif /* GEOMETRY_ROTATION_H */

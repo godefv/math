@@ -1,14 +1,15 @@
 #ifndef GEOMETRY_HOMOTHECY_H
 #define GEOMETRY_HOMOTHECY_H 
 
+#include"apply.h"
 #include<type_traits>
 
 namespace math::geometry{
 	template<class ScalarT=double>
 	struct homothecy_t{
 		ScalarT ratio;
-		auto constexpr operator()(KVector<1> const& a){
-			return ratio*a;
+		auto constexpr operator()(auto const& a) const{
+			return apply(*this, a);
 		}
 	};
 
@@ -30,6 +31,11 @@ namespace math::geometry{
 	template<class T> struct is_homothecy:std::false_type{};
 	template<class ScalarT> struct is_homothecy<homothecy_t<ScalarT>>:std::true_type{};
 	template<class T> concept bool Homothecy=is_homothecy<T>::value;
+
+	//apply
+	auto constexpr apply(Homothecy const& homothecy, KVector<1> const& operand){
+		return homothecy.ratio*operand;
+	}
 }
 
 #endif /* GEOMETRY_HOMOTHECY_H */

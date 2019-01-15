@@ -25,10 +25,16 @@ namespace math::geometry{
 	}
 	//std::strong_equality operator<=>(translation_t const&, translation_t const&) = default;
 
+	//concept
 	template<class> struct is_translation:std::false_type{};
 	template<KVector<1> VectorT>
 	struct is_translation<translation_t<VectorT>>:std::true_type{};
 	template<class T> concept bool Translation=is_translation<T>::value;
+
+	//multivector
+	auto constexpr multivector(Translation const& a){
+		return a.vector;
+	}
 }
 
 #endif /* GEOMETRY_TRANSLATION_H */
