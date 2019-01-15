@@ -14,7 +14,7 @@ auto constexpr op=dummy_operation_t{};
 auto constexpr id=math::group::identity_t<dummy_operation_t>{};
 
 auto constexpr operator*(auto const& a, auto const& b){
-	return math::group::operation<dummy_operation_t>(a,b);
+	return math::group::operation(dummy_operation_t{},a,b);
 }
 
 struct dummy_plus_operation_t{

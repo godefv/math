@@ -47,6 +47,11 @@ int main(){
 	//rotation,translation
 	check_equal((translation1,rotation1), (rotation1,math::geometry::translation_t{rotation1(translation1.vector)}));
 
+	//translation,translation commutation
+	check_equal((rotation1,translation1,homothecy1), (homothecy1,rotation1,math::geometry::translation_t{rotation1(homothecy1(translation1.vector))}));
+	check_equal((rotation1,translation1,homothecy1,rotation1), (homothecy1,(rotation1,rotation1),math::geometry::translation_t{rotation1(homothecy1(translation1.vector))}));
+	check_equal((rotation1,translation1,homothecy1,rotation1)(e1), rotation1(homothecy1(translation1(rotation1(e1)))));
+
 	return 0;
 }
 

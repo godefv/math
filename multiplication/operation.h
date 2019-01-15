@@ -11,7 +11,7 @@ namespace math{
 	struct bilinear_operation_t{
 		//by default, use DerivedOperatorT
 		static auto constexpr apply(auto const& a, auto const& b){
-			return group::operation<DerivedOperatorT>(a,b);
+			return group::operation(DerivedOperatorT{},a,b);
 		}
 		//operation with zero
 		static auto constexpr apply(Zero, auto const&){return zero;}

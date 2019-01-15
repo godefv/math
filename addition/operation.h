@@ -38,7 +38,7 @@ namespace math{
 		return group::inverse(add_operation_t{}, a);
 	}
 	auto constexpr operator+(auto const& a, auto const& b){
-		return group::operation<add_operation_t>(a,b);
+		return group::operation(add_operation_t{},a,b);
 	}
 	auto constexpr operator-(auto const& a, auto const& b){
 		return a+(-b);

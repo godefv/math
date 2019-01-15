@@ -46,7 +46,7 @@ namespace group::geometric{
 		//group rules
 		template<class A,class B> 
 		static constexpr auto apply(A const& a, B const& b){
-			return group::operation<mult_operation_t>(a,b);
+			return group::operation(mult_operation_t{},a,b);
 		}
 
 		//group inverse
