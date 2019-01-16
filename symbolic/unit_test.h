@@ -6,12 +6,12 @@
 #include"../scalar.h"
 #include<iostream>
 
-using x_t=math::symbol_t<math::symbol_name_t<'x'>>; 
-using y_t=math::symbol_t<math::symbol_name_t<'y'>>; 
-using z_t=math::symbol_t<math::symbol_name_t<'z'>>; 
-using k_t=math::symbol_t<math::symbol_name_t<'k'>>; 
-using l_t=math::symbol_t<math::symbol_name_t<'l'>>; 
-using m_t=math::symbol_t<math::symbol_name_t<'m'>>; 
+using x_t=math::symbol_t<math::name_t<'x'>>; 
+using y_t=math::symbol_t<math::name_t<'y'>>; 
+using z_t=math::symbol_t<math::name_t<'z'>>; 
+using k_t=math::symbol_t<math::name_t<'k'>>; 
+using l_t=math::symbol_t<math::name_t<'l'>>; 
+using m_t=math::symbol_t<math::name_t<'m'>>; 
 x_t x;
 y_t y;
 z_t z;

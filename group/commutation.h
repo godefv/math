@@ -58,7 +58,7 @@ namespace math{
 	}
 
 	template<char C1, char C2> requires C1!=C2
-	int constexpr static_compare(auto, symbol_t<symbol_name_t<C1>>, symbol_t<symbol_name_t<C2>>){
+	int constexpr static_compare(auto, symbol_t<name_t<C1>>, symbol_t<name_t<C2>>){
 		return C2-C1;
 	}
 

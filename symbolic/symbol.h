@@ -1,7 +1,7 @@
 #ifndef SYMBOLIC_SYMBOL_H
 #define SYMBOLIC_SYMBOL_H 
 
-#include<iostream>
+#include"../name.h"
 #include<type_traits>
 
 namespace math{
@@ -12,7 +12,9 @@ namespace math{
 
 	//!Template to make Symbol types.
 	template<class Name>
-	struct symbol_t{};
+	struct symbol_t{
+		Name name;
+	};
 
 	//operators
 	template<class NameT>
@@ -25,17 +27,15 @@ namespace math{
 	template<class Name> struct is_symbol<symbol_t<Name>>: std::true_type{};
 	template<class T> concept bool Symbol=is_symbol<T>::value;
 
-	//!Template to make symbol names from letters
-	template<char...> struct symbol_name_t{};
-
 	template<char... letters>
-	auto constexpr symbol=symbol_t<symbol_name_t<letters...>>{};
+	auto constexpr symbol=symbol_t<name_t<letters...>>{};
 
 	template<class CharT, CharT... letters>
 	auto constexpr operator""_symbol(){return symbol<letters...>;}
 
-	//formatting
-	template<char... Name> std::ostream& operator<<(std::ostream& out,symbol_t<symbol_name_t<Name...>>){return (out<<...<<Name);}
+	std::ostream& operator<<(std::ostream& out,symbol_t<auto> const& symbol){
+		return out<<symbol.name<<std::endl;
+	}
 }
 
 #endif /* SYMBOLIC_SYMBOL_H */
