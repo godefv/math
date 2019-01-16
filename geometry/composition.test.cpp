@@ -14,9 +14,9 @@ int main(){
 	auto constexpr translation1=math::geometry::translation_t{e0};
 	auto constexpr translation2=math::geometry::translation_t{e0+e1};
 
-	auto constexpr homothecy1=math::geometry::homothecy_t{ratio<2,3>};
-	auto constexpr homothecy2=math::geometry::homothecy_t{ratio<1,4>};
-	//auto constexpr homothecy3=math::geometry::homothecy_t{4.2};
+	auto constexpr scaling1=math::geometry::scaling_t{ratio<2,3>};
+	auto constexpr scaling2=math::geometry::scaling_t{ratio<1,4>};
+	//auto constexpr scaling3=math::geometry::scaling_t{4.2};
 
 	//identity
 	check_equal(math::geometry::identity(e0), e0);
@@ -35,22 +35,22 @@ int main(){
 	//translation,translation
 	check_equal((translation1,translation2), math::geometry::translation_t{math::integer<2>*e0+e1});
 	
-	//homothecy,homothecy
-	check_equal((homothecy1,homothecy2), math::geometry::homothecy_t{ratio<1,6>});
+	//scaling,scaling
+	check_equal((scaling1,scaling2), math::geometry::scaling_t{ratio<1,6>});
 
 	//homotheciy,rotation
-	check_equal((rotation1,homothecy1), (homothecy1,rotation1));
+	check_equal((rotation1,scaling1), (scaling1,rotation1));
 
-	//homothecy,translation
-	check_equal((translation1,homothecy1), (homothecy1,math::geometry::translation_t{homothecy1(translation1.vector)}));
+	//scaling,translation
+	check_equal((translation1,scaling1), (scaling1,math::geometry::translation_t{scaling1(translation1.vector)}));
 
 	//rotation,translation
 	check_equal((translation1,rotation1), (rotation1,math::geometry::translation_t{rotation1(translation1.vector)}));
 
 	//translation,translation commutation
-	check_equal((rotation1,translation1,homothecy1), (homothecy1,rotation1,math::geometry::translation_t{rotation1(homothecy1(translation1.vector))}));
-	check_equal((rotation1,translation1,homothecy1,rotation1), (homothecy1,(rotation1,rotation1),math::geometry::translation_t{rotation1(homothecy1(translation1.vector))}));
-	check_equal((rotation1,translation1,homothecy1,rotation1)(e1), rotation1(homothecy1(translation1(rotation1(e1)))));
+	check_equal((rotation1,translation1,scaling1), (scaling1,rotation1,math::geometry::translation_t{rotation1(scaling1(translation1.vector))}));
+	check_equal((rotation1,translation1,scaling1,rotation1), (scaling1,(rotation1,rotation1),math::geometry::translation_t{rotation1(scaling1(translation1.vector))}));
+	check_equal((rotation1,translation1,scaling1,rotation1)(e1), rotation1(scaling1(translation1(rotation1(e1)))));
 
 	return 0;
 }

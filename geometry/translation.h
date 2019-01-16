@@ -30,11 +30,6 @@ namespace math::geometry{
 	template<KVector<1> VectorT>
 	struct is_translation<translation_t<VectorT>>:std::true_type{};
 	template<class T> concept bool Translation=is_translation<T>::value;
-
-	//multivector
-	auto constexpr multivector(Translation const& a){
-		return a.vector;
-	}
 }
 
 #endif /* GEOMETRY_TRANSLATION_H */

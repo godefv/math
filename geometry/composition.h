@@ -1,7 +1,8 @@
 #ifndef GEOMETRY_COMPOSITION_H
 #define GEOMETRY_COMPOSITION_H 
 
-#include"transform.h"
+#include"vector_transform.h"
+#include"translation.h"
 
 #include<iostream>
 
@@ -23,7 +24,7 @@ namespace math::geometry{
 	struct generated_by_composition_t:group::generated_by_operation_t<compose_operation_t,A,B>{
 		generated_by_composition_t(A const& a, B const& b):group::generated_by_operation_t<compose_operation_t,A,B>{compose_operation_t{},a,b}{}
 		auto constexpr operator()(auto const& operand) const{
-			return apply(*this, operand);
+			return this->second(this->first(operand));
 		}
 	};
 }
@@ -49,7 +50,7 @@ namespace math::group{
 }
 namespace math::geometry{
 	//concepts
-	template<class T> concept bool Transform=Rotation<T> || Homothecy<T> || Translation<T> || group::Generated<compose_operation_t,T>;
+	template<class T> concept bool Transform=Rotation<T> || Scaling<T> || Translation<T> || group::Generated<compose_operation_t,T>;
 
 	//composition - group rules
 	Transform{Transform2}
@@ -72,30 +73,23 @@ namespace math::geometry{
 		}
 		//}
 	}
-
 	//composition - translations
 	Translation{Translation2}
 	auto constexpr operator,(Translation const& a, Translation2 const& b){
 		return translation_t{a.vector+b.vector};
 	}
-	
-	//composition - homothecies
-	Homothecy{Homothecy2}
-	auto constexpr operator,(Homothecy const& a, Homothecy2 const& b){
-		return homothecy_t{a.ratio*b.ratio};
+	//composition - scalings
+	Scaling{Scaling2}
+	auto constexpr operator,(Scaling const& a, Scaling2 const& b){
+		return scaling_t{a.factor*b.factor};
 	}
 	
-   	//composition - put homothecies first
-   	auto constexpr operator,(Rotation const& a, Homothecy const& b){
+   	//composition - put scalings first and translations last
+   	auto constexpr operator,(Rotation const& a, Scaling const& b){
    		return b,a;
    	}
-   	auto constexpr operator,(Translation const& a, Homothecy const& b){
-   		return b,b(a);
-   	}
-	
-   	//composition - put translations after rotations
-   	auto constexpr operator,(Translation const& a, Rotation const& b){
-   		return b,b(a);
+   	auto constexpr operator,(Translation const& a, VectorTransform const& b){
+   		return geometry::operator,(b,b(a));
    	}
 	
 	//formatting
@@ -105,11 +99,6 @@ namespace math::geometry{
 
 	std::ostream& operator<<(std::ostream& out, generated_by_composition_t<auto,auto> const& ab){
 		return out<<ab.first<<" then "<<ab.second;
-	}
-
-	//apply
-	auto constexpr apply(generated_by_composition_t<auto,auto> const& ab, KVector<1> const& operand){
-		return ab.second(ab.first(operand));
 	}
 }
 

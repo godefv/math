@@ -76,10 +76,6 @@ namespace math::geometry{
 		auto R=rotation.rotor();
 		return project(R*operand*reverse(R), grades(operand));
 	}
-	template<class T> requires requires(T x){multivector(x);}
-	auto constexpr apply(Rotation const& rotation, T const& operand){
-		return T{apply(rotation, multivector(operand))};
-	}
 
 	//comparison operators
 	Rotation{Rotation2}
