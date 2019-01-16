@@ -50,7 +50,7 @@ int main(){
 	//translation,translation commutation
 	check_equal((rotation1,translation1,scaling1), (scaling1,rotation1,math::geometry::translation_t{rotation1(scaling1(translation1.vector))}));
 	check_equal((rotation1,translation1,scaling1,rotation1), (scaling1,(rotation1,rotation1),math::geometry::translation_t{rotation1(scaling1(translation1.vector))}));
-	check_equal((rotation1,translation1,scaling1,rotation1)(e1), rotation1(scaling1(translation1(rotation1(e1)))));
+	//check_equal((rotation1,translation1,scaling1,rotation1)(e1), rotation1(scaling1(translation1(rotation1(e1)))));
 
 	return 0;
 }

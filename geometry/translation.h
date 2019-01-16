@@ -1,12 +1,14 @@
 #ifndef GEOMETRY_TRANSLATION_H
 #define GEOMETRY_TRANSLATION_H 
 
+#include"point.h"
+
 namespace math::geometry{
 	template<KVector<1> VectorT>
 	struct translation_t{
 		VectorT vector;
-		auto constexpr operator()(KVector<1> const& operand) const{
-			return vector+operand;
+		auto constexpr operator()(Point const& point) const{
+			return apply(*this, point);
 		}
 	};
 
