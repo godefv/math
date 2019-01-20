@@ -1,8 +1,7 @@
 #ifndef GEOMETRY_COMPOSITION_H
 #define GEOMETRY_COMPOSITION_H 
 
-#include"vector_transform.h"
-#include"translation.h"
+#include"../group/operation.h"
 
 #include<iostream>
 
@@ -22,7 +21,7 @@ namespace math::geometry{
 	//generated
 	template<class A, class B>
 	struct generated_by_composition_t:group::generated_by_operation_t<compose_operation_t,A,B>{
-		generated_by_composition_t(A const& a, B const& b):group::generated_by_operation_t<compose_operation_t,A,B>{compose_operation_t{},a,b}{}
+		constexpr generated_by_composition_t(A const& a, B const& b):group::generated_by_operation_t<compose_operation_t,A,B>{compose_operation_t{},a,b}{}
 		auto constexpr operator()(auto const& operand) const{
 			return this->second(this->first(operand));
 		}
@@ -49,49 +48,11 @@ namespace math::group{
 	}
 }
 namespace math::geometry{
-	//concepts
-	template<class T> concept bool Transform=Rotation<T> || Scaling<T> || Translation<T> || group::Generated<compose_operation_t,T>;
-
 	//composition - group rules
-	Transform{Transform2}
-	auto constexpr operator,(Transform const& a, Transform2 const& b){
+	auto constexpr operator,(auto const& a, auto const& b){
 		return group::operation(compose_operation_t{},a,b);
 	}
 
-	//composition - rotations
-	Rotation{Rotation2}
-	auto constexpr operator,(Rotation const& a, Rotation2 const& b){
-		auto ab_rotor=b.rotor()*a.rotor();
-		//auto bivector_part=project(ab_rotor, grades<2>());
-		//if constexpr(grades(ab_rotor)==grades<0,2>() && group::geometric::Blade<decltype(bivector_part)>){
-			//return simple_rotation_t{};
-		//}else{
-		if constexpr(grades(ab_rotor)==grades<0>()){
-			return identity;
-		}else{
-			return rotation_t{ab_rotor};
-		}
-		//}
-	}
-	//composition - translations
-	Translation{Translation2}
-	auto constexpr operator,(Translation const& a, Translation2 const& b){
-		return translation_t{a.vector+b.vector};
-	}
-	//composition - scalings
-	Scaling{Scaling2}
-	auto constexpr operator,(Scaling const& a, Scaling2 const& b){
-		return scaling_t{a.factor*b.factor};
-	}
-	
-   	//composition - put scalings first and translations last
-   	auto constexpr operator,(Rotation const& a, Scaling const& b){
-   		return b,a;
-   	}
-   	auto constexpr operator,(Translation const& a, VectorTransform const& b){
-   		return geometry::operator,(b,b(a));
-   	}
-	
 	//formatting
 	inline std::ostream& operator<<(std::ostream& out, identity_t){
 		return out<<"identity";

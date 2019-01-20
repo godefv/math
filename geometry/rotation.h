@@ -56,7 +56,7 @@ namespace math::geometry{
 	struct is_rotation<simple_rotation_t<Direction1,Direction2,AngleT>>:std::true_type{};
 	template<class RotorT>
 	struct is_rotation<rotation_t<RotorT>>:std::true_type{};
-	template<class T> concept bool Rotation=is_rotation<T>::value;
+	template<class T> concept bool VectorRotation=is_rotation<T>::value;
 
 	//inverse
 	auto constexpr inverse(simple_rotation_t<auto,auto,auto> const& a){
@@ -67,23 +67,23 @@ namespace math::geometry{
 	}
 
 	//multivector
-	auto constexpr multivector(Rotation const& a){
+	auto constexpr multivector(VectorRotation const& a){
 		return a.rotor();
 	}
 
 	//apply
-	auto constexpr apply(Rotation const& rotation, MultiVector const& operand){
+	auto constexpr apply(VectorRotation const& rotation, MultiVector const& operand){
 		auto R=rotation.rotor();
 		return project(R*operand*reverse(R), grades(operand));
 	}
 
 	//comparison operators
-	Rotation{Rotation2}
-	bool constexpr operator==(Rotation const& a, Rotation2 const& b){
+	VectorRotation{VectorRotation2}
+	bool constexpr operator==(VectorRotation const& a, VectorRotation2 const& b){
 		return a.rotor()==b.rotor();
 	}
-	Rotation{Rotation2}
-	bool constexpr operator!=(Rotation const& a, Rotation2 const& b){
+	VectorRotation{VectorRotation2}
+	bool constexpr operator!=(VectorRotation const& a, VectorRotation2 const& b){
 		return !(a==b);
 	}
 	

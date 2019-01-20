@@ -2,6 +2,7 @@
 #define GEOMETRY_TRANSLATION_H 
 
 #include"point.h"
+#include"composition.h"
 
 namespace math::geometry{
 	template<KVector<1> VectorT>
@@ -32,6 +33,25 @@ namespace math::geometry{
 	template<KVector<1> VectorT>
 	struct is_translation<translation_t<VectorT>>:std::true_type{};
 	template<class T> concept bool Translation=is_translation<T>::value;
+
+	//inverse
+	auto constexpr inverse(translation_t<auto> const& operand){
+		return translation_t{-operand.vector};
+	}
+
+	//composition of point transformations - translations
+	Translation{Translation2}
+	auto constexpr operator,(Translation const& a, Translation2 const& b){
+		return translation_t{a.vector+b.vector};
+	}
+
+	//apply
+	auto constexpr apply(translation_t<auto> const& transform, point_t<auto> const& point){
+		return transformed_point_t{point, transform};
+	}
+	auto constexpr apply(translation_t<auto> const& transform, transformed_point_t<auto,auto> const& point){
+		return transformed_point_t{point.origin, (point.transform,transform)};
+	}
 }
 
 #endif /* GEOMETRY_TRANSLATION_H */

@@ -4,7 +4,6 @@
 #include"symbol.h"
 #include"../unit_test.h"
 #include"../scalar.h"
-#include<iostream>
 
 using x_t=math::symbol_t<math::name_t<'x'>>; 
 using y_t=math::symbol_t<math::name_t<'y'>>; 

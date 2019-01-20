@@ -34,7 +34,7 @@ namespace math{
 	auto constexpr operator""_symbol(){return symbol<letters...>;}
 
 	std::ostream& operator<<(std::ostream& out,symbol_t<auto> const& symbol){
-		return out<<symbol.name<<std::endl;
+		return out<<symbol.name;
 	}
 }
 
