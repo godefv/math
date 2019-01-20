@@ -5,17 +5,10 @@
 #include"point.h"
 #include"../symbolic/unit_test.h"
 
-using P_t=math::geometry::point_t<math::name_t<'P'>>; 
-using O_t=math::geometry::point_t<math::name_t<'O'>>; 
-using A_t=math::geometry::point_t<math::name_t<'A'>>; 
-using B_t=math::geometry::point_t<math::name_t<'B'>>; 
-using C_t=math::geometry::point_t<math::name_t<'C'>>; 
-using D_t=math::geometry::point_t<math::name_t<'D'>>; 
-P_t P;
-O_t O;
-A_t A;
-B_t B;
-C_t C;
-D_t D;
+auto constexpr O=math::geometry::default_origin;
+auto constexpr A=math::geometry::make_point(e0+e1);
+auto constexpr B=math::geometry::make_point(e0+e1+e2);
+auto constexpr C=math::geometry::make_point(math::ratio<-1,3>*e0+math::ratio<2,3>*e1+math::ratio<3,5>*e2);
+auto constexpr D=math::geometry::make_point(2.1*e0-10.4*e1+2.3*e2);
 
 #endif /* GEOMETRY_UNIT_TEST_H */

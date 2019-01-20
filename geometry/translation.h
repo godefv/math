@@ -52,6 +52,14 @@ namespace math::geometry{
 	auto constexpr apply(translation_t<auto> const& transform, transformed_point_t<auto,auto> const& point){
 		return transformed_point_t{point.origin, (point.transform,transform)};
 	}
+
+	//make_point
+	auto constexpr make_point(point_t<auto> const& origin, Vector const& vector){
+		return translation_t{vector}(origin);
+	}
+	auto constexpr make_point(Vector const& vector){
+		return translation_t{vector}(default_origin);
+	}
 }
 
 #endif /* GEOMETRY_TRANSLATION_H */

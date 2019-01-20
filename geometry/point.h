@@ -18,6 +18,10 @@ namespace math::geometry{
 	template<class Name>
 	struct is_point<point_t<Name>>:std::true_type{};
 
+	//default origin
+	using default_origin_t=math::geometry::point_t<math::name_t<'O'>>; 
+	default_origin_t default_origin;
+
 	//operators
 	bool constexpr operator==(point_t<auto> const& a, point_t<auto> const& b){
 		return a.name==b.name;
