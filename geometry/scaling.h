@@ -33,7 +33,7 @@ namespace math::geometry{
 	template<class T> concept bool Scaling=is_scaling<T>::value;
 
 	//apply
-	auto constexpr apply(Scaling const& scaling, KVector<1> const& operand){
+	auto constexpr apply(Scaling const& scaling, Vector const& operand){
 		return scaling.factor*operand;
 	}
 }

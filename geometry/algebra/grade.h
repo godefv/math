@@ -35,6 +35,7 @@ namespace math::geometry{
 
 	//KVector concept
 	template<MultiVector T, int K> concept bool KVector=hana::value(grades(T{})==grades<K>());
+	template<class T> concept bool Vector=KVector<T,1>;
 	template<class T> concept bool BiVector=KVector<T,2>;
 	//KBlade concept
 	template<class T, int K> concept bool KBlade=KVector<T,K> && Scalar<std::decay_t<decltype(square(T{}))>>;

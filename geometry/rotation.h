@@ -10,7 +10,7 @@
 
 namespace math::geometry{
 	//rotation in a single plane
-	template<KVector<1> Direction1, KVector<1> Direction2, class AngleT=double>
+	template<Vector Direction1, Vector Direction2, class AngleT=double>
 	struct simple_rotation_t{
 		plane_t<Direction1,Direction2> plane;
 		AngleT angle;
@@ -26,7 +26,7 @@ namespace math::geometry{
 		}
 	};
 
-	template<KVector<1> Direction1, KVector<1> Direction2, class AngleT>
+	template<Vector Direction1, Vector Direction2, class AngleT>
 	simple_rotation_t(plane_t<Direction1,Direction2> const& plane, AngleT const& angle)->simple_rotation_t<Direction1,Direction2,AngleT>;
 
 	std::ostream& operator<<(std::ostream& out, simple_rotation_t<auto,auto,auto> const& r){
@@ -52,7 +52,7 @@ namespace math::geometry{
 
 	//concept
 	template<class> struct is_rotation:std::false_type{};
-	template<KVector<1> Direction1, KVector<1> Direction2, class AngleT>
+	template<Vector Direction1, Vector Direction2, class AngleT>
 	struct is_rotation<simple_rotation_t<Direction1,Direction2,AngleT>>:std::true_type{};
 	template<class RotorT>
 	struct is_rotation<rotation_t<RotorT>>:std::true_type{};

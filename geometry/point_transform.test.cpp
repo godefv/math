@@ -33,7 +33,7 @@ int main(){
 	auto constexpr rotation1=math::geometry::make_point_rotation(O,math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), ratio<1,2>*half_turn});
 	//auto constexpr rotation2=math::geometry::simple_rotation_t{math::geometry::plane(e1,n1), ratio<1,2>*half_turn};
 	//auto constexpr rotation3=math::geometry::simple_rotation_t{math::geometry::plane(e0,n1), ratio<1,2>*half_turn};
-	auto constexpr rotation4=math::geometry::make_point_rotation(translation2(O),math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), ratio<3,7>*half_turn});
+	auto constexpr rotation4=math::geometry::make_point_rotation(A,math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), ratio<3,7>*half_turn});
 	//auto constexpr rotation5=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), 1.2*half_turn};
 	
 	//rotation,translation

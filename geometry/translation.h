@@ -5,7 +5,7 @@
 #include"composition.h"
 
 namespace math::geometry{
-	template<KVector<1> VectorT>
+	template<Vector VectorT>
 	struct translation_t{
 		VectorT vector;
 		auto constexpr operator()(Point const& point) const{
@@ -13,7 +13,7 @@ namespace math::geometry{
 		}
 	};
 
-	template<KVector<1> VectorT>
+	template<Vector VectorT>
 	translation_t(VectorT const&)->translation_t<VectorT>;
 
 	std::ostream& operator<<(std::ostream& out, translation_t<auto> const& t){
@@ -30,7 +30,7 @@ namespace math::geometry{
 
 	//concept
 	template<class> struct is_translation:std::false_type{};
-	template<KVector<1> VectorT>
+	template<Vector VectorT>
 	struct is_translation<translation_t<VectorT>>:std::true_type{};
 	template<class T> concept bool Translation=is_translation<T>::value;
 
