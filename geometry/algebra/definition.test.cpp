@@ -5,6 +5,10 @@ int main(){
 	using math::one;
 	using math::zero;
 	using math::integer;
+
+	//addition
+	check_equal(e0+1.2*e0, 2.2*e0);
+
 	//powers
 	check_equal(square(e1), one);
 	check_equal(square(e2), one);

@@ -80,8 +80,8 @@ namespace math::group{
 	}
 
 	//(a power x) op a = a op (a power x) = a power (a+1)
-	template<class OperatorT, Symbol SymbolT, SimpleScalar ExponentT> auto constexpr operation(OperatorT, generated_power_t<OperatorT, ExponentT, SymbolT>, SymbolT){return power(OperatorT{}, ExponentT{}+integer<1>, SymbolT{});}
-	template<class OperatorT, Symbol SymbolT, SimpleScalar ExponentT> auto constexpr operation(OperatorT, SymbolT, generated_power_t<OperatorT, ExponentT, SymbolT>){return power(OperatorT{}, ExponentT{}+integer<1>, SymbolT{});}
+	template<class OperatorT, Symbol SymbolT, SimpleScalar ExponentT> auto constexpr operation(OperatorT, generated_power_t<OperatorT, ExponentT, SymbolT> const& a, SymbolT){return power(OperatorT{}, a.exponent+integer<1>, SymbolT{});}
+	template<class OperatorT, Symbol SymbolT, SimpleScalar ExponentT> auto constexpr operation(OperatorT, SymbolT, generated_power_t<OperatorT, ExponentT, SymbolT> const& b){return power(OperatorT{}, b.exponent+integer<1>, SymbolT{});}
 
 	//(a power x) op (a power y) = a power (x+y)
 	template<class OperatorT, SimpleScalar Exponent1, SimpleScalar Exponent2, Symbol SymbolT>

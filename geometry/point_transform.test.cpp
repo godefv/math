@@ -27,13 +27,13 @@ int main(){
 	check_equal((translation1,homothecy1)(A), homothecy1(translation1(A)));
 	check_equal((translation1,homothecy1)(B), homothecy1(translation1(B)));
 	check_equal((translation1,homothecy1)(C), homothecy1(translation1(C)));
-	//check_equal((translation1,homothecy1)(D), homothecy1(translation1(D)));
+	check_equal((translation1,homothecy1)(D), homothecy1(translation1(D)));
 	std::cout<<"\n"<<(translation1,homothecy2)<<std::endl;
 	check_equal((translation1,homothecy2)(O), homothecy2(translation1(O)));
 	check_equal((translation1,homothecy2)(A), homothecy2(translation1(A)));
 	check_equal((translation1,homothecy2)(B), homothecy2(translation1(B)));
 	check_equal((translation1,homothecy2)(C), homothecy2(translation1(C)));
-	//check_equal((translation1,homothecy2)(D), homothecy2(translation1(D)));
+	check_equal((translation1,homothecy2)(D), homothecy2(translation1(D)));
 
 	auto constexpr rotation1=math::geometry::make_point_rotation(O,math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), ratio<1,2>*half_turn});
 	//auto constexpr rotation2=math::geometry::simple_rotation_t{math::geometry::plane(e1,n1), ratio<1,2>*half_turn};

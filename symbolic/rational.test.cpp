@@ -10,6 +10,8 @@ int main(){
 	check_equal(sqrt(ratio<1,4>), ratio<1,2>);
 	check_equal(sqrt(ratio<144,25>), ratio<12,5>);
 
+	check_equal(2.0*ratio<1,8>, 0.25);
+
 	static_assert(Symbol<ratio_t<1,4>>);
 	
 	return 0;

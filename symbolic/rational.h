@@ -68,11 +68,15 @@ namespace math{
 		using result_t=std::ratio_divide<typename decltype(a)::type, typename decltype(b)::type>;
 		return ratio<result_t::num, result_t::den>;
 	}
+	auto constexpr operator/(Number a, NonZeroRatio b){return a/eval(b);}
+	auto constexpr operator/(NonZeroRatio a, Number b){return eval(a)/b;}
 	Ratio{Ratio2}
 	auto constexpr operator+(Ratio a, Ratio2 b){
 		using result_t=std::ratio_add<typename decltype(a)::type, typename decltype(b)::type>;
 		return ratio<result_t::num, result_t::den>;
 	}
+	auto constexpr operator+(Number a, NonZeroRatio b){return a+eval(b);}
+	auto constexpr operator+(NonZeroRatio a, Number b){return eval(a)+b;}
 	Ratio{Ratio2}
 	auto constexpr operator-(Ratio a, Ratio2 b){
 		using result_t=std::ratio_subtract<typename decltype(a)::type, typename decltype(b)::type>;

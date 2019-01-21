@@ -22,13 +22,14 @@ int main(){
 
 	auto constexpr scaling1=math::geometry::scaling_t{ratio<2,3>};
 	auto constexpr scaling2=math::geometry::scaling_t{ratio<1,4>};
-	//auto constexpr scaling3=math::geometry::scaling_t{4.2};
+	auto constexpr scaling3=math::geometry::scaling_t{4.2};
 
 	//scaling,scaling
 	check_equal((scaling1,scaling2), math::geometry::scaling_t{ratio<1,6>});
 
 	//scaling,rotation
 	check_equal((rotation1,scaling1), (scaling1,rotation1));
+	check_equal((rotation1,scaling3), (scaling3,rotation1));
 
 	return 0;
 }

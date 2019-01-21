@@ -25,6 +25,7 @@ int main(){
 	check_equal(power(math::add_operation_t{}, integer<5>, x),power(math::add_operation_t{}, integer<2>, x)+power(math::add_operation_t{}, integer<3>, x));
 	check_equal(power(math::add_operation_t{}, 5, x),power(math::add_operation_t{}, 2, x)+power(math::add_operation_t{}, 3, x));
 	check_equal(power(math::add_operation_t{}, integer<6>, x),x+x+x+x+x+x);
+	check_equal(power(math::add_operation_t{}, 2.2, x),x+power(math::add_operation_t{}, 1.2, x));
 
 	//commutation of powers
 	check_less(static_compare(math::add_operation_t{}, power(op,integer<2>,y), power(math::add_operation_t{},integer<-1>,power(op,integer<2>,x))), 0);
