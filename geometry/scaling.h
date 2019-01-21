@@ -2,7 +2,9 @@
 #define GEOMETRY_SCALING_H 
 
 #include"apply.h"
+#include"algebra/grade.h"
 #include<type_traits>
+#include<iostream>
 
 namespace math::geometry{
 	template<class ScalarT=double>
