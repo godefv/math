@@ -110,28 +110,6 @@ namespace math{
 		return static_compare(op, a.first, b.first);
 	}
 	
-	//indexed_element
-	template<int i> struct indexed_element_t{
-		static int constexpr index=i;
-	};
-
-	template<int i>
-	bool constexpr operator==(indexed_element_t<i> const&, indexed_element_t<i> const&){
-		return true;
-	}
-	template<int i>
-	bool constexpr operator!=(indexed_element_t<i> const& a, indexed_element_t<i> const& b){
-		return !(a==b);
-	}
-
-	template<int i>
-	std::ostream& operator<<(std::ostream& out, indexed_element_t<i> const&){
-		return out<<"e"<<i;
-	}
-
-	template<int ia, int ib>
-	constexpr int static_compare(auto, indexed_element_t<ia> const&, indexed_element_t<ib> const&){return ib-ia;}
-
 }
 
 #endif /* GROUP_COMMUTATION_H */

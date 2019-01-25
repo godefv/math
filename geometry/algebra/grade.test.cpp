@@ -44,8 +44,8 @@ int main(){
 	using math::geometry::BiVector;
 	std::cout<<"\nBiVector concept:"<<std::endl;
 	check_equal(BiVector<int>                                            , false);
-	check_equal(BiVector<e1_t>                                           , false);
-	check_equal(BiVector<e2_t>                                           , false);
+	check_equal(BiVector<decltype(e1)>                                           , false);
+	check_equal(BiVector<decltype(e2)>                                           , false);
 	check_equal(BiVector<std::decay_t<decltype(e1*e2)>>                  , true);
 	check_equal(BiVector<std::decay_t<decltype(e1*e2*e3)>>               , false);
 	check_equal(BiVector<std::decay_t<decltype(integer<5>*e1*e2*e3)>>    , false);
