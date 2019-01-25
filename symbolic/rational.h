@@ -3,6 +3,7 @@
 
 #include"symbol.h"
 #include"../abs.h"
+#include"../scalar.h"
 
 #include<iostream>
 #include<ratio>
@@ -27,11 +28,6 @@ namespace math{
 	auto ratio=ratio_t<Numerator, Denominator>{};
 	
 	//concepts
-	template<class T> concept bool Number=std::is_arithmetic<T>::value;
-
-	template<std::intmax_t Numerator, std::intmax_t Denominator> 
-	struct is_symbol<ratio_t<Numerator,Denominator>>: std::true_type{};
-
 	template<class T> struct is_ratio: std::false_type{};
 	template<std::intmax_t Numerator, std::intmax_t Denominator> 
 	struct is_ratio<ratio_t<Numerator,Denominator>>: std::true_type{};
@@ -46,7 +42,12 @@ namespace math{
 	template<class T> struct is_zero:std::false_type{};
 	template<std::intmax_t Denominator> struct is_zero<ratio_t<0,Denominator>>:std::true_type{};
 	template<class T> concept bool Zero=is_zero<T>::value;
+	template<class T> concept bool NonZero=!is_zero<T>::value;
 	template<class T> concept bool NonZeroRatio=Ratio<T> && !Zero<T>;
+	template<class T> concept bool NonZeroScalar=Scalar<T> && !Zero<T>;
+
+	template<Ratio RatioT> struct is_simple_scalar<RatioT>:std::true_type{};
+	template<Ratio RatioT> struct is_symbol<RatioT>: std::true_type{};
 
 	//eval
 	template<std::intmax_t N>
