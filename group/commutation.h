@@ -5,7 +5,7 @@
 #include"inverse.h"
 #include"operation.h"
 #include"../scalar.h"
-#include"../symbolic/symbol.h"
+#include"../name.h"
 
 namespace math{
 	template<class OperatorT>
@@ -51,15 +51,31 @@ namespace math{
 		return static_compare(op, sort_as(op, a), sort_as(op, b));
 	}
 
-	//symbol_t
-	template<class Name>
-	int constexpr static_compare(auto, symbol_t<Name>, symbol_t<Name>){
+	//name_t
+	constexpr int static_compare(auto, name_t<> const&, name_t<> const&){
 		return 0;
 	}
+	template<char C1, char... Name1>
+	constexpr int static_compare(auto, name_t<C1,Name1...> const&, name_t<> const&){
+		return -1;
+	}
+	template<char C1, char... Name1>
+	constexpr int static_compare(auto, name_t<> const&, name_t<C1,Name1...> const&){
+		return 1;
+	}
+	template<char C1, char... Name1, char C2, char... Name2>
+	constexpr int static_compare(auto const& op, name_t<C1,Name1...> const&, name_t<C2,Name2...> const&){
+		if constexpr(C1!=C2){
+		   return C2-C1;
+		}else{
+			return static_compare(op, name_t<Name1...>{}, name_t<Name2...>{});
+		}
+	}
 
-	template<char C1, char C2> requires C1!=C2
-	int constexpr static_compare(auto, symbol_t<name_t<C1>>, symbol_t<name_t<C2>>){
-		return C2-C1;
+	//T<name_t<...>>
+	template<template<class Name> class T, char... Name1, char... Name2>
+	int constexpr static_compare(auto const& op, T<name_t<Name1...>> const& a, T<name_t<Name2...>> const& b){
+		return static_compare(op, a.name, b.name);
 	}
 
 	//powers
