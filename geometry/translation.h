@@ -53,11 +53,11 @@ namespace math::geometry{
 		return transformed_point_t{point.origin, (point.transform,transform)};
 	}
 
-	//make_point
-	auto constexpr make_point(point_t<auto> const& origin, Vector const& vector){
+	//point
+	auto constexpr point(Point const& origin, Vector const& vector){
 		return translation_t{vector}(origin);
 	}
-	auto constexpr make_point(Vector const& vector){
+	auto constexpr point(Vector const& vector){
 		return translation_t{vector}(default_origin);
 	}
 }
