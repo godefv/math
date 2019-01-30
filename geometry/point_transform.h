@@ -33,6 +33,9 @@ namespace math::geometry{
 	inline auto constexpr make_point_rotation(Point const& center, VectorRotation const& rotation){
 		return make_point_transform(center, rotation);
 	}
+	inline auto constexpr make_point_rotation(Point const& center, plane_t<auto,auto> const& plane, auto const& angle){
+		return make_point_transform(center, simple_rotation_t{plane,angle});
+	}
 
 	//operators
 	bool constexpr operator==(point_transform_t<auto,auto> const& a, point_transform_t<auto,auto> const& b){
