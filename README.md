@@ -78,6 +78,9 @@ They are a good place to look for examples.
 They make sure things work as intended.
 When testing runtime values, use only values which have a finite representation in base 2, because strict equality is checked.
 
+## dependency graph of modules
+<img src="graph_modules.svg" width="66%">
+
 # Cheat sheet
 ## operators
 `A+B` : addition
