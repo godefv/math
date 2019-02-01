@@ -1,3 +1,8 @@
+* [Implementation](#implementation)
+* [Cheat sheet](#cheat-sheet)
+* [Example](#example)
+* [Requirements](#requirements)
+
 # What is it ?
 This is a C++ math library, with a focus on geometry. It provides :
 
@@ -72,6 +77,37 @@ I am waiting for C++ modules to speed up compilation time.
 They are a good place to look for examples.
 They make sure things work as intended.
 When testing runtime values, use only values which have a finite representation in base 2, because strict equality is checked.
+
+# Cheat sheet
+## operators
+`A+B` : addition
+
+`A*B` : multiplication (which is also the geometric product)
+
+`A|B` : inner product
+
+`A^B` : outer product
+
+`(A,B)` : composition (of geometric transformations)
+
+## geometric objects
+`"x"_direction_positive` : direction (and basis vector of geometric algebra which squares to +1)
+
+`"x"_direction_negative` : direction (and basis vector of geometric algebra which squares to -1)
+
+`point()` : defines a point
+
+## point transformations
+`translation_t{}` : defines a translation
+
+`make_homothecy()` : defines a homothecy
+
+`make_point_rotation()` : defines a point rotation
+
+## vector transformations
+`simple_rotation_t{}` : defines a vector rotation (transforms directions)
+
+`scaling_t{}` : defines a scaling (transforms distances)
 
 # Example
 ```
