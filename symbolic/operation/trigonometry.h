@@ -1,10 +1,10 @@
 #ifndef SYMBOLIC_TRIGONOMETRY_H
 #define SYMBOLIC_TRIGONOMETRY_H 
 
-#include"symbol.h"
-#include"rational.h"
-#include"operation/all.h"
-#include"../vector.h"
+#include"all.h"
+#include"../symbol.h"
+#include"../rational.h"
+#include"../../vector.h"
 
 #include<iostream>
 #include<type_traits>

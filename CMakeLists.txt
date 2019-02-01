@@ -61,7 +61,7 @@ math_add_test(geometry/algebra/wedge_product)
 math_add_test(geometry/algebra/norm)
 math_add_test(geometry/algebra/exponential)
 math_add_test(symbolic/operation)
-math_add_test(symbolic/trigonometry)
+math_add_test(symbolic/operation/trigonometry)
 math_add_test(symbolic/rational)
 
 math_add_test(geometry/object/slice)

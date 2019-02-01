@@ -37,7 +37,7 @@ node_from_path(){
 	if [[ $module_graph == 0 ]]; then
 		echo \"$(realpath --relative-to=. $1 | sed "s/\.[hc]$//;s/\.cpp$//")\"
 	else
-		echo \"$(realpath --relative-to=. $1 | sed "s/\.[hc]$//;s/\.cpp$//;s,/.*,,")\"
+		echo \"$(realpath --relative-to=. $1 | sed "s/\.[hc]$//;s/\.cpp$//;s,/[^/]*$,,")\"
 	fi
 }
 

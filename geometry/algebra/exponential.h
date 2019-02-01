@@ -4,7 +4,7 @@
 #include"definition.h"
 #include"grade.h"
 #include"norm.h"
-#include"../../symbolic/trigonometry.h"
+#include"../../symbolic/operation/trigonometry.h"
 
 namespace math::geometry{
 	template<KBlade<2> BivectorT> 
