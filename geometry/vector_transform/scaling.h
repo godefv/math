@@ -1,13 +1,22 @@
 #ifndef GEOMETRY_SCALING_H
 #define GEOMETRY_SCALING_H 
 
-#include"../apply.h"
 #include"../algebra/grade.h"
 
 #include<type_traits>
 #include<iostream>
 
 namespace math::geometry{
+	//concept
+	template<class T> struct is_scaling:std::false_type{};
+	template<class T> concept bool Scaling=is_scaling<T>::value;
+
+	//apply
+	auto constexpr apply(Scaling const& scaling, Vector const& operand){
+		return scaling.factor*operand;
+	}
+
+	//scaling_t
 	template<class ScalarT=double>
 	struct scaling_t{
 		ScalarT factor;
@@ -15,9 +24,10 @@ namespace math::geometry{
 			return apply(*this, a);
 		}
 	};
-
 	template<class ScalarT>
 	scaling_t(ScalarT const&)->scaling_t<ScalarT>;
+
+	template<class ScalarT> struct is_scaling<scaling_t<ScalarT>>:std::true_type{};
 
 	std::ostream& operator<<(std::ostream& out, scaling_t<auto> const& t){
 		return out<<"scaling{"<<t.factor<<"}";
@@ -30,15 +40,6 @@ namespace math::geometry{
 		return !(a==b);
 	}
 	//std::strong_equality operator<=>(scaling_t const&, scaling_t const&) = default;
-
-	template<class T> struct is_scaling:std::false_type{};
-	template<class ScalarT> struct is_scaling<scaling_t<ScalarT>>:std::true_type{};
-	template<class T> concept bool Scaling=is_scaling<T>::value;
-
-	//apply
-	auto constexpr apply(Scaling const& scaling, Vector const& operand){
-		return scaling.factor*operand;
-	}
 }
 
 #endif /* GEOMETRY_SCALING_H */
