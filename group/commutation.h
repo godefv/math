@@ -5,7 +5,7 @@
 #include"inverse.h"
 #include"operation.h"
 #include"../scalar.h"
-#include"../name.h"
+#include"../symbolic/name.h"
 
 namespace math{
 	template<class OperatorT>

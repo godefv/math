@@ -1,7 +1,8 @@
 #ifndef GEOMETRY_POINT_H
 #define GEOMETRY_POINT_H 
 
-#include"../../name.h"
+#include"../../symbolic/symbol.h"
+#include"../../symbolic/name.h"
 
 namespace math::geometry{
 	//Point
@@ -13,10 +14,8 @@ namespace math::geometry{
 	class point_t{
 		Name name;
 	};
-	template<class Name>
-	point_t(Name const&)->point_t<Name>;
-	template<class Name>
-	struct is_point<point_t<Name>>:std::true_type{};
+	template<class Name> point_t(Name const&)->point_t<Name>;
+	template<class Name> struct is_point<point_t<Name>>:std::true_type{};
 
 	//default origin
 	using default_origin_t=math::geometry::point_t<math::name_t<'O'>>; 
@@ -59,6 +58,9 @@ namespace math::geometry{
 	std::ostream& operator<<(std::ostream& out, transformed_point_t<auto,auto> const& operand){
 		return out<<"point{"<<operand.origin.name<<","<<operand.transform<<"}";
 	}
+}
+namespace math{
+	template<Symbol Name> struct is_symbol<geometry::point_t<Name>>: std::true_type{};
 }
 
 #endif /* GEOMETRY_POINT_H */

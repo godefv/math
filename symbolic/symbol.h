@@ -1,7 +1,7 @@
 #ifndef SYMBOLIC_SYMBOL_H
 #define SYMBOLIC_SYMBOL_H 
 
-#include"../name.h"
+#include"name.h"
 #include<type_traits>
 
 namespace math{
