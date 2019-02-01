@@ -131,9 +131,9 @@ auto           D=math::geometry::point(24.0*x-18.0*y+1.5*z); //stores 3 double
 
 auto constexpr translation=math::geometry::translation_t{integer<4>*x}; //stores nothing
 auto constexpr homothecy=math::geometry::make_homothecy(A,ratio<1,4>); //converted to an homothecy centered on O followed by a translation, stores a ratio and a vector (nothing in this case because everything is known at comile time)
-auto constexpr rotation1=math::geometry::point_rotation(O, math::geometry::plane(y,z), ratio<1,2>*half_turn); //stores nothing
-auto constexpr rotation2=math::geometry::point_rotation(C, math::geometry::plane(x,t), ratio<235,1279>); //a boost is a rotation in a mixed plane (containing both positive and negative directions) ; stores nothing
-auto rotation3=math::geometry::point_rotation(D, math::geometry::plane(x,y), 0.35*half_turn); //converted to a rotation centered on O followed by a translation (stored as an angle and a 3D vector, so 4 double)
+auto constexpr rotation1=math::geometry::make_point_rotation(O, math::geometry::plane(y,z), ratio<1,2>*half_turn); //stores nothing
+auto constexpr rotation2=math::geometry::make_point_rotation(C, math::geometry::plane(x,t), ratio<235,1279>); //a boost is a rotation in a mixed plane (containing both positive and negative directions) ; stores nothing
+auto rotation3=math::geometry::make_point_rotation(D, math::geometry::plane(x,y), 0.35*half_turn); //converted to a rotation centered on O followed by a translation (stored as an angle and a 3D vector, so 4 double)
 
 auto transform=(translation,rotation1,homothecy,rotation3); //converted to an homothecy followed by a rotation followed by a translation  
 auto transformed_C=transform(C); //the homothecy is applied (no op), then the rotation is applied (only the x and y components of C are affected, the t component is still a compile-time value at this point, minimal amount of computation is done), then the translation is applied (x,y,z components are computed and stored in 3 double, t component is still a compile-time value (the transformation operates in the (x,y,z) space, except for a dilation with a compile-time factor))
