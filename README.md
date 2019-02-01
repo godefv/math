@@ -95,19 +95,19 @@ When testing runtime values, use only values which have a finite representation 
 
 `"x"_direction_negative` : direction (and basis vector of geometric algebra which squares to -1)
 
-`point()` : defines a point
+`point(origin, vector)` : defines a point, translated by vector from origin
 
 ## point transformations
-`translation_t{}` : defines a translation
+`translation_t{vector}` : defines a translation from a vector
 
-`make_homothecy()` : defines a homothecy
+`make_homothecy(center,ratio)` : defines a homothecy
 
-`make_point_rotation()` : defines a point rotation
+`make_point_rotation(center,plane,angle)` : defines a point rotation
 
 ## vector transformations
-`simple_rotation_t{}` : defines a vector rotation (transforms directions)
+`simple_rotation_t{plane,angle}` : defines a vector rotation (transforms directions)
 
-`scaling_t{}` : defines a scaling (transforms distances)
+`scaling_t{factor}` : defines a scaling (transforms distances)
 
 # Example
 ```
