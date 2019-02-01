@@ -1,5 +1,5 @@
 #include"scaling.h"
-#include"algebra/unit_test.h"
+#include"../algebra/unit_test.h"
 
 int main(){
 	auto constexpr scaling1=math::geometry::scaling_t{math::ratio<1,4>};

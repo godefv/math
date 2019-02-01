@@ -1,10 +1,10 @@
 #ifndef GEOMETRY_POINT_TRANSFORM_H
 #define GEOMETRY_POINT_TRANSFORM_H 
 
-#include"point.h"
-#include"vector_transform.h"
-#include"composition.h"
 #include"translation.h"
+#include"../object/point.h"
+#include"../vector_transform/composition.h"
+#include"../composition.h"
 
 namespace math::geometry{
 	template<Point CenterT, VectorTransform TransformT>

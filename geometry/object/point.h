@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_POINT_H
 #define GEOMETRY_POINT_H 
 
-#include"../name.h"
+#include"../../name.h"
 
 namespace math::geometry{
 	//Point

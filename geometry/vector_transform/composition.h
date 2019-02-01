@@ -3,8 +3,8 @@
 
 #include"rotation.h"
 #include"scaling.h"
-#include"translation.h"
-#include"composition.h"
+#include"../point_transform/translation.h"
+#include"../composition.h"
 
 namespace math::geometry{
 	template<class F> concept bool VectorTransform=requires(F f){

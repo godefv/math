@@ -1,5 +1,5 @@
 #include"slice.h"
-#include"algebra/unit_test.h"
+#include"../algebra/unit_test.h"
 
 int main(){
 	auto constexpr slice12 =math::geometry::plane(e1,e2);

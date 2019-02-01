@@ -1,8 +1,8 @@
 #ifndef GEOMETRY_UNIT_TEST_H
 #define GEOMETRY_UNIT_TEST_H 
 
+#include"point_transform/translation.h"
 #include"algebra/unit_test.h"
-#include"point.h"
 #include"../symbolic/unit_test.h"
 
 auto constexpr O=math::geometry::default_origin;

@@ -25,6 +25,9 @@ namespace math::geometry{
 	bool constexpr operator==(direction_negative_t<auto> const& a, direction_negative_t<auto> const& b){
 		return a.name==b.name;
 	}
+	//bool constexpr operator==(Direction const& a, Direction const& b){
+		//return false;
+	//}
 	bool constexpr operator!=(Direction const& a, Direction const& b){
 		return !(a==b);
 	}

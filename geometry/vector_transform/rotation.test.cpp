@@ -1,5 +1,5 @@
 #include"rotation.h"
-#include"algebra/unit_test.h"
+#include"../algebra/unit_test.h"
 
 auto test_bivector(math::geometry::simple_rotation_t<auto,auto,auto> const& rotation){
 	auto B=rotation.bivector();

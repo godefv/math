@@ -1,8 +1,8 @@
 #ifndef GEOMETRY_SLICE_H
 #define GEOMETRY_SLICE_H 
 
-#include"algebra/wedge_product.h"
-#include"algebra/norm.h"
+#include"../algebra/wedge_product.h"
+#include"../algebra/norm.h"
 
 #include<boost/hana.hpp>
 #include<iostream>

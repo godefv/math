@@ -1,8 +1,9 @@
 #ifndef GEOMETRY_SCALING_H
 #define GEOMETRY_SCALING_H 
 
-#include"apply.h"
-#include"algebra/grade.h"
+#include"../apply.h"
+#include"../algebra/grade.h"
+
 #include<type_traits>
 #include<iostream>
 

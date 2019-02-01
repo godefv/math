@@ -1,10 +1,10 @@
 #ifndef GEOMETRY_ROTATION_H
 #define GEOMETRY_ROTATION_H 
 
-#include"slice.h"
-#include"apply.h"
-#include"algebra/exponential.h"
-#include"../multiplication/reverse.h"
+#include"../object/slice.h"
+#include"../apply.h"
+#include"../algebra/exponential.h"
+#include"../../multiplication/reverse.h"
 
 #include<type_traits>
 

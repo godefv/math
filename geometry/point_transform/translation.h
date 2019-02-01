@@ -1,8 +1,9 @@
 #ifndef GEOMETRY_TRANSLATION_H
 #define GEOMETRY_TRANSLATION_H 
 
-#include"point.h"
-#include"composition.h"
+#include"../object/point.h"
+#include"../algebra/grade.h"
+#include"../composition.h"
 
 namespace math::geometry{
 	template<Vector VectorT>
