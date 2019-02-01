@@ -3,7 +3,6 @@
 
 #include"rotation.h"
 #include"scaling.h"
-#include"../point_transform/translation.h"
 #include"../composition.h"
 
 namespace math::geometry{
@@ -12,10 +11,6 @@ namespace math::geometry{
 			f(2.5*direction_negative_t<name_t<'x'>>{}+ratio<3,5>*direction_positive_t<name_t<'t'>>{})
 		), 1>;
 	};
-
-	auto constexpr apply(VectorTransform const& transform, translation_t<auto> const& operand){
-		return translation_t{apply(transform, operand.vector)};
-	}
 
 	//composition of vector transformations - scalings
 	Scaling{Scaling2}

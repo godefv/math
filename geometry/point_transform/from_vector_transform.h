@@ -55,7 +55,7 @@ namespace math::geometry{
 	}
 	template<class Name>
 	auto constexpr apply(point_transform_t<point_t<Name>, auto> const& transform, transformed_point_t<Name,translation_t<auto>> const& operand){
-		return transformed_point_t{operand.origin, transform.vector_transform(operand.transform)};
+		return transformed_point_t{operand.origin, translation_t{transform.vector_transform(operand.transform.vector)}};
 	}
 
 	//composition of point transformations - point_transform_t with the same center
@@ -65,7 +65,7 @@ namespace math::geometry{
 	}
 	//composition of point transformations - put scalings first and translations last
    	auto constexpr operator,(Translation const& a, point_transform_t<auto,auto> const& b){
-   		return (b,b.vector_transform(a));
+   		return (b,translation_t{b.vector_transform(a.vector)});
    	}
 	
 }
