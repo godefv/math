@@ -3,7 +3,7 @@
 
 #include"../object/point.h"
 #include"../algebra/grade.h"
-#include"../composition.h"
+#include"../../composition/operation.h"
 
 namespace math::geometry{
 	template<Vector VectorT>

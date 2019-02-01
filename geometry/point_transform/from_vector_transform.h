@@ -4,7 +4,6 @@
 #include"translation.h"
 #include"../object/point.h"
 #include"../vector_transform/composition.h"
-#include"../composition.h"
 
 namespace math::geometry{
 	template<Point CenterT, VectorTransform TransformT>
