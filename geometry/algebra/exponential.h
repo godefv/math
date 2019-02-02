@@ -1,8 +1,7 @@
 #ifndef GEOMETRY_ALGEBRA_EXPONENTIAL_H
 #define GEOMETRY_ALGEBRA_EXPONENTIAL_H 
 
-#include"definition.h"
-#include"grade.h"
+#include"geometric_product.h"
 #include"norm.h"
 #include"../../symbolic/operation/trigonometry.h"
 
@@ -34,7 +33,7 @@ namespace math::geometry{
 	}
 
 	template<KVector<2> BivectorT> 
-		requires !Symbol<BivectorT> && hana::value(grades(square(BivectorT{}))==grades<0>())
+		requires !Symbol<BivectorT> && Scalar<decltype(square(BivectorT{}))>
 	constexpr auto exp(BivectorT const& a){
 		using ::eval;
 		double square=eval(a|a);

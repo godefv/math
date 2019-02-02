@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_ALGEBRA_DOT_PRODUCT_H
 #define GEOMETRY_ALGEBRA_DOT_PRODUCT_H 
 
-#include"grade.h"
+#include"geometric_product.h"
 #include"../../multiplication/operation.h"
 #include"../../abs.h"
 

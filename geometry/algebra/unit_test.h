@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_ALGEBRA_UNIT_TEST_H
 #define GEOMETRY_ALGEBRA_UNIT_TEST_H 
 
-#include"definition.h"
+#include"../object/direction.h"
 #include"../../symbolic/unit_test.h"
 
 //generators

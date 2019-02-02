@@ -1,0 +1,24 @@
+#ifndef GEOMETRY_ALGEBRA_POWER_H
+#define GEOMETRY_ALGEBRA_POWER_H 
+
+#include"definition.h"
+#include"grade.h"
+
+namespace math::geometry{
+	//cyclic order
+	auto constexpr cycle_order(mult_operation_t, direction_positive_t<auto>){
+		return 2;
+	}
+	auto constexpr cycle_order(mult_operation_t, direction_negative_t<auto>){
+		return 4;
+	}
+
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, direction_negative_t<auto> const&){
+		return -one;
+	}
+	auto constexpr generated_power(mult_operation_t, integer_t<3>, direction_negative_t<auto> const& ei){
+		return -ei;
+	}
+}
+
+#endif /* GEOMETRY_ALGEBRA_POWER_H */

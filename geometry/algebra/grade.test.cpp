@@ -1,4 +1,5 @@
 #include"grade.h"
+#include"geometric_product.h"
 #include"unit_test.h"
 
 int main(){
