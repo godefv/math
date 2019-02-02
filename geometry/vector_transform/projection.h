@@ -6,11 +6,11 @@
 
 namespace math::geometry{
 	//concept
-	template<class T> struct is_projection:std::false_type{};
-	template<class T> concept bool Projection=is_projection<T>::value;
+	template<class T> struct is_orthographic_projection:std::false_type{};
+	template<class T> concept bool OrthographicProjection=is_orthographic_projection<T>::value;
 
 	//apply
-	auto constexpr apply(Projection const& projection, Vector const& operand){
+	auto constexpr apply(OrthographicProjection const& projection, Vector const& operand){
 		auto blade=projection.slice.blade();
 		return project(inverse(blade)*(blade|operand), grades(operand));
 	}
@@ -26,7 +26,7 @@ namespace math::geometry{
 	template<class SliceT>
 	projection_t(SliceT const&)->projection_t<SliceT>;
 
-	template<class SliceT> struct is_projection<projection_t<SliceT>>:std::true_type{};
+	template<class SliceT> struct is_orthographic_projection<projection_t<SliceT>>:std::true_type{};
 
 	std::ostream& operator<<(std::ostream& out, projection_t<auto> const& p){
 		return out<<"projection{"<<p.slice<<"}";
