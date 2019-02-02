@@ -8,28 +8,25 @@
 
 namespace math{
 	//static square root function for integers
-	template<std::intmax_t Exponent, std::intmax_t N, std::intmax_t begin, std::intmax_t end> requires begin<=end
-	auto constexpr static_sqrt(integer_t<N> operand, integer_t<begin>, integer_t<end>){
-		//while range is not empty, search it by dichotomy
-		if constexpr(begin!=end){
-			auto constexpr mid = integer<(end+begin)/2>;
-			auto constexpr power=group::power(mult_operation_t{}, integer<Exponent>, mid);
-
-			if constexpr(power==operand){
-				return mid;
-			}else if constexpr(power>operand){
-				return static_sqrt<Exponent>(operand, integer<begin>, mid);
-			}else{
-				return static_sqrt<Exponent>(operand, mid+integer<1>, integer<end>);
-			}
-		//if range is empty, no exact root has been found, so generate a symbolic power
+	template<Integer Integer1, Integer Integer2>
+	auto constexpr static_sqrt_linear(one_t,Integer1,Integer2){
+		return integer<1>;
+	}
+	template<Integer Integer1, Integer Integer2>
+	auto constexpr static_sqrt_linear(Integer operand, Integer1 exponent, Integer2 i){
+		auto constexpr power=group::power(mult_operation_t{}, exponent, i);
+		auto constexpr ratio=operand/power;
+		if constexpr(ratio.denominator()==1){
+			return i*group::power(mult_operation_t{}, inverse(exponent), ratio);
+		}else if constexpr(power<operand){
+			return static_sqrt_linear(operand, exponent, i+integer<1>);
 		}else{
-			return group::generated_power(mult_operation_t{}, ratio<1,Exponent>, operand);
+			return group::generated_power(mult_operation_t{}, inverse(exponent), operand);
 		}
 	}
-	template<std::intmax_t Exponent, std::intmax_t N>
-	auto constexpr static_sqrt(integer_t<N> operand){
-		return static_sqrt<Exponent>(operand, integer<1>, operand+integer<1>);
+	template<std::intmax_t Exponent>
+	auto constexpr static_sqrt(Integer operand){
+		return static_sqrt_linear(operand, integer<Exponent>, integer<2>);
 	}
 
 	//exact roots of rationals
@@ -37,10 +34,10 @@ namespace math{
 	auto constexpr generated_power(mult_operation_t, ExponentT, RatioT){
 		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}
-	//apply inverse if different than power<-1> (only with rational operands for now)
-	template<class OperatorT, SimpleScalar ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(Integer<OperandT> && !Integer<ExponentT>)
-	auto constexpr generated_power(OperatorT op, ExponentT exponent, OperandT const& operand){
-		return group::power(op, -exponent, inverse(operand));
+	//apply inverse if different than power<-1> (only with rational operands for now, because we know they can then be processed immediately)
+	template<SimpleScalar ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(Integer<OperandT> && !Integer<ExponentT>)
+	auto constexpr generated_power(mult_operation_t, ExponentT exponent, OperandT const& operand){
+		return group::power(mult_operation_t{}, -exponent, inverse(operand));
 	}
 	//power of addition powers (ka)^n = (k^n)(a^n) because k is a scalar
 	template<SimpleScalar Exponent1, SimpleScalar Exponent2>

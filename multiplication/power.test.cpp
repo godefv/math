@@ -16,9 +16,11 @@ int main(){
 
 	//powers of rationals
 	check_equal(pow<3>(integer<2>),integer<8>);
+	check_equal(nth_root<2>(integer<1>), integer<1>);
 	check_equal(nth_root<3>(integer<8>),integer<2>);
 	check_equal(nth_root<2>(integer<25>), integer<5>);
 	check_equal(nth_root<2>(integer<4>), integer<2>);
+	check_equal(nth_root<2>(integer<8>), integer<2>*nth_root<2>(integer<2>));
 	check_equal(nth_root<2>(integer<2>)*nth_root<2>(integer<2>), integer<2>);
 	check_equal(nth_root<2>(ratio<25,4>), ratio<5,2>);
 	check_equal(nth_root<2>(ratio<1,4>), ratio<1,2>);
