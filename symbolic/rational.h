@@ -13,8 +13,8 @@ namespace math{
 	template<std::intmax_t Numerator, std::intmax_t Denominator> requires Denominator>=0
 	struct ratio_t: std::ratio<Numerator,Denominator>{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
-		auto constexpr numerator(){return Numerator;}
-		auto constexpr denominator(){return Denominator;}
+		auto constexpr numerator() const{return Numerator;}
+		auto constexpr denominator() const{return Denominator;}
 	};
 
 	template<std::intmax_t value>
