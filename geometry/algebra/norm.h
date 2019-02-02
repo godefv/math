@@ -16,7 +16,8 @@ namespace math::geometry{
 		return sqrt(abs(a_square));
 	}
 
-	auto constexpr normalized(auto const& a){
+	template<class T> requires NonZero<decltype(norm(T{}))>
+	auto constexpr normalized(T const& a){
 		return a/norm(a);
 	}
 }
