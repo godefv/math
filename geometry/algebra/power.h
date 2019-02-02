@@ -19,6 +19,12 @@ namespace math::geometry{
 	auto constexpr generated_power(mult_operation_t, integer_t<3>, direction_negative_t<auto> const& ei){
 		return -ei;
 	}
+	template<MultiVector MultiVectorT> 
+		requires NonZeroScalar<decltype(square(MultiVectorT{}))> //user is responsible for division by zero errors
+			  && !group::Power<add_operation_t,MultiVectorT> //handled by multiplication/power.h
+	auto constexpr generated_power(mult_operation_t, integer_t<-1>, MultiVectorT const& operand){
+		return operand/project(square(operand), grades<0>());
+	}
 }
 
 #endif /* GEOMETRY_ALGEBRA_POWER_H */

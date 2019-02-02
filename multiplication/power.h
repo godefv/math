@@ -47,9 +47,16 @@ namespace math{
 	}
 	//expand powers of multiplication or addition a^n = a(a^(n-1)) with a=xy or x+y 
 	//this gives a chance to apply commutation rules, and expands (a+b)^n
-	template<SimpleScalar ExponentT, class T> requires ExponentT::num>0 && ExponentT::den==1 && (group::Operation<mult_operation_t,T> || group::Operation<add_operation_t,T>)
+	template<SimpleScalar ExponentT, class T> 
+		requires ExponentT::num>0 
+		      && ExponentT::den==1 
+			  && (group::Operation<mult_operation_t,T> || group::Operation<add_operation_t,T>)
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, T const& a){
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
+	}
+	//(ka+lb)² =(ka)²+(lb)²+(kl)(ab+ba), factoring (kl) gives a chance to simplify (ab+ba), which is not always possible if (kl) is a runtime value
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, group::generated_by_operation_t<add_operation_t, group::generated_power_t<add_operation_t, auto, auto>, group::generated_power_t<add_operation_t, auto, auto>> const& ka_plus_lb){
+		return square(ka_plus_lb.first)+square(ka_plus_lb.second)+(ka_plus_lb.first.exponent*ka_plus_lb.second.exponent)*(ka_plus_lb.first.operand*ka_plus_lb.second.operand+ka_plus_lb.second.operand*ka_plus_lb.first.operand);
 	}
 	//powers of runtime values
 	auto constexpr generated_power(mult_operation_t, SimpleScalar const& exponent, Number const& operand){

@@ -64,7 +64,7 @@ namespace math::group{
 	auto constexpr power(OperatorT op, ExponentT exponent, generated_power_t<OperatorT,ScalarT,auto> const& operand){
 		return power(op, exponent*operand.exponent, operand.operand);
 	} 
-	//some powers can be processed immediatly
+	//Integer powers of SimpleScalar can be processed immediatly
 	template<class OperatorT, Integer ExponentT, SimpleScalar OperandT> requires ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
 	auto constexpr power(OperatorT op, ExponentT, OperandT const& operand){
 		return OperatorT::apply(power(op, integer_t<ExponentT::num-1>{}, operand), operand);

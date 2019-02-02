@@ -5,6 +5,7 @@ int main(){
 	using math::one;
 	using math::zero;
 	using math::integer;
+	using math::ratio;
 
 	//addition
 	check_equal(e0+1.2*e0, 2.2*e0);
@@ -23,6 +24,12 @@ int main(){
 	check_equal(inverse(e1),  e1);
 	check_equal(inverse(n1), -n1);
 	check_equal(inverse(e1*e2), inverse(e2)*inverse(e1));
+	//inverse of blades
+	check_equal(inverse(2.0*e1),  0.5*e1);
+	check_equal(inverse(2.0*n1), -0.5*n1);
+	check_equal(inverse(integer<2>*e1+integer<2>*e2), ratio<1,4>*(e1+e2));
+	check_equal(inverse(2.0*e1+2.0*e2), 0.25*(e1+e2));
+	check_equal(inverse(2.0*e1*e2), 0.5*inverse(e2)*inverse(e1));
 	//inverse of inverse
 	check_equal(inverse(inverse(e1)), e1);
 	check_equal(inverse(inverse(n1)), n1);
