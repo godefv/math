@@ -35,6 +35,7 @@ int main(){
 	check_equal(pow<1>(x),x);
 	check_equal(pow<2>(x),x*x);
 	check_equal(square(2.0*x+4.0*y),4.0*x*x+16.0*y*y+8.0*(x*y+y*x));
+	check_equal(square(2.0*x+4.0*y+3.0),4.0*x*x+16.0*y*y+9.0+8.0*(x*y+y*x)+12.0*x+24.0*y);
 
 	//power of power
 	check_equal(pow<4>(nth_root<3>(x)), pow(x, ratio<4,3>));

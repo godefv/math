@@ -2,11 +2,36 @@
 #define MULTIPLICATION_POWER_H 
 
 #include"operation.h"
+#include"commutator.h"
 #include"../group/power.h"
 
 #include<cmath>
 
 namespace math{
+	//aliases
+	template<SimpleScalar ExponentT, class OperandT>
+	using power_t=group::generated_power_t<mult_operation_t, ExponentT, OperandT>;
+
+	template<Ratio RatioT, class OperandT>
+	using nth_root_t=power_t<decltype(inverse(RatioT{})), OperandT>;
+
+	template<class OperandT>
+	using square_t=power_t<integer_t<2>, OperandT>;
+
+	template<class OperandT>
+	using sqrt_t=nth_root_t<integer_t<2>, OperandT>;
+
+	auto constexpr pow(auto const& operand, Ratio exponent){
+		using group::power;
+		return power(mult_operation_t{}, exponent, operand);
+	}
+	template<std::intmax_t N>
+	auto constexpr pow(auto const& operand){return pow(operand, integer<N>);}
+	template<std::intmax_t N>
+	auto constexpr nth_root(auto const& operand){return pow(operand, ratio<1,N>);}
+	auto constexpr square(auto const& operand){return pow<2>(operand);}
+	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
+
 	//static square root function for integers
 	template<Integer Integer1, Integer Integer2>
 	auto constexpr static_sqrt_linear(one_t,Integer1,Integer2){
@@ -55,37 +80,13 @@ namespace math{
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
 	}
 	//(ka+lb)² =(ka)²+(lb)²+(kl)(ab+ba), factoring (kl) gives a chance to simplify (ab+ba), which is not always possible if (kl) is a runtime value
-	auto constexpr generated_power(mult_operation_t, integer_t<2>, group::generated_by_operation_t<add_operation_t, group::generated_power_t<add_operation_t, auto, auto>, group::generated_power_t<add_operation_t, auto, auto>> const& ka_plus_lb){
-		return square(ka_plus_lb.first)+square(ka_plus_lb.second)+(ka_plus_lb.first.exponent*ka_plus_lb.second.exponent)*(ka_plus_lb.first.operand*ka_plus_lb.second.operand+ka_plus_lb.second.operand*ka_plus_lb.first.operand);
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, group::generated_by_operation_t<add_operation_t, auto, auto> const& ka_plus_lb){
+		return square(ka_plus_lb.first)+square(ka_plus_lb.second)+anticommutator(ka_plus_lb.first, ka_plus_lb.second);
 	}
 	//powers of runtime values
 	auto constexpr generated_power(mult_operation_t, SimpleScalar const& exponent, Number const& operand){
 		return std::pow(operand, eval(exponent));
 	}
-
-	//aliases
-	template<SimpleScalar ExponentT, class OperandT>
-	using power_t=group::generated_power_t<mult_operation_t, ExponentT, OperandT>;
-
-	template<Ratio RatioT, class OperandT>
-	using nth_root_t=power_t<decltype(inverse(RatioT{})), OperandT>;
-
-	template<class OperandT>
-	using square_t=power_t<integer_t<2>, OperandT>;
-
-	template<class OperandT>
-	using sqrt_t=nth_root_t<integer_t<2>, OperandT>;
-
-	auto constexpr pow(auto const& operand, Ratio exponent){
-		using group::power;
-		return power(mult_operation_t{}, exponent, operand);
-	}
-	template<std::intmax_t N>
-	auto constexpr pow(auto const& operand){return pow(operand, integer<N>);}
-	template<std::intmax_t N>
-	auto constexpr nth_root(auto const& operand){return pow(operand, ratio<1,N>);}
-	auto constexpr square(auto const& operand){return pow<2>(operand);}
-	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
 
 	//eval
 	auto constexpr eval(group::generated_power_t<mult_operation_t,auto,auto> const& pow){

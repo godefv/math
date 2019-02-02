@@ -73,6 +73,9 @@ int main(){
 	check_equal((e2*e1)*(e1*e2), ((e2*e1)*e1)*e2);
 	check_equal((e2*e1)*(e1*e2), one);
 
+	//square
+	check_equal(square(2.0*e1+3.0*e2+4.0*e3), 4.0+9.0+16.0);
+
 	//concepts
 	using math::geometry::Blade;
 	std::cout<<"\nBlade concept:"<<std::endl;
