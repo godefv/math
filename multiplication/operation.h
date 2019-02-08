@@ -5,6 +5,8 @@
 #include"../group/commutation.h"
 #include"../addition/all.h"
 
+#include<type_traits>
+
 namespace math{
 	//!Template for bilinear operations.
 	template<class DerivedOperatorT>
@@ -61,6 +63,9 @@ namespace math{
 	struct mult_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a*b;
+		}
+		auto constexpr operator()(auto const& a, auto const& b) const{
+			return std::decay_t<decltype(*this)>::apply(a,b);
 		}
 	};
 

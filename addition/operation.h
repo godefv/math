@@ -7,6 +7,7 @@
 #include"../scalar.h"
 
 #include<iostream>
+#include<type_traits>
 
 //enable "using ::operator+;"
 template<class A, class B> requires false
@@ -16,6 +17,9 @@ namespace math{
 	struct add_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a+b;
+		}
+		auto constexpr operator()(auto const& a, auto const& b) const{
+			return std::decay_t<decltype(*this)>::apply(a,b);
 		}
 	};
 	//zero

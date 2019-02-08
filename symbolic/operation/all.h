@@ -32,7 +32,7 @@ namespace math{
 	auto constexpr abs(T const& a){
 		return abs_endomorphism(a);
 	}
-	//abs(kx)=abs(k)abs(x)
+	//abs is not an endomorphism over + because abs(-x)!=-abs(x)
 	auto constexpr abs(group::generated_power_t<add_operation_t,auto,auto> const& pow){
 		return abs(pow.exponent)*abs(pow.operand);
 	}
