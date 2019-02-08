@@ -2,6 +2,7 @@
 #define GEOMETRY_ALGEBRA_GRADE_H 
 
 #include"definition.h"
+#include"../../group/morphism.h"
 
 #include<boost/hana.hpp>
 
@@ -24,14 +25,9 @@ namespace math::geometry{
 	template<int... Is>
 	auto constexpr grades(){return hana::make_set(hana::llong_c<Is>...);}
 	
-	//grades of multivectors
-	auto constexpr grades(Blade const& a){return grades<grade(a)>();}
 	//grades is a morphism from (auto,+) to (hana::set,hana::union)
-	auto constexpr grades(zero_t const&){return grades<>();}
-	MultiVector{MultiVector2}
-	auto constexpr grades(group::generated_by_operation_t<add_operation_t, MultiVector,MultiVector2> const& a){
-		return hana::union_(grades(a.first), grades(a.second));
-	}
+	auto constexpr grades_functor=group::morphism_t{add_operation_t{}, hana::union_, [](Blade const& operand){return grades<grade(operand)>();}};
+	auto constexpr grades(MultiVector const& operand){return grades_functor(operand);}
 
 	//KVector concept
 	template<MultiVector T, int K> concept bool KVector=hana::value(grades(T{})==grades<K>());
@@ -42,19 +38,13 @@ namespace math::geometry{
 
 
 	//project multivector onto a set of grades
-	auto constexpr project(Blade const& blade, auto grades){
+	auto constexpr project=group::endomorphism(add_operation_t{}, [](Blade const& blade, auto grades){
 		if constexpr(hana::find(grades, hana::llong_c<grade(blade)>)==hana::nothing){
 			return zero;
 		}else{
 			return blade;
 		}
-	}
-	//project(x, auto) is an endomorphism over +
-	auto constexpr project(zero_t, auto){return zero;}
-	MultiVector{MultiVector2}
-	auto constexpr project(group::generated_by_operation_t<add_operation_t, MultiVector,MultiVector2> const& a, auto grades){
-		return project(a.first, grades)+project(a.second, grades);
-	}
+	});
 }
 
 #endif /* GEOMETRY_ALGEBRA_GRADE_H */

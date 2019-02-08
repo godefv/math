@@ -5,6 +5,8 @@
 #include"../symbolic/rational.h"
 #include"../scalar.h"
 
+#include<boost/hana.hpp>
+
 namespace math::group{
 	template<class OperatorT, Scalar ExponentT, class OperandT>
 	struct generated_power_t{
@@ -95,6 +97,12 @@ namespace math::group{
 namespace math{
 	template<class OperatorT, Symbol ExponentT, Symbol SymbolT> struct is_symbol<group::generated_power_t<OperatorT,ExponentT,SymbolT>>:std::true_type{};
 	template<class OperatorT, Scalar ExponentT, Scalar ScalarT> struct is_scalar<group::generated_power_t<OperatorT,ExponentT,ScalarT>>:std::true_type{};
+}
+
+namespace boost::hana{
+	auto constexpr generated_power(decltype(boost::hana::union_) const&, auto const& , auto const& operand){
+		return operand;
+	}
 }
 
 #endif /* GROUP_POWER_H */
