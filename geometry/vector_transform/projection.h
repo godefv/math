@@ -12,7 +12,7 @@ namespace math::geometry{
 	//apply
 	auto constexpr apply(OrthographicProjection const& projection, Vector const& operand){
 		auto blade=projection.slice.blade();
-		return project(inverse(blade)*(blade|operand), grades(operand));
+		return project(blade*(inverse(blade)|operand), grades(operand));
 	}
 
 	//projection
