@@ -5,20 +5,19 @@
 #include<iostream>
 
 namespace boost::hana{
-	template<class T, class... Ts>
-	std::ostream& operator<<(std::ostream& out, set<T, Ts...> const& foldable){
-		out<<"<";
-		return fold(foldable, std::cout, [](std::ostream& o, auto const& value)->std::ostream&{return o<<value<<", ";})<<">";
-	}
-	template<template<class...> class List, class T, class... Ts> requires std::is_same<List<>,tuple<>>::value
-	std::ostream& operator<<(std::ostream& out, List<T, Ts...> const& foldable){
-		out<<"<"<<front(foldable);
-		return fold(drop_front(foldable), std::cout, [](std::ostream& o, auto const& value){return o<<value<<", ";})<<">";
+	template<class FoldableT> requires Foldable<FoldableT>::value
+	std::ostream& operator<<(std::ostream& out, FoldableT const& foldable){
+		using std::operator<<;
+		return fold(foldable, out<<"<", [](std::ostream& o, auto const& value)->std::ostream&{
+			using std::operator<<;
+			return o<<value<<", ";
+		})<<">";
 	}
 }
 
 template<class T> struct is_hana_set:std::false_type{};
 template<class... Ts> struct is_hana_set<boost::hana::set<Ts...>>:std::true_type{};
+template<class... Ts> struct is_hana_set<boost::hana::detail::map_impl<Ts...>>:std::true_type{};
 
 void print_type(auto const& a){
 	std::cout<<typeid(a).name()<<std::endl;
