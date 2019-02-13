@@ -19,7 +19,7 @@ namespace math::group{
 		template<class... ArgsT> auto constexpr operator()(generated_power_t<InnerOperatorT, SimpleScalar, auto> const& pow, ArgsT&&... args) const{
 			return group::power(outer_operator, pow.exponent, operator()(pow.operand, std::forward<ArgsT>(args)...));
 		}
-		template<class... ArgsT> auto constexpr operator()(identity_t<InnerOperatorT>, ArgsT&&... args) const{
+		template<class... ArgsT> auto constexpr operator()(identity_t<InnerOperatorT>, ArgsT&&... ) const{
 			return identity(OuterOperatorT{});
 		}
 	};
