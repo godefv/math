@@ -66,6 +66,7 @@ math_add_test(symbolic/operation/trigonometry)
 math_add_test(symbolic/rational)
 
 math_add_test(geometry/object/slice)
+math_add_test(geometry/object/frame)
 math_add_test(geometry/vector_transform/rotation)
 math_add_test(geometry/vector_transform/scaling)
 math_add_test(geometry/vector_transform/projection)
