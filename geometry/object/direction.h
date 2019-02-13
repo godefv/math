@@ -3,13 +3,15 @@
 
 #include"../../symbolic/symbol.h"
 
+#include<boost/hana.hpp>
 #include<type_traits>
 #include<iostream>
 
 namespace math::geometry{
 	//directions definition
-	template<class Name> struct direction_positive_t{Name name;};
-	template<class Name> struct direction_negative_t{Name name;};
+	struct direction_tag_t{};
+	template<class Name> struct direction_positive_t{Name name;using hana_tag=direction_tag_t;};
+	template<class Name> struct direction_negative_t{Name name;using hana_tag=direction_tag_t;};
 
 	//direction concept
 	template<class> struct is_direction_t: std::false_type{};
@@ -48,6 +50,33 @@ namespace math::geometry{
 namespace math{
 	//a direction is a symbol
 	template<geometry::Direction DirectionT> struct is_symbol<DirectionT>: std::true_type{};
+}
+
+namespace boost::hana {
+    // Comparable
+
+    template <>
+    struct equal_impl<math::geometry::direction_tag_t, math::geometry::direction_tag_t> {
+		math::geometry::Direction{Direction2}
+        static constexpr auto apply(math::geometry::Direction const& a, Direction2 const& b)
+            -> hana::bool_<std::is_same_v<decltype(a), decltype(b)>>
+        { return {}; }
+
+        template <typename T, typename U>
+        static constexpr auto apply(T, T)
+            -> hana::true_
+        { return {}; }
+    };
+
+    // Hashable
+
+    template <>
+    struct hash_impl<math::geometry::direction_tag_t> {
+        template <typename T>
+        static constexpr auto apply(T)
+            -> hana::type<T>
+        { return {}; }
+    };
 }
 
 #endif /* GEOMETRY_OBJECT_DIRECTION_H */
