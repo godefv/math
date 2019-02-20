@@ -32,6 +32,11 @@ namespace math::geometry{
 		return out<<operand.name;
 	}
 
+	namespace literals{
+		template<class CharT, CharT... letters>
+		auto constexpr operator""_point(){return point_t<name_t<letters...>>{};}
+	}
+
 	//PointTransform
 	template<class F> concept bool PointTransform=requires(F f){
 		requires Point<decltype(f(point_t<name_t<'P'>>{}))>;
