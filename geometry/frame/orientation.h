@@ -47,8 +47,8 @@ namespace math::geometry{
 			return hana::to_map(hana::zip_with(hana::make_pair
 				,new_keys
 				,hana::transform(new_keys, [&](auto new_key){
-					auto project_new_key_on_this=[&](auto const& operand){
-						return project(hana::first(operand)*(inverse(new_key)|hana::second(operand)), grades(hana::second(operand)));
+					auto project_new_key_on_this=[&](auto const& key_value){
+						return project(hana::first(key_value)*(new_key|inverse(hana::second(key_value))), grades(hana::second(key_value)));
 					};
 					return direction_map
 						|hana::to_tuple
@@ -75,7 +75,7 @@ namespace math::geometry{
 		requires static_cast<bool>(hana::difference(
 			 get_reference_frame(OperandT{})
 			,hana::to_set(hana::keys(DirectionMapT{}))
-			//TODO: allow partial frame change. For example, (X,Y)->(e1,e2) can be used to transform e3+X
+			//TODO: allow partial frame change. For example, (X,Y)->(e1,e2) can be used to transform e3+X. Or do not allow it ?
 		)==hana::make_set())
 	auto constexpr change_reference_frame(OperandT const& operand, orientation_t<DirectionMapT> const& old_reference){
 		return internal::apply_direction_map(operand, old_reference.vectors);

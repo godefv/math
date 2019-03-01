@@ -8,6 +8,12 @@
 using namespace math::geometry::literals;
 static constexpr auto Px="Px"_direction_positive; 
 static constexpr auto Py="Py"_direction_positive; 
+static constexpr auto Pz="Pz"_direction_positive; 
 static constexpr auto Po="Po"_point; 
+
+static constexpr auto Cx="Cx"_direction_positive; 
+static constexpr auto Cy="Cy"_direction_positive; 
+static constexpr auto Cz="Cz"_direction_positive; 
+static constexpr auto Co="Co"_point; 
 
 #endif /* GEOMETRY_FRAME_UNIT_TEST_H */
