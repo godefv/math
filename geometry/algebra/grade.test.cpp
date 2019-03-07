@@ -16,6 +16,7 @@ int main(){
 	check_equal(grade(e1*e2), 2);
 	check_equal(grade(e1*n1), 2);
 	//grades
+	check_equal(grades(zero)           , grades<>());
 	check_equal(grades(one)            , grades<0>());
 	check_equal(grades(e1)             , grades<1>());
 	check_equal(grades(e1*e1)          , grades<0>());

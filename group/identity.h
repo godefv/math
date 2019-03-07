@@ -4,6 +4,8 @@
 #include<type_traits>
 #include<iostream>
 
+#include<boost/hana.hpp>
+
 namespace math::group{
 	template<class Operator> struct generated_identity_t{
 		Operator operation;
@@ -34,5 +36,9 @@ namespace math::group{
 		return out<<"id<"<<typeid(BinaryOperator).name()<<">";
 	}
 } 
+
+namespace boost::hana{
+	auto constexpr identity(decltype(union_)){return make_set();}
+}
 
 #endif /* IDENTITY_H */
