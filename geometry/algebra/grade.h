@@ -30,7 +30,7 @@ namespace math::geometry{
 	auto constexpr grades(MultiVector const& operand){return grades_functor(operand);}
 
 	//KVector concept
-	template<MultiVector T, int K> concept bool KVector=hana::value(grades(T{})==grades<K>());
+	template<MultiVector T, int K> concept bool KVector=hana::value(grades(T{})==grades<K>()) || Zero<T>;
 	template<class T> concept bool Vector=KVector<T,1>;
 	template<class T> concept bool BiVector=KVector<T,2>;
 	//KBlade concept
