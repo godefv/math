@@ -1,18 +1,13 @@
 cmake_minimum_required(VERSION 3.8)
 project(math CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 if(NOT CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
 	if(DISABLE_COMPILER_CHECK)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17" ) 
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fconcepts" ) 
 	else()
 		message(FATAL_ERROR "Require at least g++-7.0")
 	endif()
 endif()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts" ) 
 
 set(GCC_WARNING_FLAGS
     -Werror
@@ -34,7 +29,14 @@ set(GCC_WARNING_FLAGS
 )
 
 # require hana library, may work with Boost >= 1.61, but was tested only with boost 1.62 and 1.64
-find_package(Boost 1.62.0)
+find_package(Boost 1.62.0 REQUIRED)
+
+add_library(math INTERFACE)
+target_compile_features(math INTERFACE cxx_std_17)
+#target_compile_features(math INTERFACE cxx_concepts)
+if(CMAKE_COMPILER_IS_GNUCXX)
+	target_compile_options(math INTERFACE "-fconcepts")
+endif()
 
 enable_testing()
 
@@ -42,6 +44,7 @@ function(math_add_test module)
 	string(REPLACE "/" "_" test_target ${module})
 	set(test_target "test_${test_target}")
 	add_executable(${test_target} ${module}.test.cpp)
+	target_link_libraries(${test_target} math)
 	target_compile_options(${test_target} PRIVATE ${GCC_WARNING_FLAGS})
 	add_test(${module} ${test_target})
 endfunction()
