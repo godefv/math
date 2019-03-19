@@ -74,8 +74,7 @@ namespace math{
 	using one_t=integer_t<1>;
 	auto constexpr one=one_t{};
 
-	template<class T> requires std::is_arithmetic<T>::value
-	auto constexpr inverse(T const& a){return 1./a;}
+	auto constexpr inverse(Number const& a){return 1./a;}
 	//default inverse is inverse of multiplication
 	template<class T> requires !group::Generated<mult_operation_t,T>
 	auto constexpr inverse(mult_operation_t, T const& a){
@@ -83,19 +82,28 @@ namespace math{
 	}
 
 	//by default, use group operations and bilinear rules
-	auto constexpr inverse(auto const& a){
+	auto constexpr inverse(NonSimpleScalarExpression const& a){
 		return group::inverse(mult_operation_t{}, a);
 	}
-	auto constexpr operator*(auto const& a, auto const& b){
+	template<Expression A, Expression B> 
+		requires (!SimpleScalar<A> || !SimpleScalar<B>) //avoid negating a boolean expression inside constraints, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67070
+		&& (
+		   ((!Scalar<A> && !Scalar<B>) || !(static_compare(mult_operation_t{}, A{},B{})<0))
+		|| group::Operation<mult_operation_t,A>
+		|| group::Operation<mult_operation_t,B>
+		)
+	auto constexpr operator*(A const& a, B const& b){
 		return bilinear_operation_t<mult_operation_t>::apply(a,b);
 	}
-	auto constexpr operator/(auto const& a, auto const& b){
+   	template<Expression A, class B> requires !(SimpleScalar<A> && SimpleScalar<B>) && requires(B b){inverse(b);}
+	auto constexpr operator/(A const& a, B const& b){
 		return a*inverse(b);
 	}
 
    	//commutation rule
-   	template<class A, class B>
-   		requires !std::is_same<A,B>::value 
+   	template<Expression A, Expression B>
+   		requires (!SimpleScalar<A> || !SimpleScalar<B>) //avoid negating a boolean expression inside constraints, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67070
+   		      && !std::is_same<A,B>::value 
 		      && !group::Operation<mult_operation_t,A>
 		      && !group::Operation<mult_operation_t,B>
    		      && static_compare(mult_operation_t{}, A{},B{})<0

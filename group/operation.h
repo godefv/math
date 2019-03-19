@@ -38,15 +38,27 @@ namespace math::group{
 		return OperatorT::apply(eval(ab.first), eval(ab.second));
 	}
 
-	//concepts
+	//concept Operation
 	template<class OperatorT, class> struct is_generated_by_operation:std::false_type{};
 	template<class OperatorT, class A,class B> struct is_generated_by_operation<OperatorT, generated_by_operation_t<OperatorT,A,B>>:std::true_type{};
 	template<class OperatorT, class T> concept bool Operation=is_generated_by_operation<OperatorT, T>::value;
 
+	//concept Generated<OperatorT>
 	template<class OperatorT, class T> 
 	concept bool Generated=Operation<OperatorT,T> 
 	                    || Power<OperatorT,T> 
 	                    || std::is_same<generated_identity_t<OperatorT>,T>::value;
+
+	//concept GeneratedByAnyOperation
+	template<class T> struct is_generated_by_any_operation: std::false_type{};
+	template<class T> concept bool GeneratedByAnyOperation=is_generated_by_any_operation<T>::value;
+
+	template<class OperatorT> 
+	struct is_generated_by_any_operation<group::generated_identity_t<OperatorT>>: std::true_type{};
+	template<class OperatorT, class ExponentT, class OperandT> 
+	struct is_generated_by_any_operation<group::generated_power_t<OperatorT,ExponentT,OperandT>>: std::true_type{};
+	template<class OperatorT, class A, class B>
+	struct is_generated_by_any_operation<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
 
 }namespace math::geometry{
 		struct compose_operation_t;

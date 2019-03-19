@@ -4,6 +4,9 @@
 int main(){
 	using namespace math;
 	check_equal(ratio<2,3>*ratio<2,3>, ratio<4,9>);
+	check_equal(integer<0>*ratio<2,3>, integer<0>);
+	check_equal(integer<0>*2.4, integer<0>);
+	check_equal(integer<0>/2.4, integer<0>);
 	check_equal(inverse(ratio<2,3>), ratio<3,2>);
 	check_equal(eval(ratio<1,4>), 0.25);
 	check_equal(abs(ratio<1,4>), ratio<1,4>);

@@ -71,6 +71,7 @@ namespace math{
 	}
 	auto constexpr operator/(Number a, NonZeroRatio b){return a/eval(b);}
 	auto constexpr operator/(NonZeroRatio a, Number b){return eval(a)/b;}
+	auto constexpr operator/(Zero, Number){return integer<0>;}
 	Ratio{Ratio2}
 	auto constexpr operator+(Ratio a, Ratio2 b){
 		using result_t=std::ratio_add<typename decltype(a)::type, typename decltype(b)::type>;

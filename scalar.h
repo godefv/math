@@ -15,7 +15,7 @@ namespace math{
 	template<class T> struct is_scalar:std::false_type{};
 	template<SimpleScalar SimpleScalarT> struct is_scalar<SimpleScalarT>:std::true_type{};
 
-	template<class T> concept bool Scalar=is_scalar<T>::value;
+	template<class T> concept bool Scalar=SimpleScalar<T> || is_scalar<T>::value;
 }
 
 #endif /* SCALAR_H */

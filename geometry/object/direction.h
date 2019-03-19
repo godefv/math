@@ -2,6 +2,7 @@
 #define GEOMETRY_OBJECT_DIRECTION_H 
 
 #include"../../symbolic/symbol.h"
+#include"../../scalar.h"
 
 #include<boost/hana.hpp>
 #include<type_traits>
@@ -17,7 +18,7 @@ namespace math::geometry{
 	template<class> struct is_direction_t: std::false_type{};
 	template<class Name> struct is_direction_t<direction_positive_t<Name>>: std::true_type{};
 	template<class Name> struct is_direction_t<direction_negative_t<Name>>: std::true_type{};
-	template<class A> concept bool Direction=is_direction_t<A>::value;
+	template<class A> concept bool Direction=is_direction_t<A>::value && Symbol<A> && !Scalar<A> && !SimpleScalar<A>; // last term is needed because gcc does not expand !(x||y) to (!x && !y)
 
 	//operators
 	bool constexpr operator==(direction_positive_t<auto> const& a, direction_positive_t<auto> const& b){
@@ -49,7 +50,9 @@ namespace math::geometry{
 
 namespace math{
 	//a direction is a symbol
-	template<geometry::Direction DirectionT> struct is_symbol<DirectionT>: std::true_type{};
+	template<Symbol Name> struct is_symbol<geometry::direction_positive_t<Name>>: std::true_type{};
+	template<Symbol Name> struct is_symbol<geometry::direction_negative_t<Name>>: std::true_type{};
+
 }
 
 namespace boost::hana {

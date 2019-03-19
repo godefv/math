@@ -4,6 +4,7 @@
 #include"../group/operation.h"
 #include"../group/commutation.h"
 #include"../group/power.h"
+#include"../expression.h"
 #include"../scalar.h"
 
 #include<iostream>
@@ -38,19 +39,22 @@ namespace math{
 	using minus_t=group::generated_power_t<add_operation_t, integer_t<-1>, T>;
 
 	//by default, use group operations
-	auto constexpr operator-(auto const& a){
+	auto constexpr operator-(NonSimpleScalarExpression const& a){
 		return group::inverse(add_operation_t{}, a);
 	}
-	auto constexpr operator+(auto const& a, auto const& b){
+   	template<Expression A, Expression B> requires !(SimpleScalar<A> && SimpleScalar<B>)
+	auto constexpr operator+(A const& a, B const& b){
 		return group::operation(add_operation_t{},a,b);
 	}
-	auto constexpr operator-(auto const& a, auto const& b){
+   	template<Expression A, Expression B> requires !(SimpleScalar<A> && SimpleScalar<B>)
+	auto constexpr operator-(A const& a, B const& b){
 		return a+(-b);
 	}
 
    	//commutation rule
-   	template<class A, class B>
-   		requires !std::is_same<A,B>::value 
+   	template<Expression A, Expression B>
+   		requires !(SimpleScalar<A> && SimpleScalar<B>)
+		      && !std::is_same<A,B>::value 
 		      && !group::Operation<add_operation_t,A>
 		      && !group::Operation<add_operation_t,B>
    		      && static_compare(add_operation_t{}, A{},B{})<0
@@ -67,7 +71,7 @@ namespace math{
 	}
 
 	//collapse ka+b as k(a+b/k) if a+b/k can be processed
-	template<class A, class B, Symbol K> 
+	template<class A, Expression B, Symbol K> 
 		requires !std::is_same<decltype(A{}+group::power(add_operation_t{}, integer<1>/K{}, B{}))
 		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>
 							  >::value 
