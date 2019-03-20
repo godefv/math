@@ -62,7 +62,7 @@ int main(){
 	}
 
 	//define camera projection
-	auto constexpr camera_projection=make_point_transform(Co, math::geometry::perspective_projection_t{math::geometry::slice_t{Cx,Cy}, ratio<1,10>});
+	auto constexpr camera_projection=make_point_transform(Co, math::geometry::perspective_projection_t{Cz, ratio<1,10>});
 
 	auto object_points_projected=std::vector<math::geometry::transformed_point_t<decltype(Co.name), math::geometry::translation_t<decltype(1.0*Cx+1.0*Cy)>>>{object_points.size()};
 	std::transform(
