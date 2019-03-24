@@ -6,6 +6,7 @@
 #include"../algebra/dot_product.h"
 #include"../object/point.h"
 #include"../point_transform/translation.h"
+#include"../vector_transform/rotation.h"
 #include"../../group/morphism.h"
 #include"../../hana.h"
 
@@ -67,6 +68,22 @@ namespace godefv::math::geometry{
 	template<class DirectionMapT>
 	orientation_t(DirectionMapT const&)->orientation_t<DirectionMapT>;
 
+	//operators
+	auto constexpr operator==(orientation_t<auto> const& a, orientation_t<auto> const& b){
+		return a.vectors==b.vectors;
+	}
+	auto constexpr operator!=(orientation_t<auto> const& a, orientation_t<auto> const& b){
+		return !(a==b);
+	}
+	std::ostream& operator<<(std::ostream& out, orientation_t<auto> const& operand){
+		out<<"orientation{";
+		hana::for_each(hana::to_tuple(operand.vectors), [&](auto const& key_value){
+			out<<hana::first(key_value)<<":="<<hana::second(key_value)<<" ; ";
+		});
+		return out<<"}";
+	}
+
+	//
 	auto constexpr inverse(orientation_t<auto> const& orientation){
 		return orientation_t{internal::transpose(orientation.vectors)};
 	}
@@ -88,6 +105,13 @@ namespace godefv::math::geometry{
 	template<class Name>
 	auto constexpr change_reference_frame(transformed_point_t<Name,translation_t<auto>> const& operand, orientation_t<auto> const& old_reference){
 		return transformed_point_t{operand.origin, translation_t{change_reference_frame(operand.transform.vector, old_reference)}};
+	}
+
+	auto constexpr apply(VectorRotation const& transform, orientation_t<auto> const& operand){
+		return orientation_t{hana::to_map(hana::zip_with(hana::make_pair
+			,hana::keys(operand.vectors)
+			,hana::values(operand.vectors)|hana::transform_with(transform)
+		))};
 	}
 }
 

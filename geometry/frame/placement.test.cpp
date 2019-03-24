@@ -21,6 +21,15 @@ int main(){
 	check_equal(change_reference_frame(math::geometry::point(O, e2), inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)+normalized(Px-Py)));
 	check_equal(change_reference_frame(math::geometry::point(O, 2.0*e1+4.0*e2), inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)+2.0*normalized(Px+Py)+4.0*normalized(Px-Py)));
 
+	//transform a placement relative to parent
+	auto constexpr translation1=math::geometry::translation_t{e0};
+	auto constexpr rotation1=math::geometry::make_point_rotation(O, math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn);
+
+	check_equal(translation1(placement1).orientation, placement1.orientation);
+	check_equal(translation1(placement1).position   , translation1(placement1.position));
+	check_equal(rotation1(placement1).orientation, rotation1.vector_transform(placement1.orientation));
+	check_equal(rotation1(placement1).position   , rotation1(placement1.position));
+
 	return 0;
 }
 

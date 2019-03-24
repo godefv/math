@@ -9,13 +9,15 @@ namespace godefv::math::geometry{
 	template<Vector VectorT>
 	struct translation_t{
 		VectorT vector;
-		auto constexpr operator()(Point const& point) const{
-			return apply(*this, point);
+		auto constexpr operator()(auto const& operand) const{
+			return apply(*this, operand);
 		}
 	};
 
 	template<Vector VectorT>
 	translation_t(VectorT const&)->translation_t<VectorT>;
+
+	template<class VectorT> struct is_point_transform<translation_t<VectorT>>:std::true_type{};
 
 	std::ostream& operator<<(std::ostream& out, translation_t<auto> const& t){
 		return out<<"translation{"<<t.vector<<"}";

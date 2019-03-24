@@ -70,6 +70,7 @@ math_add_test(symbolic/rational)
 
 math_add_test(geometry/object/slice)
 math_add_test(geometry/frame/orientation)
+math_add_test(geometry/frame/position)
 math_add_test(geometry/frame/placement)
 math_add_test(geometry/vector_transform/rotation)
 math_add_test(geometry/vector_transform/scaling)

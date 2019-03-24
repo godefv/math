@@ -10,12 +10,15 @@ namespace godefv::math::geometry{
 	struct point_transform_t{
 		CenterT center;
 		TransformT vector_transform;
-		auto constexpr operator()(Point const& a) const{
-			return apply(*this, a);
+		auto constexpr operator()(auto const& operand) const{
+			return apply(*this, operand);
 		}
 	};
 	template<class Name, VectorTransform TransformT>
 	point_transform_t(point_t<Name> const&, TransformT const&)->point_transform_t<point_t<Name>, TransformT>;
+
+	template<class CenterT, class TransformT> 
+	struct is_point_transform<point_transform_t<CenterT,TransformT>>:std::true_type{};
 
 	auto constexpr make_point_transform(point_t<auto> const& center, VectorTransform const& transform){
 		return point_transform_t{center,transform};

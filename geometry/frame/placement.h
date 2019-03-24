@@ -27,6 +27,13 @@ namespace godefv::math::geometry{
 	auto constexpr change_reference_frame(Point const& operand, placement_t<auto,auto> const& old_reference){
 		return change_reference_frame(change_reference_frame(operand, old_reference.orientation), old_reference.position);
 	}
+
+	auto constexpr apply(Translation const& transform, placement_t<auto,auto> const& operand){
+		return placement_t{transform(operand.position), operand.orientation};
+	}
+	auto constexpr apply(point_transform_t<Point,VectorTransform> const& transform, placement_t<auto,auto> const& operand){
+		return placement_t{transform(operand.position), transform.vector_transform(operand.orientation)};
+	}
 }
 
 #endif /* GEOMETRY_OBJECT_PLACEMENT_H */

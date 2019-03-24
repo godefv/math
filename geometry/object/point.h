@@ -38,9 +38,8 @@ namespace godefv::math::geometry{
 	}
 
 	//PointTransform
-	template<class F> concept bool PointTransform=requires(F f){
-		requires Point<decltype(f(point_t<name_t<'P'>>{}))>;
-	};
+	template<class T> struct is_point_transform:std::false_type{};
+	template<class F> concept bool PointTransform=is_point_transform<F>::value;
 
 	//transformed point
 	template<class Name, class PointTransformT>
