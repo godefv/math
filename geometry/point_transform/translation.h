@@ -19,6 +19,10 @@ namespace godefv::math::geometry{
 
 	template<class VectorT> struct is_point_transform<translation_t<VectorT>>:std::true_type{};
 
+	template<PointTransform PointTransform1, PointTransform PointTransform2> 
+	struct is_point_transform<generated_by_composition_t<PointTransform1,PointTransform2>>:std::true_type{};
+
+
 	std::ostream& operator<<(std::ostream& out, translation_t<auto> const& t){
 		return out<<"translation{"<<t.vector<<"}";
 	}
