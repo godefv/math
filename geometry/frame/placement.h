@@ -4,6 +4,7 @@
 #include"position.h"
 #include"orientation.h"
 #include"../point_transform/translation.h"
+#include"../point_transform/from_vector_transform.h"
 
 namespace godefv::math::geometry{
 	//pose, placement, or frame
@@ -26,6 +27,19 @@ namespace godefv::math::geometry{
 
 	auto constexpr change_reference_frame(Point const& operand, placement_t<auto,auto> const& old_reference){
 		return change_reference_frame(change_reference_frame(operand, old_reference.orientation), old_reference.position);
+	}
+	auto constexpr change_reference_frame(translation_t<auto> const& operand, placement_t<auto,auto> const& old_reference){
+		return translation_t{change_reference_frame(operand.transform, old_reference.orientation)};
+	}
+	auto constexpr change_reference_frame(point_transform_t<Point,VectorTransform> const& operand, placement_t<auto,auto> const& old_reference){
+		return make_point_transform(
+			 change_reference_frame(operand.center, old_reference.position)
+			,change_reference_frame(operand.vector_transform, old_reference.orientation)
+		);
+	}
+	auto constexpr change_reference_frame_endomorphism=group::endomorphism(compose_operation_t{}, [](auto const& a, auto const & ref){return change_reference_frame(a, ref);});
+	auto constexpr change_reference_frame(group::Generated<compose_operation_t> const& operand, placement_t<auto,auto> const& old_reference){
+		return change_reference_frame_endomorphism(operand, old_reference);
 	}
 
 	auto constexpr apply(Translation const& transform, placement_t<auto,auto> const& operand){

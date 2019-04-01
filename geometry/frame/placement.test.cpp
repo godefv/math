@@ -7,6 +7,7 @@ int main(){
 		,math::geometry::orientation_t{boost::hana::make_map(
 			 boost::hana::make_pair(Px, normalized(e1+e2))
 			,boost::hana::make_pair(Py, normalized(e1-e2))
+			,boost::hana::make_pair(Pz, normalized(e3))
 		)}
 	};
 	auto inverse_placement1=inverse(placement1);
@@ -22,13 +23,23 @@ int main(){
 	check_equal(change_reference_frame(math::geometry::point(O, 2.0*e1+4.0*e2), inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)+2.0*normalized(Px+Py)+4.0*normalized(Px-Py)));
 
 	//transform a placement relative to parent
-	auto constexpr translation1=math::geometry::translation_t{e0};
-	auto constexpr rotation1=math::geometry::make_point_rotation(O, math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn);
+	{
+		auto constexpr translation=math::geometry::translation_t{e0};
+		auto constexpr rotation=math::geometry::make_point_rotation(O, math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn);
 
-	check_equal(translation1(placement1).orientation, placement1.orientation);
-	check_equal(translation1(placement1).position   , translation1(placement1.position));
-	check_equal(rotation1(placement1).orientation, rotation1.vector_transform(placement1.orientation));
-	check_equal(rotation1(placement1).position   , rotation1(placement1.position));
+		check_equal(translation(placement1).orientation, placement1.orientation);
+		check_equal(translation(placement1).position   , translation(placement1.position));
+		check_equal(rotation(placement1).orientation, rotation.vector_transform(placement1.orientation));
+		check_equal(rotation(placement1).position   , rotation(placement1.position));
+	}
+
+	//change frame : rotations
+	{
+		auto constexpr rotation_P=math::geometry::make_point_rotation(Po, math::geometry::plane(Px,Pz), math::ratio<1,2>*math::half_turn);
+		auto constexpr rotation_e=math::geometry::make_point_rotation(math::geometry::point(O, 3.0*e1), math::geometry::plane(normalized(e1+e2),e3), math::ratio<1,2>*math::half_turn);
+
+		check_equal(change_reference_frame(rotation_P, placement1), rotation_e);
+	}
 
 	return 0;
 }

@@ -102,9 +102,22 @@ namespace godefv::math::geometry{
 	auto constexpr change_reference_frame(point_t<Name> const& operand, orientation_t<auto> const&){
 		return operand;
 	}
+	auto constexpr change_reference_frame(translation_t<auto> const& operand, orientation_t<auto> const& old_reference){
+		return translation_t{change_reference_frame(operand.vector, old_reference)};
+	}
+	template<Vector... DirectionTypes>
+	auto constexpr change_reference_frame(slice_t<DirectionTypes...> const& operand, orientation_t<auto> const& old_reference){
+		return slice_t{change_reference_frame(boost::hana::get<DirectionTypes>(operand.directions), old_reference)...};
+	}
+	auto constexpr change_reference_frame(simple_rotation_t<auto,auto,auto> const& operand, orientation_t<auto> const& old_reference){
+		return simple_rotation_t{change_reference_frame(operand.plane, old_reference), operand.angle};
+	}
+	auto constexpr change_reference_frame(rotation_t<auto> const& operand, orientation_t<auto> const& old_reference){
+		return rotation_t{change_reference_frame(operand.rotor, old_reference)};
+	}
 	template<class Name>
 	auto constexpr change_reference_frame(transformed_point_t<Name,translation_t<auto>> const& operand, orientation_t<auto> const& old_reference){
-		return transformed_point_t{operand.origin, translation_t{change_reference_frame(operand.transform.vector, old_reference)}};
+		return transformed_point_t{operand.origin, change_reference_frame(operand.transform, old_reference)};
 	}
 
 	auto constexpr apply(VectorRotation const& transform, orientation_t<auto> const& operand){

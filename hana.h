@@ -35,6 +35,15 @@ namespace boost::hana{
 	inline auto constexpr fold_with(auto const& f){
 		return [&](auto const& x){return fold(x,f);};
 	}
+
+	//get by type in tuple
+	template <typename T, typename Searchable>
+	auto get(Searchable&& xs)
+	{
+		return *hana::find_if(std::forward<Searchable>(xs), [](auto const& x){
+			return hana::equal(hana::decltype_(x), hana::type_c<const T>);
+		});
+	}
 }
 
 #endif /* HANA_PIPE_H */
