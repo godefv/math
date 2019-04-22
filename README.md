@@ -28,20 +28,11 @@ This is a C++ math library, with a focus on geometry. It provides :
 
     Using this library, you will first define basis vectors (for example `north`,`east`,`up`), which will have distinct types with zero memory footprint, and then define vectors as linear combinations of basis vectors (for example `1.2*north+2*east`). Of course, in this example, the computer will store the resulting vector as a set of 2 numbers, but both compilers and humans reading the code know the attached basis vectors. Also note that even if you defined 3 basis vectors, only 2 numbers are stored when you define a 2D vector.
 
-    If you have several frames, just define your new frames in terms of the previous ones and use adequate frame vectors directly : 
-    ```
-    auto my_frame_x=1.2*north+2*east; //the new frame does not need to be normal
-    auto my_frame_z=1.2*north+0.5*up; //the new frame does not need to be orthogonal
-    1.3*my_frame_x + 2.4*my_frame_z; //converted internally in the original frame
-    1.3*my_frame_x + 2.4*north; //of course you can mix frame vectors,
-                                //you really are summing arbitrary vectors 
-    ```
-
   * between vectors (actually representing translations) and points. A point can be represented by the translation which transforms a given fix point (called the origin) to it, but a point is *not* a translation (a point has no magnitude, no direction). 
 
     Using this library, you will first define an origin, which is a special point defined as a type with zero memory footprint (a default origin is defined for you if you use only one), then apply geometrical transformations on it to form new points. For convenience, you can give any point and a vector to the `point()` function (for example `math::geometry::point(my_home, 1.2*north+2*east)`), which will define a translation from your vector, apply it to the given point, and return the result. You can also provide only a vector if you use the default origin (for example `math::geometry::point(1.2*north+2*east)`), but it is obviously less clear.
 
-    If you have another frame, you can use it directly (for example `math::geometry::point(my_desk, 0.12*forward+0.23*right)`). The internal representation of every point and geometric transformation will automatically be converted in the main frame, so any tranformation can be applied safely on any point. 
+    If you have another frame, you can also use it (for example `math::geometry::point(my_desk, 0.12*forward+0.23*right)`). 
 
   * between a vector rotation and a quaternion or a matrix. Actually, a vector rotation is mathematically defined only by the way it tranforms vectors, so it should have its own interface for transforming vectors and its representation should be an implementation detail.
 
@@ -62,7 +53,7 @@ Most program will of course use runtime values, but the library will try to do e
 No need to specify in advance a space in which to work, new types are generated if new dimensions appear in an expression. If you write `auto a=3*x+4*y`, `a` stores two values in a type generated from the expression `"double*x+double*y"`. Then, writing `a+2.5*z` will just generate a larger type holding three values (assuming `z` is not a combination of `x` and `y`).
 
 ## small and easy to read
-It is small because it exploits work from mathematicians. They have put many concepts into the most beautiful form they could find : both as general and as simple as possible, which means factorized and simple code.
+It is small because it exploits work from mathematicians. They have put many concepts into the most beautiful form they could find : both as general and as simple as possible. Using those concepts in code means factorized and simple code.
 
 ## metaprogramming, expression templates
 The library takes care of returning the best types in terms of memory and geometric signification for every math operation or function. An important example is the composition of geometric transformations : any composition of rotations will produce a rotation (and be stored internally as a quaternion), a composition of any number of rotations with any number of translations in any order will generate a type storing a single rotation followed by a single translation (stored internally as a quaternion and a vector), and similar simplifications are made automatically if you add homothecies in the mix, always generating the simplest possible type, which will also limit the number of different C++ types in the whole program. 
@@ -150,3 +141,6 @@ auto transformed_C=transform(C); //the homothecy is applied (no op), then the ro
 
 Only tested on Linux with GCC.
 
+# Bugs and feature requests
+
+If you encounter a bug or if you think that some new functionality would be helpful, please report it here https://github.com/godefv/math/issues . 
