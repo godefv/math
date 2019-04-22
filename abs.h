@@ -3,7 +3,7 @@
 
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	template<class T> requires std::is_arithmetic<T>::value
 	auto constexpr abs(T const& a){
 		return a>0?a:-a;

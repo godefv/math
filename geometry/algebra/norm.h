@@ -8,7 +8,7 @@
 
 #include<cmath>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	auto constexpr norm(MultiVector const& a){
 		Scalar a_square=(a|a);
 		using std::sqrt;

@@ -4,7 +4,7 @@
 #include"power.h"
 #include"identity.h"
 
-namespace math::group{
+namespace godefv::math::group{
 	//inverse is power<-1>
 	template<class OperatorT>
 	auto constexpr inverse(OperatorT, auto const& operand){

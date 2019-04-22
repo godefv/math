@@ -5,7 +5,7 @@
 #include"../algebra/grade.h"
 #include"../../composition/operation.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	template<Vector VectorT>
 	struct translation_t{
 		VectorT vector;

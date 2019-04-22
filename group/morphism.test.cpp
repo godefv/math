@@ -4,7 +4,7 @@
 template<class T> struct f_t{T operand;};
 template<class T> f_t(T)->f_t<T>;
 
-namespace math{
+namespace godefv::math{
 template<Symbol SymbolT> struct is_symbol<f_t<SymbolT>>:std::true_type{};
 }
 

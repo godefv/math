@@ -5,7 +5,7 @@
 #include"../multiplication/power.h"
 
 int main(){
-	using namespace math;
+	using namespace godefv::math;
 
 	//concepts
 	check_equal(Scalar<decltype(cos(2))>, true);

@@ -7,7 +7,7 @@
 
 #include<cmath>
 
-namespace math{
+namespace godefv::math{
 	//aliases
 	template<SimpleScalar ExponentT, class OperandT>
 	using power_t=group::generated_power_t<mult_operation_t, ExponentT, OperandT>;

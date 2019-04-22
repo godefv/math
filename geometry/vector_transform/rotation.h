@@ -7,7 +7,7 @@
 
 #include<type_traits>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//concept
 	template<class> struct is_rotation:std::false_type{};
 	template<class T> concept bool VectorRotation=is_rotation<T>::value;

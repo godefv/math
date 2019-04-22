@@ -4,7 +4,7 @@
 #include"../../symbolic/symbol.h"
 #include"../../symbolic/name.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//Point
 	template<class> struct is_point:std::false_type{};
 	template<class T> concept bool Point=is_point<T>::value;
@@ -64,7 +64,7 @@ namespace math::geometry{
 		return out<<"point{"<<operand.origin.name<<","<<operand.transform<<"}";
 	}
 }
-namespace math{
+namespace godefv::math{
 	template<Symbol Name> struct is_symbol<geometry::point_t<Name>>: std::true_type{};
 }
 

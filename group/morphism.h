@@ -3,7 +3,7 @@
 
 #include"operation.h"
 
-namespace math::group{
+namespace godefv::math::group{
 	template<class InnerOperatorT, class OuterOperatorT, class FunctorT>
 	struct morphism_t{
 		InnerOperatorT inner_operator;

@@ -4,7 +4,7 @@
 #include"name.h"
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	//!A Symbol is any type which represents a specific instance of a mathematical object. 
 	//!An abstract type x_t is a Symbol even if it can be assigned a value at runtime if it will represent only one specific value
 	//!The int type is not a Symbol because it can represent any integer at runtime.

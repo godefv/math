@@ -7,7 +7,7 @@
 
 #include<type_traits>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//Blade concept, actually a restricted version where e1e2+e2e3 is not considered a blade because we don't factor it as (e1-e3)e2
 	template<class> struct is_blade: std::false_type{};
 	template<Direction DirectionT> struct is_blade<DirectionT>: std::true_type{};

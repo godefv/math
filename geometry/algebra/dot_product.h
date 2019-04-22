@@ -7,7 +7,7 @@
 
 #include<cmath>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	struct dot_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a|b;

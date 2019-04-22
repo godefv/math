@@ -6,7 +6,7 @@
 
 #include<boost/hana.hpp>
 
-namespace math::group{
+namespace godefv::math::group{
 	template<class Operator> struct generated_identity_t{
 		Operator operation;
 	};

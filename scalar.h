@@ -3,7 +3,7 @@
 
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	//!A Scalar is a type representing a mathematical expression, the product of which with anything commutes.
 
 	template<class T> concept bool Number=std::is_arithmetic<T>::value;

@@ -7,7 +7,7 @@
 #include<boost/hana.hpp>
 #include<iostream>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	template<Vector... DirectionTypes>
 	struct slice_t{
 		boost::hana::tuple<DirectionTypes...> directions;

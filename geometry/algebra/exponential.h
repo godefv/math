@@ -5,7 +5,7 @@
 #include"norm.h"
 #include"../../symbolic/operation/trigonometry.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	template<KBlade<2> BivectorT> 
 		requires Symbol<BivectorT> && std::is_same<decltype(square(BivectorT{})),zero_t>::value 
 	constexpr auto exp(BivectorT const& a){
@@ -35,7 +35,7 @@ namespace math::geometry{
 	template<KVector<2> BivectorT> 
 		requires !Symbol<BivectorT> && Scalar<decltype(square(BivectorT{}))>
 	constexpr auto exp(BivectorT const& a){
-		using ::eval;
+		using godefv::math::eval;
 		double square=eval(a|a);
 		if(square==0){
 			return 1.+eval(a);

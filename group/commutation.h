@@ -7,7 +7,7 @@
 #include"../scalar.h"
 #include"../symbolic/name.h"
 
-namespace math{
+namespace godefv::math{
 	template<class OperatorT>
 	int constexpr sort_index(OperatorT, group::identity_t<OperatorT> const&){
 		return 0;

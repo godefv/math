@@ -9,7 +9,7 @@
 #include<iostream>
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	template<class RatioT>
 	using angle_t=decltype(pi*RatioT{});
 

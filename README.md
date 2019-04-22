@@ -116,6 +116,7 @@ When testing runtime values, use only values which have a finite representation 
 ```
 #include"geometry/point_transform.h"
 
+namespace math=godef::math;
 using namespace math::geometry::literals;
 using math::half_turn;
 using math::ratio;

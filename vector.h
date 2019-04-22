@@ -5,7 +5,7 @@
 #include"multiplication/operation.h"
 #include"addition/operation.h"
 
-namespace math{
+namespace godefv::math{
 	template<class DirectionT, class T> struct is_vector:std::false_type{};
 	
 	template<class DirectionT> struct is_vector<DirectionT, zero_t    >:std::true_type{};

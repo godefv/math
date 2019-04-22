@@ -7,7 +7,7 @@
 
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	//!Template for bilinear operations.
 	template<class DerivedOperatorT>
 	struct bilinear_operation_t{

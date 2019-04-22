@@ -5,7 +5,7 @@
 #include"../../symbolic/unit_test.h"
 
 //generators
-using namespace math::geometry::literals;
+using namespace godefv::math::geometry::literals;
 static constexpr auto e0="e0"_direction_positive; 
 static constexpr auto e1="e1"_direction_positive; 
 static constexpr auto e2="e2"_direction_positive; 

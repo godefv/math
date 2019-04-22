@@ -7,7 +7,7 @@
 
 #include<boost/hana.hpp>
 
-namespace math::group{
+namespace godefv::math::group{
 	template<class OperatorT, Scalar ExponentT, class OperandT>
 	struct generated_power_t{
 		OperatorT operator_;
@@ -94,7 +94,7 @@ namespace math::group{
 	template<class OperatorT, class T> concept bool Power=is_power<OperatorT, T>::value;
 }
 
-namespace math{
+namespace godefv::math{
 	template<class OperatorT, Symbol ExponentT, Symbol SymbolT> struct is_symbol<group::generated_power_t<OperatorT,ExponentT,SymbolT>>:std::true_type{};
 	template<class OperatorT, Scalar ExponentT, Scalar ScalarT> struct is_scalar<group::generated_power_t<OperatorT,ExponentT,ScalarT>>:std::true_type{};
 }

@@ -2,14 +2,14 @@
 #include"commutation.h"
 #include"unit_test.h"
 
-namespace math{
+namespace godefv::math{
 auto constexpr cycle_order(dummy_operation_t, z_t){
 	return 4;
 }
 }
 
 int main(){
-	using namespace math::group;
+	using namespace godefv::math::group;
 	using math::integer;
 	//special exponents
 	check_equal(power(op, integer<0>, x),identity_t<dummy_operation_t>{});

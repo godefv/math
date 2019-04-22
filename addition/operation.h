@@ -14,7 +14,7 @@
 template<class A, class B> requires false
 auto constexpr operator+(A,B);
 
-namespace math{
+namespace godefv::math{
 	struct add_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a+b;

@@ -3,7 +3,7 @@
 
 #include<iostream>
 
-namespace math{
+namespace godefv::math{
 	//!Template to make symbol names from letters
 	template<char...> struct name_t{};
 

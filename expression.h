@@ -7,7 +7,7 @@
 #include"symbolic/symbol.h"
 #include"scalar.h"
 
-namespace math{
+namespace godefv::math{
 	template<class T> concept bool Expression=Scalar<T> || Symbol<T> || group::GeneratedByAnyOperation<T>;
 	template<class T> concept bool NonSimpleScalarExpression=!SimpleScalar<T> && Expression<T>;
 }

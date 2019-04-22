@@ -5,7 +5,7 @@
 #include"orientation.h"
 #include"../point_transform/translation.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//pose, placement, or frame
 	template<class PositionT, class OrientationT>
 	struct placement_t{

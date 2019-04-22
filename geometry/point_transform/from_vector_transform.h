@@ -5,7 +5,7 @@
 #include"../object/point.h"
 #include"../vector_transform/composition.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	template<Point CenterT, VectorTransform TransformT>
 	struct point_transform_t{
 		CenterT center;

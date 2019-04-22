@@ -6,7 +6,7 @@
 
 #include<boost/hana.hpp>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//grade of blades
 	auto constexpr grade(Scalar const&){return 0;}
 	auto constexpr grade(Direction const&){return 1;}

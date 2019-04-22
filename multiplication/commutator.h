@@ -4,7 +4,7 @@
 #include"operation.h"
 #include"../scalar.h"
 
-namespace math{
+namespace godefv::math{
 	//commutator uses bilinear rules, then ab-ba
 	struct commutator_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){

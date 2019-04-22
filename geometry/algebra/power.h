@@ -4,7 +4,7 @@
 #include"definition.h"
 #include"grade.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//cyclic order
 	auto constexpr cycle_order(mult_operation_t, direction_positive_t<auto>){
 		return 2;

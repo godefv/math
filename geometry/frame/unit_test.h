@@ -5,7 +5,7 @@
 #include"../algebra/unit_test.h"
 #include"../point_transform/unit_test.h"
 
-using namespace math::geometry::literals;
+using namespace godefv::math::geometry::literals;
 static constexpr auto Px="Px"_direction_positive; 
 static constexpr auto Py="Py"_direction_positive; 
 static constexpr auto Pz="Pz"_direction_positive; 

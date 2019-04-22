@@ -9,7 +9,7 @@
 #include<ratio>
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	template<std::intmax_t Numerator, std::intmax_t Denominator> requires Denominator>=0
 	struct ratio_t: std::ratio<Numerator,Denominator>{
 		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}

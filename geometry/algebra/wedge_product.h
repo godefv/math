@@ -6,7 +6,7 @@
 
 #include<cmath>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	struct wedge_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a^b;

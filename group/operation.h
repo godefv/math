@@ -9,7 +9,7 @@
 #include<type_traits>
 #include<cmath>
 
-namespace math::group{
+namespace godefv::math::group{
 	//generated_by_operation_t
 	template<class OperatorT, class A,class B> struct generated_by_operation_t{
 		OperatorT operation;
@@ -34,7 +34,7 @@ namespace math::group{
 
 	template<class OperatorT>
 	auto constexpr eval(generated_by_operation_t<OperatorT,auto,auto> const& ab){
-		using ::eval;
+		using godefv::math::eval;
 		return OperatorT::apply(eval(ab.first), eval(ab.second));
 	}
 
@@ -60,9 +60,9 @@ namespace math::group{
 	template<class OperatorT, class A, class B>
 	struct is_generated_by_any_operation<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
 
-}namespace math::geometry{
+}namespace godefv::math::geometry{
 		struct compose_operation_t;
-}namespace math::group{
+}namespace godefv::math::group{
 	//default operation
 	template<class OperatorT, class A, class B> 
 		requires !std::is_same<A,identity_t<OperatorT>>::value 
@@ -125,7 +125,7 @@ namespace math::group{
 
 }
 
-namespace math{
+namespace godefv::math{
 	template<class OperatorT, Symbol A, Symbol B> struct is_symbol<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
 	template<class OperatorT, Scalar A, Scalar B> struct is_scalar<group::generated_by_operation_t<OperatorT,A,B>>: std::true_type{};
 }

@@ -10,7 +10,7 @@
 #include<iostream>
 #include<type_traits>
 
-namespace math{
+namespace godefv::math{
 	template<class OperationT, class... OperandsT>
 	struct operation_t{
 		OperationT operation; 

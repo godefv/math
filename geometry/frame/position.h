@@ -3,7 +3,7 @@
 
 #include"../object/point.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	template<class Name, Point PointT>
 	struct position_t{
 		point_t<Name> key;

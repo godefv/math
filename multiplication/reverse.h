@@ -3,7 +3,7 @@
 
 #include"operation.h"
 
-namespace math{
+namespace godefv::math{
 	constexpr auto reverse(auto const& a){
 		return a;
 	}

@@ -6,7 +6,7 @@
 #include<type_traits>
 #include<iostream>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//concept
 	template<class T> struct is_scaling:std::false_type{};
 	template<class T> concept bool Scaling=is_scaling<T>::value;

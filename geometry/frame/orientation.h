@@ -10,7 +10,7 @@
 #include"../../hana.h"
 
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	namespace hana=boost::hana;
 
 	auto constexpr get_reference_frame=

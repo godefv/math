@@ -8,7 +8,7 @@
 #include<type_traits>
 #include<iostream>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//directions definition
 	struct direction_tag_t{};
 	template<class Name> struct direction_positive_t{Name name;using hana_tag=direction_tag_t;};
@@ -48,7 +48,7 @@ namespace math::geometry{
 	}
 }
 
-namespace math{
+namespace godefv::math{
 	//a direction is a symbol
 	template<Symbol Name> struct is_symbol<geometry::direction_positive_t<Name>>: std::true_type{};
 	template<Symbol Name> struct is_symbol<geometry::direction_negative_t<Name>>: std::true_type{};
@@ -59,9 +59,9 @@ namespace boost::hana {
     // Comparable
 
     template <>
-    struct equal_impl<math::geometry::direction_tag_t, math::geometry::direction_tag_t> {
-		math::geometry::Direction{Direction2}
-        static constexpr auto apply(math::geometry::Direction const& a, Direction2 const& b)
+    struct equal_impl<godefv::math::geometry::direction_tag_t, godefv::math::geometry::direction_tag_t> {
+		godefv::math::geometry::Direction{Direction2}
+        static constexpr auto apply(godefv::math::geometry::Direction const& a, Direction2 const& b)
             -> hana::bool_<std::is_same_v<decltype(a), decltype(b)>>
         { return {}; }
 
@@ -74,7 +74,7 @@ namespace boost::hana {
     // Hashable
 
     template <>
-    struct hash_impl<math::geometry::direction_tag_t> {
+    struct hash_impl<godefv::math::geometry::direction_tag_t> {
         template <typename T>
         static constexpr auto apply(T)
             -> hana::type<T>

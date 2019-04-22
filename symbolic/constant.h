@@ -6,7 +6,7 @@
 
 #include<limits>
 
-namespace math{
+namespace godefv::math{
 	auto constexpr infinity="infinity"_symbol;
 	using infinity_t=std::decay_t<decltype(infinity)>;
 	auto constexpr eval(infinity_t){return std::numeric_limits<double>::infinity();}

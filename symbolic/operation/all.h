@@ -6,7 +6,7 @@
 #include"../../addition/all.h"
 #include"../../multiplication/all.h"
 
-namespace math{
+namespace godefv::math{
 #define DEFINE_OPERATION(op, op_index) \
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \

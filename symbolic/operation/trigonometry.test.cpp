@@ -1,17 +1,17 @@
 #include"trigonometry.h"
 #include"../unit_test.h"
 
-using namespace math;
+using namespace godefv::math;
 
 auto f(Symbol){}
 auto constexpr theta="θ"_symbol;
 using theta_t=std::decay_t<decltype(theta)>;
-namespace math{
+namespace godefv::math{
 	template<> struct is_vector<pi_t,theta_t>:std::true_type {};
 }
 
 int main(){
-	using namespace math;
+	using namespace godefv::math;
 	//concepts
 	std::cout<<"Symbol concept"<<std::endl;
 	check_equal(Symbol<decltype(ratio<1,4>*half_turn)>, true);

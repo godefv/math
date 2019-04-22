@@ -5,7 +5,7 @@
 
 #include<iostream>
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	struct compose_operation_t{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a,b;
@@ -27,10 +27,10 @@ namespace math::geometry{
 		}
 	};
 }
-namespace math{
+namespace godefv::math{
 	auto constexpr identity(geometry::compose_operation_t){return geometry::identity;}
 }
-namespace math::group{
+namespace godefv::math::group{
 	template<class A,class B> 
 	struct is_generated_by_operation<geometry::compose_operation_t, geometry::generated_by_composition_t<A,B>>:std::true_type{};
 
@@ -47,7 +47,7 @@ namespace math::group{
 		return geometry::generated_by_composition_t{ab,c};
 	}
 }
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//composition - group rules
 	auto constexpr operator,(auto const& a, auto const& b){
 		return group::operation(compose_operation_t{},a,b);

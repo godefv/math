@@ -4,7 +4,7 @@
 #include"../object/slice.h"
 #include"../algebra/dot_product.h"
 
-namespace math::geometry{
+namespace godefv::math::geometry{
 	//concept
 	template<class T> struct is_orthographic_projection:std::false_type{};
 	template<class T> concept bool OrthographicProjection=is_orthographic_projection<T>::value;
