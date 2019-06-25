@@ -33,9 +33,9 @@ namespace godefv::math::group{
 	}
 
 	template<class OperatorT>
-	auto constexpr eval(generated_by_operation_t<OperatorT,auto,auto> const& ab){
-		using godefv::math::eval;
-		return OperatorT::apply(eval(ab.first), eval(ab.second));
+	auto constexpr eval_with_data(generated_by_operation_t<OperatorT,auto,auto> const& ab, auto const& eval_data){
+		using godefv::math::eval_with_data;
+		return OperatorT::apply(eval_with_data(ab.first, eval_data), eval_with_data(ab.second, eval_data));
 	}
 
 	//concept Operation

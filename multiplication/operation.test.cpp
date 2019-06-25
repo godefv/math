@@ -68,6 +68,9 @@ int main(){
 	check_equal(x*y+y*z+x*y, math::integer<2>*x*y+y*z);
 	check_equal(-math::integer<2>*x*y+-math::integer<2>*y*z+math::integer<2>*x*y, -math::integer<2>*y*z);
 
+	//eval
+	check_equal(eval_with_data(x*y+z, [](auto symbol){return eval_symbol(symbol);}), eval_symbol(x)*eval_symbol(y)+eval_symbol(z));
+
 	return 0;
 }
 

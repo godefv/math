@@ -2,6 +2,7 @@
 #define SYMBOLIC_SYMBOL_H 
 
 #include"name.h"
+#include"../cpp20_concepts.h"
 #include<type_traits>
 
 namespace godefv::math{
@@ -39,6 +40,10 @@ namespace godefv::math{
 	std::ostream& operator<<(std::ostream& out,symbol_t<auto> const& symbol){
 		return out<<symbol.name;
 	}
+
+	//eval
+	template<class NameT, class EvaluatorT> requires Invocable<EvaluatorT, symbol_t<NameT>>
+	auto constexpr eval_with_data(symbol_t<NameT> symbol, EvaluatorT const& evaluator){return evaluator(symbol);}
 }
 
 #endif /* SYMBOLIC_SYMBOL_H */

@@ -15,8 +15,8 @@ namespace godefv::math{
 	}
 
 	//eval
-	auto constexpr eval(group::generated_power_t<add_operation_t,auto,auto> const& pow){
-		return eval(pow.exponent)*eval(pow.operand);
+	auto constexpr eval_with_data(group::generated_power_t<add_operation_t,auto,auto> const& pow, auto const& eval_data){
+		return eval_with_data(pow.exponent, eval_data)*eval_with_data(pow.operand, eval_data);
 	}
 
 }

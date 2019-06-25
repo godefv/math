@@ -89,8 +89,8 @@ namespace godefv::math{
 	}
 
 	//eval
-	auto constexpr eval(group::generated_power_t<mult_operation_t,auto,auto> const& pow){
-		return std::pow(eval(pow.operand), eval(pow.exponent));
+	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,auto,auto> const& pow, auto const& eval_data){
+		return std::pow(eval_with_data(pow.operand, eval_data), eval_with_data(pow.exponent, eval_data));
 	}
 
 	//formatting

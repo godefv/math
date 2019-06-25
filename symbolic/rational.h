@@ -4,6 +4,7 @@
 #include"symbol.h"
 #include"../abs.h"
 #include"../scalar.h"
+#include"../eval.h"
 
 #include<iostream>
 #include<ratio>
@@ -51,8 +52,8 @@ namespace godefv::math{
 
 	//eval
 	template<std::intmax_t N>
-	auto constexpr eval(integer_t<N> const&){return N;}
-	auto constexpr eval(Ratio const& a){return static_cast<double>(a);}
+	auto constexpr eval_with_data(integer_t<N> const&, auto const&){return N;}
+	auto constexpr eval_with_data(Ratio const& a, auto const&){return static_cast<double>(a);}
 
 	//operators
 	auto constexpr operator*(Number, Zero){return integer<0>;}

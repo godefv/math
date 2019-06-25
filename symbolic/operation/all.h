@@ -11,7 +11,7 @@ namespace godefv::math{
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
 	template<class... OperandsT> auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};} \
-	auto constexpr eval(operation_t<op##_t, auto> const& operand){using std::op; return op(eval(operand.operand()));} \
+	auto constexpr eval_with_data(operation_t<op##_t, auto> const& operand, auto const& eval_data){using std::op; return op(eval_with_data(operand.operand(), eval_data));} \
 	std::intmax_t constexpr index(op##_t){return op_index;}
 	DEFINE_OPERATION(exp  , 0)
 	DEFINE_OPERATION(log  , 1)

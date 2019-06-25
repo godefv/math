@@ -26,4 +26,11 @@ namespace godefv::math{
 	template<> struct is_scalar<m_t>:std::true_type {};
 }
 
+auto constexpr eval_symbol(x_t){return 8.0;}
+auto constexpr eval_symbol(y_t){return 3.0;}
+auto constexpr eval_symbol(z_t){return 1.0;}
+auto constexpr eval_symbol(k_t){return 8;}
+auto constexpr eval_symbol(l_t){return 3;}
+auto constexpr eval_symbol(m_t){return 1;}
+
 #endif /* SYMBOLIC_UNIT_TEST_H */
