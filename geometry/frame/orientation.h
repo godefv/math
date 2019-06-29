@@ -1,131 +1,74 @@
-#ifndef GEOMETRY_OBJECT_FRAME_H
-#define GEOMETRY_OBJECT_FRAME_H 
+#ifndef GODEFV_MATH_GEOMETRY_FRAME_ORIENTATION
+#define GODEFV_MATH_GEOMETRY_FRAME_ORIENTATION 
 
+#include"reference.h"
+#include"linear_map.h"
 #include"../object/direction.h"
-#include"../algebra/definition.h"
-#include"../algebra/dot_product.h"
-#include"../object/point.h"
-#include"../point_transform/translation.h"
 #include"../vector_transform/rotation.h"
-#include"../../group/morphism.h"
+#include"../vector_transform/composition.h"
 #include"../../hana.h"
 
+#include<iostream>
 
 namespace godefv::math::geometry{
 	namespace hana=boost::hana;
 
-	auto constexpr get_reference_frame=
-		group::morphism_t{add_operation_t{}, hana::union_,
-		group::morphism_t{mult_operation_t{}, hana::union_, 
-			[](auto const& a){
-				if constexpr(Direction<std::decay_t<decltype(a)>>){
-					return hana::make_set(a);
-				}else{
-					return hana::make_set();
-				}
-			}
-		}};
-
-	namespace internal{
-		auto constexpr apply_direction_map=
-			group::endomorphism(add_operation_t{}, 
-			group::endomorphism(mult_operation_t{}, 
-				[]<class OperandT, class DirectionMapT>(OperandT const& a, DirectionMapT const& direction_map){
-					if constexpr(hana::find(DirectionMapT{}, OperandT{}) == hana::nothing){
-						return a;
-					}else{
-						return direction_map[a];
-					}
-				}
-			));
-
-		auto constexpr transpose(auto const& direction_map){
-			auto new_keys=direction_map
-				|hana::values
-				|hana::transform_with(get_reference_frame)
-				|hana::fold_with(hana::union_)
-				|hana::to_tuple;
-			return hana::to_map(hana::zip_with(hana::make_pair
-				,new_keys
-				,hana::transform(new_keys, [&](auto new_key){
-					auto project_new_key_on_this=[&](auto const& key_value){
-						return project(hana::first(key_value)*(new_key|inverse(hana::second(key_value))), grades(hana::second(key_value)));
-					};
-					return direction_map
-						|hana::to_tuple
-						|hana::transform_with(project_new_key_on_this)
-						|hana::fold_with(add_operation_t{});
-				})
-			));
-		}
-	}
-	//orientation_t
-	template<class DirectionMapT>
+	template<class DirectionsT, class ReferenceDirectionsT, VectorRotation RotationT>
+		requires static_cast<bool>(hana::size(DirectionsT{})==hana::size(ReferenceDirectionsT{}))
+		&& static_cast<bool>(hana::is_subset(
+			get_reference_frame(RotationT{}.rotor()), hana::to_set(ReferenceDirectionsT{})
+		))
 	struct orientation_t{
-		//! vectors must be a map from directions of this frame to orthonormal vectors written in a parent frame
-		DirectionMapT vectors;
+		DirectionsT frame;
+		ReferenceDirectionsT reference_frame;
+		RotationT rotation_from_reference;
 	};
-	template<class DirectionMapT>
-	orientation_t(DirectionMapT const&)->orientation_t<DirectionMapT>;
+	template<Direction... DirectionTs, Direction... ReferenceDirectionTs, VectorRotation RotationT>
+	orientation_t(hana::tuple<DirectionTs...> const&, hana::tuple<ReferenceDirectionTs...> const&, RotationT const&)
+	->orientation_t<hana::tuple<DirectionTs...>, hana::tuple<ReferenceDirectionTs...>, RotationT>;
 
 	//operators
-	auto constexpr operator==(orientation_t<auto> const& a, orientation_t<auto> const& b){
-		return a.vectors==b.vectors;
+	auto constexpr operator==(orientation_t<auto,auto,auto> const& a, orientation_t<auto,auto,auto> const& b){
+		return a.reference_frame==b.reference_frame && a.frame==b.frame && a.rotation_from_reference==b.rotation_from_reference;
 	}
-	auto constexpr operator!=(orientation_t<auto> const& a, orientation_t<auto> const& b){
+	auto constexpr operator!=(orientation_t<auto,auto,auto> const& a, orientation_t<auto,auto,auto> const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, orientation_t<auto> const& operand){
-		out<<"orientation{";
-		hana::for_each(hana::to_tuple(operand.vectors), [&](auto const& key_value){
-			out<<hana::first(key_value)<<":="<<hana::second(key_value)<<" ; ";
-		});
-		return out<<"}";
+	std::ostream& operator<<(std::ostream& out, orientation_t<auto,auto,auto> const& operand){
+		return out<<"orientation{"<<operand.frame<<":="<<operand.rotation_from_reference<<"("<<operand.reference_frame<<")";
 	}
 
-	//
-	auto constexpr inverse(orientation_t<auto> const& orientation){
-		return orientation_t{internal::transpose(orientation.vectors)};
+	//apply geometric tranformations
+	auto constexpr apply(VectorRotation const& transform, orientation_t<auto,auto,auto> const& operand){
+		return orientation_t{operand.frame, operand.reference_frame, (operand.rotation_from_reference,transform)};
 	}
-
-	template<MultiVector OperandT, class DirectionMapT>
-		requires static_cast<bool>(hana::difference(
-			 get_reference_frame(OperandT{})
-			,hana::to_set(hana::keys(DirectionMapT{}))
-			//TODO: allow partial frame change. For example, (X,Y)->(e1,e2) can be used to transform e3+X. Or do not allow it ?
-		)==hana::make_set())
-	auto constexpr change_reference_frame(OperandT const& operand, orientation_t<DirectionMapT> const& old_reference){
-		return internal::apply_direction_map(operand, old_reference.vectors);
-	}
-
-	template<class Name>
-	auto constexpr change_reference_frame(point_t<Name> const& operand, orientation_t<auto> const&){
+	template<VectorTransform VectorTransformT> requires !VectorRotation<VectorTransformT>
+	auto constexpr apply(VectorTransformT const& transform, orientation_t<auto,auto,auto> const& operand){
 		return operand;
 	}
-	auto constexpr change_reference_frame(translation_t<auto> const& operand, orientation_t<auto> const& old_reference){
-		return translation_t{change_reference_frame(operand.vector, old_reference)};
-	}
-	template<Vector... DirectionTypes>
-	auto constexpr change_reference_frame(slice_t<DirectionTypes...> const& operand, orientation_t<auto> const& old_reference){
-		return slice_t{change_reference_frame(boost::hana::get<DirectionTypes>(operand.directions), old_reference)...};
-	}
-	auto constexpr change_reference_frame(simple_rotation_t<auto,auto,auto> const& operand, orientation_t<auto> const& old_reference){
-		return simple_rotation_t{change_reference_frame(operand.plane, old_reference), operand.angle};
-	}
-	auto constexpr change_reference_frame(rotation_t<auto> const& operand, orientation_t<auto> const& old_reference){
-		return rotation_t{change_reference_frame(operand.rotor, old_reference)};
-	}
-	template<class Name>
-	auto constexpr change_reference_frame(transformed_point_t<Name,translation_t<auto>> const& operand, orientation_t<auto> const& old_reference){
-		return transformed_point_t{operand.origin, change_reference_frame(operand.transform, old_reference)};
-	}
 
-	auto constexpr apply(VectorRotation const& transform, orientation_t<auto> const& operand){
-		return orientation_t{hana::to_map(hana::zip_with(hana::make_pair
-			,hana::keys(operand.vectors)
-			,hana::values(operand.vectors)|hana::transform_with(transform)
+	//to_linear_map
+	auto constexpr to_linear_map(orientation_t<auto,auto,auto> const& operand){
+		return linear_map_t{boost::hana::to_map(hana::zip_with(hana::make_pair
+			,operand.frame
+			,hana::transform(operand.reference_frame, operand.rotation_from_reference)
 		))};
 	}
+
+	//inverse
+	auto constexpr inverse(orientation_t<auto,auto,auto> const& operand){
+		return orientation_t{operand.reference_frame, operand.frame, change_reference_frame(
+			inverse(operand.rotation_from_reference)
+			,linear_map_t{hana::to_map(hana::zip_with(hana::make_pair
+				,operand.reference_frame
+				,operand.frame
+			))}
+		)};
+	}
+
+	//change_reference_frame
+	//use `change_reference_frame(operand, to_linear_map(orientation))`
+	
 }
 
-#endif /* GEOMETRY_OBJECT_FRAME_H */
+#endif /* GODEFV_MATH_GEOMETRY_FRAME_ORIENTATION */

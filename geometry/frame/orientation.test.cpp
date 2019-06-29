@@ -4,37 +4,28 @@
 int main(){
 	namespace hana=boost::hana;
 
-	auto constexpr orientation1=math::geometry::orientation_t{hana::make_map(
-		 hana::make_pair(Px, normalized(e1+e2))
-		,hana::make_pair(Py, normalized(e1-e2))
-		,hana::make_pair(Pz, normalized(e3))
-	)};
+	auto orientation=math::geometry::orientation_t{
+		hana::make_tuple(Px,Py,Pz),
+		hana::make_tuple(e1,e2,e3),
+		math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn}
+	};
 
-	check_equal(math::geometry::get_reference_frame(normalized(e1+e2)), hana::make_set(e1,e2));
-	check_equal(math::geometry::get_reference_frame(normalized(2.0*e1-4.0*e2)), hana::make_set(e1,e2));
-	
-	check_equal(inverse(orientation1).vectors, hana::make_map(
-		 hana::make_pair(e1, normalized(Px+Py))
-		,hana::make_pair(e2, normalized(Px-Py))
-		,hana::make_pair(e3, normalized(Pz))
-	));
-	
-	check_equal(change_reference_frame(Px+2.0*Py, orientation1), normalized(e1+e2)+2.0*normalized(e1-e2));
-	
-	//transform a rotation relative to parent
 	{
-		auto constexpr rotation=math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn};
-
-		check_equal(hana::keys  (rotation(orientation1).vectors)|hana::to_tuple, hana::keys  (orientation1.vectors)|hana::to_tuple);
-		check_equal(hana::values(rotation(orientation1).vectors)|hana::to_tuple, hana::values(orientation1.vectors)|hana::transform_with(rotation)|hana::to_tuple);
+	check_equal(change_reference_frame(Px, to_linear_map(orientation)), -e2);
+	check_equal(change_reference_frame(Py, to_linear_map(orientation)), e1);
+	check_equal(change_reference_frame(Pz, to_linear_map(orientation)), e3);
 	}
 
-	//change frame : rotations
 	{
-		auto constexpr rotation_P=math::geometry::simple_rotation_t{math::geometry::plane(Px,Pz), math::ratio<1,2>*math::half_turn};
-		auto constexpr rotation_e=math::geometry::simple_rotation_t{math::geometry::plane(normalized(e1+e2),e3), math::ratio<1,2>*math::half_turn};
+	auto inverse_orientation=inverse(orientation);
+	check_equal(change_reference_frame(e1, to_linear_map(inverse_orientation)), Py);
+	check_equal(change_reference_frame(e2, to_linear_map(inverse_orientation)), -Px);
+	check_equal(change_reference_frame(e3, to_linear_map(inverse_orientation)), Pz);
+	}
 
-		check_equal(change_reference_frame(rotation_P, orientation1), rotation_e);
+	{
+	auto rotation=math::geometry::simple_rotation_t{math::geometry::plane(e1,e3), math::ratio<1,2>*math::half_turn};
+	check_equal(rotation(orientation), math::geometry::orientation_t{orientation.frame,orientation.reference_frame, (orientation.rotation_from_reference,rotation)});
 	}
 
 	return 0;

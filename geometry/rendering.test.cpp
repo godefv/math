@@ -1,17 +1,17 @@
 #include"vector_transform/perspective_projection.h"
 #include"point_transform/from_vector_transform.h"
 #include"frame/unit_test.h"
-#include"frame/placement.h"
+#include"frame/affine_map.h"
 
 #include<vector>
 
 int main(){
 	using math::ratio;
 
-	//define the dynamic placement of some object
-	auto constexpr object_placement=math::geometry::placement_t{
+	//define the dynamic affine_map of some object
+	auto constexpr object_affine_map=math::geometry::affine_map_t{
 		 math::geometry::position_t{Po, math::geometry::point(O, 3.0*e1)}
-		,math::geometry::orientation_t{boost::hana::make_map(
+		,math::geometry::linear_map_t{boost::hana::make_map(
 			 boost::hana::make_pair(Px, normalized(1.0*e1+1.0*e2))
 			,boost::hana::make_pair(Py, normalized(1.0*e1-1.0*e2))
 			,boost::hana::make_pair(Pz, 1.0*e3)
@@ -30,7 +30,7 @@ int main(){
 	std::transform(
 		begin(object_points), end(object_points)
 		,begin(object_points_relative_to_world)
-		,[&](auto const& point){return change_reference_frame(point, object_placement);}
+		,[&](auto const& point){return change_reference_frame(point, object_affine_map);}
 	);
 
 	std::cout<<"relative to world"<<std::endl;
@@ -38,16 +38,16 @@ int main(){
 		std::cout<<point<<std::endl;
 	}
 
-	//define the dynamic placement of a camera
-	auto constexpr camera_placement=math::geometry::placement_t{
-		 math::geometry::position_t{Co, math::geometry::point(object_placement.position.value, 2.0*e2)}
-		,math::geometry::orientation_t{boost::hana::make_map(
+	//define the dynamic affine_map of a camera
+	auto constexpr camera_affine_map=math::geometry::affine_map_t{
+		 math::geometry::position_t{Co, math::geometry::point(object_affine_map.origin_map.value, 2.0*e2)}
+		,math::geometry::linear_map_t{boost::hana::make_map(
 			 boost::hana::make_pair(Cx, normalized(1.0*e1+1.0*e3)/256)
 			,boost::hana::make_pair(Cy, normalized(1.0*e1-1.0*e3)/256)
 			,boost::hana::make_pair(Cz, normalized(-2.0*e2))
 		)}
 	};
-	auto world_to_camera=inverse(camera_placement);
+	auto world_to_camera=inverse(camera_affine_map);
 
 	auto object_points_relative_to_camera=std::vector<math::geometry::transformed_point_t<decltype(Co.name), math::geometry::translation_t<decltype(1.0*Cx+1.0*Cy+1.0*Cz)>>>{object_points.size()};
 	std::transform(

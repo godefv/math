@@ -2,43 +2,46 @@
 #include"unit_test.h"
 
 int main(){
-	auto constexpr placement1=math::geometry::placement_t{
+	namespace hana=boost::hana;
+
+	auto placement=math::geometry::placement_t{
 		 math::geometry::position_t{Po, math::geometry::point(O, 3.0*e1)}
-		,math::geometry::orientation_t{boost::hana::make_map(
-			 boost::hana::make_pair(Px, normalized(e1+e2))
-			,boost::hana::make_pair(Py, normalized(e1-e2))
-			,boost::hana::make_pair(Pz, normalized(e3))
-		)}
+		,math::geometry::orientation_t{
+			hana::make_tuple(Px,Py,Pz),
+			hana::make_tuple(e1,e2,e3),
+			math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn}
+		}
 	};
-	auto inverse_placement1=inverse(placement1);
 
-	check_equal(change_reference_frame(Po, placement1), placement1.position.value);
-	check_equal(change_reference_frame(math::geometry::point(Po, Px), placement1), math::geometry::point(O, 3.0*e1+normalized(e1+e2)));
-	check_equal(change_reference_frame(math::geometry::point(Po, Py), placement1), math::geometry::point(O, 3.0*e1+normalized(e1-e2)));
-	check_equal(change_reference_frame(math::geometry::point(Po, 2.0*Px+4.0*Py), placement1), math::geometry::point(O, 3.0*e1+2.0*normalized(e1+e2)+4.0*normalized(e1-e2)));
-
-	check_equal(change_reference_frame(O, inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)));
-	check_equal(change_reference_frame(math::geometry::point(O, e1), inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)+normalized(Px+Py)));
-	check_equal(change_reference_frame(math::geometry::point(O, e2), inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)+normalized(Px-Py)));
-	check_equal(change_reference_frame(math::geometry::point(O, 2.0*e1+4.0*e2), inverse_placement1), math::geometry::point(Po, -3.0*normalized(Px+Py)+2.0*normalized(Px+Py)+4.0*normalized(Px-Py)));
-
-	//transform a placement relative to parent
 	{
-		auto constexpr translation=math::geometry::translation_t{e0};
-		auto constexpr rotation=math::geometry::make_point_rotation(O, math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn);
-
-		check_equal(translation(placement1).orientation, placement1.orientation);
-		check_equal(translation(placement1).position   , translation(placement1.position));
-		check_equal(rotation(placement1).orientation, rotation.vector_transform(placement1.orientation));
-		check_equal(rotation(placement1).position   , rotation(placement1.position));
+	check_equal(change_reference_frame(math::geometry::point(Po, 1.0*Px), to_affine_map(placement)), math::geometry::point(placement.position.value, -1.0*e2));
+	check_equal(change_reference_frame(math::geometry::point(Po, 1.0*Py), to_affine_map(placement)), math::geometry::point(placement.position.value,  1.0*e1));
+	check_equal(change_reference_frame(math::geometry::point(Po, 1.0*Pz), to_affine_map(placement)), math::geometry::point(placement.position.value,  1.0*e3));
 	}
 
-	//change frame : rotations
 	{
-		auto constexpr rotation_P=math::geometry::make_point_rotation(Po, math::geometry::plane(Px,Pz), math::ratio<1,2>*math::half_turn);
-		auto constexpr rotation_e=math::geometry::make_point_rotation(math::geometry::point(O, 3.0*e1), math::geometry::plane(normalized(e1+e2),e3), math::ratio<1,2>*math::half_turn);
+	auto inverse_placement=inverse(placement);
+	check_equal(change_reference_frame(math::geometry::point(placement.position.value, -1.0*e2), to_affine_map(inverse_placement)), math::geometry::point(Po, 1.0*Px+0.0*Py));
+	check_equal(change_reference_frame(math::geometry::point(placement.position.value,  1.0*e1), to_affine_map(inverse_placement)), math::geometry::point(Po, 1.0*Py));
+	check_equal(change_reference_frame(math::geometry::point(placement.position.value,  1.0*e3), to_affine_map(inverse_placement)), math::geometry::point(Po, 1.0*Pz+0.0*Py));
+	}
 
-		check_equal(change_reference_frame(rotation_P, placement1), rotation_e);
+	{
+	auto vector_transform=math::geometry::simple_rotation_t{math::geometry::plane(e1,e3), math::ratio<1,2>*math::half_turn};
+	auto rotation=make_point_transform(placement.position.value, vector_transform);
+	check_equal(rotation(placement), math::geometry::placement_t{
+		 math::geometry::position_t{placement.position.key, rotation(placement.position.value)}
+		,vector_transform(placement.orientation)
+	});
+	}
+
+	{
+	auto vector_transform=math::geometry::simple_rotation_t{math::geometry::plane(e1,e3), math::ratio<1,2>*math::half_turn};
+	auto rotation=make_point_transform(O, vector_transform);
+	check_equal(rotation(placement), math::geometry::placement_t{
+		 math::geometry::position_t{placement.position.key, rotation(placement.position.value)}
+		,vector_transform(placement.orientation)
+	});
 	}
 
 	return 0;
