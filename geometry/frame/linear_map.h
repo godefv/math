@@ -17,10 +17,15 @@ namespace godefv::math::geometry{
 			group::endomorphism(add_operation_t{}, 
 			group::endomorphism(mult_operation_t{}, 
 				[]<class OperandT, class DirectionMapT>(OperandT const& a, DirectionMapT const& direction_map){
-					if constexpr(hana::find(DirectionMapT{}, OperandT{}) == hana::nothing){
+					if constexpr(!hana::Hashable<hana::tag_of_t<OperandT>>::value){
 						return a;
-					}else{
-						return direction_map[a];
+					}else{ 
+						auto value=hana::find(DirectionMapT{}, OperandT{});
+						if constexpr(value==hana::nothing){
+							return a;
+						}else{
+							return direction_map[a];
+						}
 					}
 				}
 			));
@@ -98,7 +103,7 @@ namespace godefv::math::geometry{
 		return simple_rotation_t{change_reference_frame(operand.plane, old_reference), operand.angle};
 	}
 	auto constexpr change_reference_frame(rotation_t<auto> const& operand, linear_map_t<auto> const& old_reference){
-		return rotation_t{change_reference_frame(operand.rotor, old_reference)};
+		return rotation_t{change_reference_frame(operand.rotor(), old_reference)};
 	}
 	template<class Name>
 	auto constexpr change_reference_frame(transformed_point_t<Name,translation_t<auto>> const& operand, linear_map_t<auto> const& old_reference){

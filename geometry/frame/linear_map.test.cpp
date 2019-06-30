@@ -23,8 +23,12 @@ int main(){
 	
 	//transform a rotation relative to parent
 	{
-		auto constexpr rotation=math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn};
+		auto constexpr simple_rotation=math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), math::ratio<1,2>*math::half_turn};
 
+		check_equal(hana::keys  (simple_rotation(linear_map1).vectors)|hana::to_tuple, hana::keys  (linear_map1.vectors)|hana::to_tuple);
+		check_equal(hana::values(simple_rotation(linear_map1).vectors)|hana::to_tuple, hana::values(linear_map1.vectors)|hana::transform_with(simple_rotation)|hana::to_tuple);
+
+		auto rotation=math::geometry::rotation_t{simple_rotation.rotor()};
 		check_equal(hana::keys  (rotation(linear_map1).vectors)|hana::to_tuple, hana::keys  (linear_map1.vectors)|hana::to_tuple);
 		check_equal(hana::values(rotation(linear_map1).vectors)|hana::to_tuple, hana::values(linear_map1.vectors)|hana::transform_with(rotation)|hana::to_tuple);
 	}
@@ -35,6 +39,7 @@ int main(){
 		auto constexpr rotation_e=math::geometry::simple_rotation_t{math::geometry::plane(normalized(e1+e2),e3), math::ratio<1,2>*math::half_turn};
 
 		check_equal(change_reference_frame(rotation_P, linear_map1), rotation_e);
+		check_equal(change_reference_frame(math::geometry::rotation_t{rotation_P.rotor()}, linear_map1), math::geometry::rotation_t{rotation_e.rotor()});
 	}
 
 	return 0;
