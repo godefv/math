@@ -46,7 +46,7 @@ namespace godefv::math{
 		return cos(angle-full_turn);
 	}
 	auto constexpr cos(AngleQuadrant2 const& angle){
-		return cos(half_turn-angle);
+		return -cos(half_turn-angle);
 	}
 	//avoid problematic value of one half turn exactly
 	auto constexpr cos(angle_t<integer_t<1>>){
