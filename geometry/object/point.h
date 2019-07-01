@@ -32,7 +32,7 @@ namespace godefv::math::geometry{
 		return out<<operand.name;
 	}
 
-	namespace literals{
+	inline namespace literals{
 		template<class CharT, CharT... letters>
 		auto constexpr operator""_point(){return point_t<name_t<letters...>>{};}
 	}

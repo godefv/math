@@ -40,7 +40,7 @@ namespace godefv::math::geometry{
 	auto constexpr direction_positive=direction_positive_t<name_t<letters...>>{};
 	template<char... letters>
 	auto constexpr direction_negative=direction_negative_t<name_t<letters...>>{};
-	namespace literals{
+	inline namespace literals{
 		template<class CharT, CharT... letters>
 		auto constexpr operator""_direction_positive(){return direction_positive<letters...>;}
 		template<class CharT, CharT... letters>

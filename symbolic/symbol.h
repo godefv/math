@@ -34,8 +34,10 @@ namespace godefv::math{
 	template<char... letters>
 	auto constexpr symbol=symbol_t<name_t<letters...>>{};
 
-	template<class CharT, CharT... letters>
-	auto constexpr operator""_symbol(){return symbol<letters...>;}
+	inline namespace literals{
+		template<class CharT, CharT... letters>
+		auto constexpr operator""_symbol(){return symbol<letters...>;}
+	}
 
 	std::ostream& operator<<(std::ostream& out,symbol_t<auto> const& symbol){
 		return out<<symbol.name;
