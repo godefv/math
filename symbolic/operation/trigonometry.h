@@ -70,6 +70,38 @@ namespace godefv::math{
 	                        ,minus_t<square_t<operation_t<sinh_t,AngleT>>>){
 		return integer<1>;
 	}
+	//cos(x)cos(y)-sin(x)sin(y)=cos(x+y)
+	template<Symbol Angle1, Symbol Angle2>
+	auto constexpr operator+(group::generated_by_operation_t<mult_operation_t
+	                        ,operation_t<cos_t,Angle1>
+	                        ,operation_t<cos_t,Angle2>>
+							,minus_t<group::generated_by_operation_t<mult_operation_t
+	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle1{})>
+	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle2{})>>>){
+		return cos(Angle1{}+Angle2{});
+	}
+	//cos(x)sin(y)+sin(x)cos(y)=sin(x+y)
+	template<Symbol Angle1, Symbol Angle2>
+	auto constexpr operator+(group::generated_by_operation_t<mult_operation_t
+	                        ,operation_t<cos_t,Angle1>
+	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle2{})>>
+							,group::generated_by_operation_t<mult_operation_t
+	                        ,operation_t<cos_t,Angle2>
+	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle1{})>>){
+		return sin(Angle1{}+Angle2{});
+	}
+	//cos(x)²-sin(x)²=cos(2x)
+	template<Symbol AngleT>
+	auto constexpr operator+(square_t<operation_t<cos_t,AngleT>>
+	                        ,minus_t<square_t<operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})>>>){
+		return cos(integer<2>*AngleT{});
+	}
+	//cos(x)sin(x)=sin(2x)/2
+	template<Symbol AngleT>
+	auto constexpr operator*(operation_t<cos_t,AngleT>
+	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-AngleT{})>){
+		return ratio<1,2>*sin(integer<2>*AngleT{});
+	}
 }
 
 #endif /* SYMBOLIC_TRIGONOMETRY_H */

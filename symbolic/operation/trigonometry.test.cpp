@@ -63,6 +63,21 @@ int main(){
 	check_equal(square(cosh(k*pi))*x-square(sinh(k*pi))*x, x);
 	check_equal(integer<2>*x*square(cosh(k*pi))-integer<2>*x*square(sinh(k*pi)), integer<2>*x);
 
+	//cos(x)sin(x)=sin(2x)/2
+	check_equal(cos(k*pi)*sin(k*pi), ratio<1,2>*sin(integer<2>*k*pi));
+	check_equal(sin(ratio<1,42>*half_turn)*cos(ratio<1,42>*half_turn), ratio<1,2>*sin(integer<2>*ratio<1,42>*half_turn));
+
+	//cos(x)²-sin(x)²=cos(2x)
+	check_equal(square(cos(k*pi))-square(sin(k*pi)), cos(integer<2>*k*pi));
+	check_equal(square(cos(ratio<3,7>*half_turn))-square(sin(ratio<3,7>*half_turn)), cos(integer<2>*ratio<3,7>*half_turn));
+	check_equal(square(cos(ratio<1,42>*half_turn))-square(sin(ratio<1,42>*half_turn)), cos(integer<2>*ratio<1,42>*half_turn));
+
+	//cos(x)sin(y)+sin(x)cos(y)=sin(x+y)
+	check_equal(cos(k*pi)*sin(l*pi)+sin(k*pi)*cos(l*pi), sin((k+l)*pi));
+	
+	//cos(x)cos(y)-sin(x)sin(y)=cos(x+y)
+	check_equal(cos(k*pi)*cos(l*pi)-sin(k*pi)*sin(l*pi), cos((k+l)*pi));
+	
 	return 0;
 }
 

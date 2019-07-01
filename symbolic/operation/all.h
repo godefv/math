@@ -7,27 +7,27 @@
 #include"../../multiplication/all.h"
 
 namespace godefv::math{
-#define DEFINE_OPERATION(op, op_index) \
+#define DEFINE_OPERATION(op, op_index, op_constraint) \
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
-	template<class... OperandsT> auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};} \
+	template<class... OperandsT> requires op_constraint auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};} \
 	auto constexpr eval_with_data(operation_t<op##_t, auto> const& operand, auto const& eval_data){using std::op; return op(eval_with_data(operand.operand(), eval_data));} \
 	std::intmax_t constexpr index(op##_t){return op_index;}
-	DEFINE_OPERATION(exp  , 0)
-	DEFINE_OPERATION(log  , 1)
-	DEFINE_OPERATION(abs  , 2)
-	DEFINE_OPERATION(cos  , 3)
-	DEFINE_OPERATION(sin  , 4)
-	DEFINE_OPERATION(tan  , 5)
-	DEFINE_OPERATION(acos , 6)
-	DEFINE_OPERATION(asin , 7)
-	DEFINE_OPERATION(atan , 8)
-	DEFINE_OPERATION(cosh , 9)
-	DEFINE_OPERATION(sinh , 10)
-	DEFINE_OPERATION(tanh , 11)
-	DEFINE_OPERATION(acosh, 12)
-	DEFINE_OPERATION(asinh, 13)
-	DEFINE_OPERATION(atanh, 14)
+	DEFINE_OPERATION(exp  , 0, true)
+	DEFINE_OPERATION(log  , 1, true)
+	DEFINE_OPERATION(abs  , 2, true)
+	DEFINE_OPERATION(cos  , 3, true)
+	DEFINE_OPERATION(sin  , 4, false)
+	DEFINE_OPERATION(tan  , 5, true)
+	DEFINE_OPERATION(acos , 6, true)
+	DEFINE_OPERATION(asin , 7, true)
+	DEFINE_OPERATION(atan , 8, true)
+	DEFINE_OPERATION(cosh , 9, true)
+	DEFINE_OPERATION(sinh , 10, true)
+	DEFINE_OPERATION(tanh , 11, true)
+	DEFINE_OPERATION(acosh, 12, true)
+	DEFINE_OPERATION(asinh, 13, true)
+	DEFINE_OPERATION(atanh, 14, true)
 #undef DEFINE_OPERATION
 
 	//abs is an endomorphism over *

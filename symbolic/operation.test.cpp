@@ -40,8 +40,8 @@ int main(){
 
 	//formatting
 	std::cout<<exp(integer<3>)<<std::endl;
-	std::cout<<sin(integer<3>)<<std::endl;
-	std::cout<<square(sin(sqrt(integer<5>)))<<std::endl;
+	std::cout<<cos(integer<3>)<<std::endl;
+	std::cout<<square(cos(sqrt(integer<5>)))<<std::endl;
 
 	return 0;
 }
