@@ -22,6 +22,17 @@ namespace godefv::math::geometry{
 		};
 	}
 
+	//operators
+	auto constexpr operator==(affine_map_t<auto,auto> const& a, affine_map_t<auto,auto> const& b){
+		return a.origin_map==b.origin_map && a.directions_map==b.directions_map;
+	}
+	auto constexpr operator!=(affine_map_t<auto,auto> const& a, affine_map_t<auto,auto> const& b){
+		return !(a==b);
+	}
+	std::ostream& operator<<(std::ostream& out, affine_map_t<auto,auto> const& operand){
+		return out<<"affine_map{"<<operand.origin_map<<" ; "<<operand.directions_map<<"}";
+	}
+
 	//change_reference_frame
 	auto constexpr change_reference_frame(Point const& operand, affine_map_t<auto,auto> const& frame_map){
 		return change_reference_frame(change_reference_frame(operand, frame_map.directions_map), frame_map.origin_map);
