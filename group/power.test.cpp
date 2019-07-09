@@ -19,8 +19,8 @@ int main(){
 	//power of power
 	check_equal(power(op, integer<5>, power(op, integer<3>, x)), power(op, integer<15>, x));
 	//concept
-	check_equal(Power<dummy_operation_t, decltype(power(op, integer<3>, x))>, true);
-	check_equal(Power<dummy_operation_t, double>, false);
+	check_equal(Power<decltype(power(op, integer<3>, x)), dummy_operation_t>, true);
+	check_equal(Power<double, dummy_operation_t>, false);
 	//cyclic operands
 	check_equal(power(op, integer<10>, z), power(op, integer<2>, z));
 	check_equal(power(op, integer<-1>, z), power(op, integer<3>, z));

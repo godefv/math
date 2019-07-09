@@ -16,8 +16,8 @@ namespace godefv::math{
 		return bilinear_operation_t<commutator_operation_t>::apply(a,b);
 	}
 	template<class A, class B>
-		requires !group::Generated<add_operation_t,A>
-		      && !group::Generated<add_operation_t,B>
+		requires !group::Generated<A,add_operation_t>
+		      && !group::Generated<B,add_operation_t>
 	auto constexpr commutator(A const& a, B const& b){
 		if constexpr(Scalar<A> || Scalar<B>){
 			return zero;
@@ -37,8 +37,8 @@ namespace godefv::math{
 		return bilinear_operation_t<anticommutator_operation_t>::apply(a,b);
 	}
 	template<class A, class B>
-		requires !group::Generated<add_operation_t,A>
-		      && !group::Generated<add_operation_t,B>
+		requires !group::Generated<A,add_operation_t>
+		      && !group::Generated<B,add_operation_t>
 	auto constexpr anticommutator(A const& a, B const& b){
 		return a*b+b*a;
 	}

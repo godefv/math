@@ -21,7 +21,7 @@ namespace godefv::math::geometry{
 	}
 	template<MultiVector MultiVectorT> 
 		requires NonZeroScalar<decltype(square(MultiVectorT{}))> //user is responsible for division by zero errors
-			  && !group::Power<add_operation_t,MultiVectorT> //handled by multiplication/power.h
+			  && !group::Power<MultiVectorT,add_operation_t> //handled by multiplication/power.h
 	auto constexpr generated_power(mult_operation_t, integer_t<-1>, MultiVectorT const& operand){
 		return operand/project(square(operand), grades<0>());
 	}

@@ -75,7 +75,7 @@ namespace godefv::math{
 	template<SimpleScalar ExponentT, class T> 
 		requires ExponentT::num>0 
 		      && ExponentT::den==1 
-			  && (group::Operation<mult_operation_t,T> || group::Operation<add_operation_t,T>)
+			  && (group::Operation<T,mult_operation_t> || group::Operation<T,add_operation_t>)
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, T const& a){
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
 	}

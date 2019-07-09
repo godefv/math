@@ -29,7 +29,7 @@ namespace godefv::math{
 	auto constexpr zero=zero_t{};
 
 	//inverse
-	template<class T> requires !group::Generated<add_operation_t,T>
+	template<class T> requires !group::Generated<T,add_operation_t>
 	auto constexpr inverse(add_operation_t, T const& a){
 		return -a;
 	}
@@ -55,8 +55,8 @@ namespace godefv::math{
    	template<Expression A, Expression B>
    		requires !(SimpleScalar<A> && SimpleScalar<B>)
 		      && !std::is_same<A,B>::value 
-		      && !group::Operation<add_operation_t,A>
-		      && !group::Operation<add_operation_t,B>
+		      && !group::Operation<A,add_operation_t>
+		      && !group::Operation<B,add_operation_t>
    		      && static_compare(add_operation_t{}, A{},B{})<0
    	auto constexpr operator+(A const& a, B const& b){
    		return b+a;

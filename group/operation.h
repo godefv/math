@@ -41,12 +41,12 @@ namespace godefv::math::group{
 	//concept Operation
 	template<class OperatorT, class> struct is_generated_by_operation:std::false_type{};
 	template<class OperatorT, class A,class B> struct is_generated_by_operation<OperatorT, generated_by_operation_t<OperatorT,A,B>>:std::true_type{};
-	template<class OperatorT, class T> concept bool Operation=is_generated_by_operation<OperatorT, T>::value;
+	template<class T, class OperatorT> concept bool Operation=is_generated_by_operation<OperatorT, T>::value;
 
 	//concept Generated<OperatorT>
-	template<class OperatorT, class T> 
-	concept bool Generated=Operation<OperatorT,T> 
-	                    || Power<OperatorT,T> 
+	template<class T, class OperatorT> 
+	concept bool Generated=Operation<T,OperatorT> 
+	                    || Power<T,OperatorT> 
 	                    || std::is_same<generated_identity_t<OperatorT>,T>::value;
 
 	//concept GeneratedByAnyOperation
@@ -77,14 +77,14 @@ namespace godefv::math::group{
 	//associativity	//put everything in normalized from ((AB)C)D...
 	template<class OperatorT, class A,class B,class C> 
 		requires !std::is_same<A,identity_t<OperatorT>>::value
-			  //&& !(std::is_base_of<generated_by_operation_t<OperatorT,B,C>, decltype(inverse(OperatorT{}, A{}))>::value && !Operation<OperatorT, A>)
+			  //&& !(std::is_base_of<generated_by_operation_t<OperatorT,B,C>, decltype(inverse(OperatorT{}, A{}))>::value && !Operation<A, OperatorT>)
 	auto constexpr operation(OperatorT, A const& a, generated_by_operation_t<OperatorT,B,C> const& bc){
 		return OperatorT::apply(OperatorT::apply(a, bc.first), bc.second);
 	}
 	//contract (ab)c=a(bc) if (bc) can be processed
 	template<class OperatorT, class A,class B,class C> 
-		requires !Operation<OperatorT,B> 
-		      && !Operation<OperatorT,C> 
+		requires !Operation<B,OperatorT> 
+		      && !Operation<C,OperatorT> 
 			  && !std::is_base_of<generated_by_operation_t<OperatorT,B,C>, decltype(OperatorT::apply(B{},C{}))>::value 
 			  && !std::is_same<C,identity_t<OperatorT>>::value
 	auto constexpr operation(OperatorT, generated_by_operation_t<OperatorT,A,B> const& ab, C const& c){
@@ -102,7 +102,7 @@ namespace godefv::math::group{
 	}
 
 	//a op a = a power 2
-	template<class OperatorT, Symbol SymbolT> requires !Generated<OperatorT,SymbolT>
+	template<class OperatorT, Symbol SymbolT> requires !Generated<SymbolT,OperatorT>
 	auto constexpr operation(OperatorT, SymbolT,SymbolT){
 		return power(OperatorT{}, integer<2>, SymbolT{});
 	}

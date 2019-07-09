@@ -8,7 +8,7 @@ int main(){
 	using math::ratio;
 
 	//concepts
-	check_equal(math::group::Power<math::mult_operation_t, decltype(math::group::power(math::mult_operation_t{}, ratio<1,3>, integer<2>))>, true);
+	check_equal(math::group::Power<decltype(math::group::power(math::mult_operation_t{}, ratio<1,3>, integer<2>)), math::mult_operation_t>, true);
 	check_equal(math::Scalar<decltype(pow<2>(x))>, false);
 	check_equal(math::Symbol<decltype(pow<2>(x))>, true);
 	check_equal(math::Scalar<decltype(nth_root<2>(2))>, true);

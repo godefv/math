@@ -21,17 +21,17 @@ namespace godefv::math{
 		//operation with scalar
 		//TODO: one line should be enough
 		template<NonZeroScalar ScalarT, class T> 
-			requires !group::Generated<DerivedOperatorT,ScalarT>
+			requires !group::Generated<ScalarT,DerivedOperatorT>
 			      && (!Symbol<ScalarT> || SimpleScalar<ScalarT>)
 			      && !Zero<T>
 		static auto constexpr apply(ScalarT k, T const& a){
 			return group::power(add_operation_t{}, k, a);
 		}
 		template<NonZeroScalar ScalarT, class T> 
-			requires !group::Generated<DerivedOperatorT,ScalarT>
+			requires !group::Generated<ScalarT,DerivedOperatorT>
 			      && (!Symbol<ScalarT> || SimpleScalar<ScalarT>)
 			      && !Zero<T>
-		          && (!Scalar<T> || group::Generated<DerivedOperatorT,T>)
+		          && (!Scalar<T> || group::Generated<T,DerivedOperatorT>)
 		static auto constexpr apply(T const& a, ScalarT k){
 			return group::power(add_operation_t{}, k, a);
 		}
@@ -41,18 +41,18 @@ namespace godefv::math{
 			return group::power(add_operation_t{}, a.exponent, DerivedOperatorT::apply(a.operand,b));
 		}
 		//factor addition power out a*(kb)=k(a*b)
-		template<class A> requires !group::Power<add_operation_t,A>
+		template<class A> requires !group::Power<A,add_operation_t>
 		static auto constexpr apply(A const& a, group::generated_power_t<add_operation_t, Scalar,auto> const& b){
 			return group::power(add_operation_t{}, b.exponent, DerivedOperatorT::apply(a,b.operand));
 		}
 		
 		//develop product over addition a(b+c)=ab+ac
-		template<class A> requires !group::Power<add_operation_t,A>
+		template<class A> requires !group::Power<A,add_operation_t>
 		static auto constexpr apply(A const& a, group::generated_by_operation_t<add_operation_t, auto,auto> const& bc){
 			return DerivedOperatorT::apply(a,bc.first)+DerivedOperatorT::apply(a,bc.second);
 		}
 		//develop product over addition (a+b)c=ac+bc
-		template<class C> requires !group::Operation<add_operation_t, C> && !group::Power<add_operation_t,C>
+		template<class C> requires !group::Operation<C,add_operation_t> && !group::Power<C,add_operation_t>
 		static auto constexpr apply(group::generated_by_operation_t<add_operation_t, auto,auto> const& ab, C const& c){
 			return DerivedOperatorT::apply(ab.first,c)+DerivedOperatorT::apply(ab.second,c);
 		}
@@ -76,7 +76,7 @@ namespace godefv::math{
 
 	auto constexpr inverse(Number const& a){return 1./a;}
 	//default inverse is inverse of multiplication
-	template<class T> requires !group::Generated<mult_operation_t,T>
+	template<class T> requires !group::Generated<T,mult_operation_t>
 	auto constexpr inverse(mult_operation_t, T const& a){
 		return inverse(a);
 	}
@@ -89,8 +89,8 @@ namespace godefv::math{
 		requires (!SimpleScalar<A> || !SimpleScalar<B>) //avoid negating a boolean expression inside constraints, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67070
 		&& (
 		   ((!Scalar<A> && !Scalar<B>) || !(static_compare(mult_operation_t{}, A{},B{})<0))
-		|| group::Operation<mult_operation_t,A>
-		|| group::Operation<mult_operation_t,B>
+		|| group::Operation<A,mult_operation_t>
+		|| group::Operation<B,mult_operation_t>
 		)
 	auto constexpr operator*(A const& a, B const& b){
 		return bilinear_operation_t<mult_operation_t>::apply(a,b);
@@ -104,8 +104,8 @@ namespace godefv::math{
    	template<Expression A, Expression B>
    		requires (!SimpleScalar<A> || !SimpleScalar<B>) //avoid negating a boolean expression inside constraints, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67070
    		      && !std::is_same<A,B>::value 
-		      && !group::Operation<mult_operation_t,A>
-		      && !group::Operation<mult_operation_t,B>
+		      && !group::Operation<A,mult_operation_t>
+		      && !group::Operation<B,mult_operation_t>
    		      && static_compare(mult_operation_t{}, A{},B{})<0
 		      && (Scalar<A>||Scalar<B>) // scalars commute with everything
    	auto constexpr operator*(A const& a, B const& b){

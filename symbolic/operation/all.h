@@ -32,7 +32,7 @@ namespace godefv::math{
 
 	//abs is an endomorphism over *
 	auto constexpr abs_endomorphism=group::endomorphism(mult_operation_t{}, [](auto const& a){return abs(a);});
-	template<class T> requires group::Generated<add_operation_t,T> || group::Generated<mult_operation_t,T>
+	template<class T> requires group::Generated<T,add_operation_t> || group::Generated<T,mult_operation_t>
 	auto constexpr abs(T const& a){
 		return abs_endomorphism(a);
 	}
