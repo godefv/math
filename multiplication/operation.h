@@ -136,8 +136,19 @@ namespace godefv::math{
 
 	
 	//formatting
+	namespace detail{
+		std::ostream& format_multiplication_operand(std::ostream& out, auto const& operand){
+			return out<<"("<<operand<<")";
+		}
+		std::ostream& format_multiplication_operand(std::ostream& out, group::Generated<mult_operation_t> const& operand){
+			return out<<operand;
+		}
+	}
 	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<mult_operation_t, auto, auto> const& ab){
-		return out<<"("<<ab.first<<") * ("<<ab.second<<")";
+		detail::format_multiplication_operand(out, ab.first);
+		out<<" * ";
+		detail::format_multiplication_operand(out, ab.second);
+		return out;
 	}
 }
 
