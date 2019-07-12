@@ -38,6 +38,10 @@ int main(){
 	//reverse of exp is exp of reverse
 	check_equal(reverse(exp(x*y)), exp(y*x));
 
+	//differentiate
+	check_equal(differentiate(x, exp(cosh(x))), sinh(x)*exp(cosh(x)));
+	check_equal(differentiate(x, log(sinh(x))), cosh(x)/sinh(x));
+
 	//formatting
 	std::cout<<exp(integer<3>)<<std::endl;
 	std::cout<<cos(integer<3>)<<std::endl;

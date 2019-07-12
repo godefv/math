@@ -5,6 +5,8 @@
 #include"../../group/morphism.h"
 #include"../../addition/all.h"
 #include"../../multiplication/all.h"
+#include"../../differentiate.h"
+#include"../../eval.h"
 
 namespace godefv::math{
 #define DEFINE_OPERATION(op, op_index, op_constraint) \
@@ -48,8 +50,28 @@ namespace godefv::math{
 	}
 
 	//reverse
-	constexpr auto reverse(operation_t<exp_t,auto> const& op){
+	auto constexpr reverse(operation_t<exp_t,auto> const& op){
 		return exp(reverse(op.operand()));
+	}
+
+	//differentiate
+	auto constexpr differentiate(symbol_t<auto> variable, operation_t<exp_t,auto> const& op){
+		return differentiate(variable, op.operand())*op;
+	}
+	auto constexpr differentiate(symbol_t<auto> variable, operation_t<log_t,auto> const& op){
+		return differentiate(variable, op.operand())/op.operand();
+	}
+	auto constexpr differentiate(symbol_t<auto> variable, operation_t<cos_t,auto> const& op){
+		return -differentiate(variable, op.operand())*sin(op.operand());
+	}
+	auto constexpr differentiate(symbol_t<auto> variable, operation_t<sin_t,auto> const& op){
+		return differentiate(variable, op.operand())*cos(op.operand());
+	}
+	auto constexpr differentiate(symbol_t<auto> variable, operation_t<cosh_t,auto> const& op){
+		return differentiate(variable, op.operand())*sinh(op.operand());
+	}
+	auto constexpr differentiate(symbol_t<auto> variable, operation_t<sinh_t,auto> const& op){
+		return differentiate(variable, op.operand())*cosh(op.operand());
 	}
 }
 

@@ -78,6 +78,10 @@ int main(){
 	//cos(x)cos(y)-sin(x)sin(y)=cos(x+y)
 	check_equal(cos(k*pi)*cos(l*pi)-sin(k*pi)*sin(l*pi), cos((k+l)*pi));
 	
+	//differentiate
+	check_equal(differentiate(k, exp(cos(k*pi))), -pi*sin(k*pi)*exp(cos(k*pi)));
+	check_equal(differentiate(k, log(sin(k*pi))), pi*cos(k*pi)/sin(k*pi));
+
 	return 0;
 }
 
