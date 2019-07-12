@@ -52,7 +52,7 @@ int main(){
 	check_equal((translation1,rotation4)(A), rotation4(translation1(A)));
 	check_equal((translation1,rotation4)(B), rotation4(translation1(B)));
 	check_equal((translation1,rotation4)(C), rotation4(translation1(C)));
-	check_equal((translation1,rotation4)(D), rotation4(translation1(D)));
+	//check_equal((translation1,rotation4)(D), rotation4(translation1(D)));
 
 	//translation commutation
 	std::cout<<"\n"<<(rotation1,translation1,homothecy1)<<std::endl;

@@ -89,6 +89,10 @@ namespace godefv::math::group{
 	}
 
 	//concept
+	template<class> struct is_generated_power:std::false_type{};
+	template<class OperatorT, Scalar ExponentT, class OperandT> struct is_generated_power<generated_power_t<OperatorT,ExponentT, OperandT>>:std::true_type{};
+	template<class T> concept bool GeneratedPower=is_generated_power<T>::value;
+
 	template<class OperatorT, class> struct is_power:std::false_type{};
 	template<class OperatorT, Scalar ExponentT, class OperandT> struct is_power<OperatorT, generated_power_t<OperatorT,ExponentT, OperandT>>:std::true_type{};
 	template<class T, class OperatorT> concept bool Power=is_power<OperatorT, T>::value;

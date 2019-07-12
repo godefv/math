@@ -88,6 +88,18 @@ namespace godefv::math{
 			return (b.exponent-a.exponent).numerator();
 		}
 	}
+	int constexpr static_compare(auto op, group::generated_power_t<auto, Ratio, auto> const& a, auto const& b){
+		auto operand_order=static_compare(op, a.operand, b);
+		if(operand_order!=0){
+		   return operand_order;
+		}else{
+			return (-a.exponent).numerator();
+		}
+	}
+	template<class A> requires !group::GeneratedPower<A>
+	int constexpr static_compare(auto op, A const& a, group::generated_power_t<auto, Ratio, auto> const& b){
+		return -static_compare(op,b,a);
+	}
 
 	//auto constexpr static_compare(identity_t<auto> const& a, identity_t<auto> const& b){
 		//return static_compare(a.operation,b.operation);
