@@ -3,6 +3,7 @@
 
 #include"../../symbolic/symbol.h"
 #include"../../scalar.h"
+#include"../../differentiate.h"
 
 #include<boost/hana.hpp>
 #include<type_traits>
@@ -45,6 +46,11 @@ namespace godefv::math::geometry{
 		auto constexpr operator""_direction_positive(){return direction_positive<letters...>;}
 		template<class CharT, CharT... letters>
 		auto constexpr operator""_direction_negative(){return direction_negative<letters...>;}
+	}
+
+	//differentiate
+	auto constexpr differentiate(symbol_t<auto>, Direction){
+		return integer<0>;
 	}
 }
 
