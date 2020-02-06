@@ -19,6 +19,9 @@ namespace godefv::math::geometry{
 	auto constexpr generated_power(mult_operation_t, integer_t<3>, direction_negative_t<auto> const& ei){
 		return -ei;
 	}
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, direction_null_t<auto> const&){
+		return zero;
+	}
 	template<MultiVector MultiVectorT> 
 		requires NonZeroScalar<decltype(square(MultiVectorT{}))> //user is responsible for division by zero errors
 			  && !group::Power<MultiVectorT,add_operation_t> //handled by multiplication/power.h

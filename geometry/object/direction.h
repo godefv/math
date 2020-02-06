@@ -14,18 +14,18 @@ namespace godefv::math::geometry{
 	struct direction_tag_t{};
 	template<class Name> struct direction_positive_t{Name name;using hana_tag=direction_tag_t;};
 	template<class Name> struct direction_negative_t{Name name;using hana_tag=direction_tag_t;};
+	template<class Name> struct direction_null_t{Name name;using hana_tag=direction_tag_t;};
 
 	//direction concept
 	template<class> struct is_direction_t: std::false_type{};
 	template<class Name> struct is_direction_t<direction_positive_t<Name>>: std::true_type{};
 	template<class Name> struct is_direction_t<direction_negative_t<Name>>: std::true_type{};
+	template<class Name> struct is_direction_t<direction_null_t<Name>>: std::true_type{};
 	template<class A> concept bool Direction=is_direction_t<A>::value && Symbol<A> && !Scalar<A> && !SimpleScalar<A>; // last term is needed because gcc does not expand !(x||y) to (!x && !y)
 
 	//operators
-	bool constexpr operator==(direction_positive_t<auto> const& a, direction_positive_t<auto> const& b){
-		return a.name==b.name;
-	}
-	bool constexpr operator==(direction_negative_t<auto> const& a, direction_negative_t<auto> const& b){
+	template<template<class> class DirectionT, class Name1, class Name2> requires Direction<DirectionT<Name1>> && Direction<DirectionT<Name2>>
+	bool constexpr operator==(DirectionT<Name1> const& a, DirectionT<Name2> const& b){
 		return a.name==b.name;
 	}
 	//bool constexpr operator==(Direction const& a, Direction const& b){
@@ -41,11 +41,15 @@ namespace godefv::math::geometry{
 	auto constexpr direction_positive=direction_positive_t<name_t<letters...>>{};
 	template<char... letters>
 	auto constexpr direction_negative=direction_negative_t<name_t<letters...>>{};
+	template<char... letters>
+	auto constexpr direction_null=direction_null_t<name_t<letters...>>{};
 	inline namespace literals{
 		template<class CharT, CharT... letters>
 		auto constexpr operator""_direction_positive(){return direction_positive<letters...>;}
 		template<class CharT, CharT... letters>
 		auto constexpr operator""_direction_negative(){return direction_negative<letters...>;}
+		template<class CharT, CharT... letters>
+		auto constexpr operator""_direction_null(){return direction_null<letters...>;}
 	}
 
 	//differentiate
@@ -58,6 +62,7 @@ namespace godefv::math{
 	//a direction is a symbol
 	template<Symbol Name> struct is_symbol<geometry::direction_positive_t<Name>>: std::true_type{};
 	template<Symbol Name> struct is_symbol<geometry::direction_negative_t<Name>>: std::true_type{};
+	template<Symbol Name> struct is_symbol<geometry::direction_null_t<Name>>: std::true_type{};
 
 }
 
