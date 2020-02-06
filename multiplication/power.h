@@ -65,10 +65,17 @@ namespace godefv::math{
 		return group::power(mult_operation_t{}, -exponent, inverse(operand));
 	}
 	//power of addition powers (ka)^n = (k^n)(a^n) because k is a scalar
-	template<SimpleScalar Exponent1, SimpleScalar Exponent2>
+	template<Scalar Exponent1, Scalar Exponent2>
 	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<add_operation_t, Exponent2, auto> const& pow_ab){
 		using group::power;
 		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
+	}
+	//power of multiplication with a scalar (ka)^n = (k^n)(a^n) because k is a scalar
+	//typically, multiplicaation with sqrt(2) or pi are kept as multiplication, not addition power
+	template<Scalar Exponent1, class A, class B> requires Scalar<A> || Scalar<B>
+	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_by_operation_t<mult_operation_t, A, B> const& ab){
+		using group::power;
+		return power(mult_operation_t{}, exponent, ab.first)*power(mult_operation_t{}, exponent, ab.second);
 	}
 	//expand powers of multiplication or addition a^n = a(a^(n-1)) with a=xy or x+y 
 	//this gives a chance to apply commutation rules, and expands (a+b)^n

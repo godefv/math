@@ -43,6 +43,7 @@ int main(){
 
 	//(ka)^n = (k^n)(a^n) because k is a scalar
 	check_equal(pow<2>(x+x),x*x+x*x+x*x+x*x);
+	check_equal(pow<2>(k*x),pow<2>(k)*pow<2>(x));
 	check_equal(pow<-1>(-x),-pow<-1>(x));
 
 	//powers of products

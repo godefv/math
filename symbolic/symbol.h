@@ -28,7 +28,7 @@ namespace godefv::math{
 	//operators
 	template<class NameT>
 	bool operator==(symbol_t<NameT>,symbol_t<NameT>){return true;}
-	bool operator==(symbol_t<auto> a,symbol_t<auto> b){return false;}
+	bool operator==(symbol_t<auto>  ,symbol_t<auto>  ){return false;}
 	bool operator!=(symbol_t<auto> a,symbol_t<auto> b){return !(a==b);}
 
 	template<char... letters>

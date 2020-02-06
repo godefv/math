@@ -1,11 +1,18 @@
 #include"from_vector_transform.h"
 #include"unit_test.h"
+#include"../../eval.h"
 
 //auto constexpr test(auto const&... transforms){
 	//auto total_transform=(transforms...)
 	//std::cout<<total_transform<<std::endl;
 	//check_equal(total_transform(O), )
 //}
+
+// for angles, the library needs to know the sign of their square
+namespace godefv::math{
+	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,integer_t<2>,k_t>, decltype(boost::hana::nothing)){return 1;}
+	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,integer_t<2>,l_t>, decltype(boost::hana::nothing)){return 1;}
+}
 
 int main(){
 	using math::half_turn;
@@ -66,6 +73,25 @@ int main(){
 	check_equal((rotation1,translation1,homothecy2,rotation1)(B), rotation1(homothecy2(translation1(rotation1(B)))));
 	check_equal((rotation1,translation1,homothecy2,rotation1)(C), rotation1(homothecy2(translation1(rotation1(C)))));
 	check_equal((rotation1,translation1,homothecy2,rotation1)(D), rotation1(homothecy2(translation1(rotation1(D)))));
+
+	//make a 3D torus
+	auto constexpr translation_r=math::geometry::translation_t{m*e0};
+	auto constexpr translation_R=math::geometry::translation_t{n*e0};
+	auto constexpr rotation_c=math::geometry::make_point_rotation(O, math::geometry::plane(e0,e2), k*half_turn);
+	auto constexpr rotation_C=math::geometry::make_point_rotation(O, math::geometry::plane(e0,e1), l*half_turn);
+	auto constexpr torus_equation=(translation_r,rotation_c,translation_R,rotation_C)(O);
+	std::cout<<"torus equation : "<<torus_equation<<std::endl;
+    for(float i=0; i<2.0f; i+=0.2)
+    for(float j=0; j<2.0f; j+=0.2){
+		std::cout<<math::eval_with_data(torus_equation.transform.vector, [i,j](auto symbol){
+			     if(symbol==m){return 1.0f;}
+			else if(symbol==n){return 5.0f;}
+			else if(symbol==k){return i;}
+			else if(symbol==l){return j;}
+			return 10000.0f;
+		})<<" ; ";
+		return 0;
+	}
 
 	return 0;
 }
