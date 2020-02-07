@@ -48,6 +48,12 @@ namespace godefv::math{
 	auto constexpr abs(zero_t){
 		return zero;
 	}
+	//abs(x)²=x²
+	template<Integer ExponentT> requires ExponentT::num!=0 && ExponentT::num%2==0
+	auto constexpr generated_power(mult_operation_t, ExponentT exponent, operation_t<abs_t,Scalar> abs_x){
+		using group::power;
+		return power(mult_operation_t{}, exponent, abs_x.operand());
+	}
 
 	//reverse
 	auto constexpr reverse(operation_t<exp_t,auto> const& op){

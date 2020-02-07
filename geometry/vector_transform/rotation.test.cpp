@@ -1,6 +1,10 @@
 #include"rotation.h"
 #include"../algebra/unit_test.h"
 
+// for angles, the library needs to know the sign of their square
+namespace godefv::math{
+	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,integer_t<2>,k_t>, decltype(boost::hana::nothing)){return 1;}
+}
 
 auto test_bivector(math::geometry::simple_rotation_t<auto,auto,auto> const& rotation){
 	auto B=rotation.bivector();
@@ -50,6 +54,7 @@ auto test_rotation(math::geometry::simple_rotation_t<auto,auto,auto> const& rota
 int main(){
 	using math::half_turn;
 	using math::ratio;
+	using math::zero;
 
 	auto constexpr rotation1=math::geometry::simple_rotation_t{math::geometry::plane(e1,e2), ratio<1,2>*half_turn};
 	auto constexpr rotation2=math::geometry::simple_rotation_t{math::geometry::plane(e1,n1), ratio<1,2>*half_turn};
@@ -57,6 +62,8 @@ int main(){
 	auto constexpr rotation4=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), ratio<3,7>*half_turn};
 	auto constexpr rotation5=math::geometry::simple_rotation_t{math::geometry::plane(e0,e1), 1.2*half_turn};
 	auto constexpr rotation6=math::geometry::simple_rotation_t{math::geometry::plane(e0+e1,e2), ratio<3,7>*half_turn};
+	auto constexpr rotation7=math::geometry::simple_rotation_t{math::geometry::plane(e0,e2), zero};
+	auto constexpr rotation8=math::geometry::simple_rotation_t{math::geometry::plane(e0,e2), k*half_turn};
 
 	test_bivector(rotation1);
 	test_bivector(rotation2);
@@ -78,6 +85,8 @@ int main(){
 	test_rotation(rotation4);
 	//test_rotation(rotation5); //rounding errors
 	test_rotation(rotation6);
+	test_rotation(rotation7);
+	test_rotation(rotation8);
 
 	std::cout<<e1+n1<<"->"; check_equal(rotation1(e1+n1), n1-e2); 
 	std::cout<<e2   <<"->"; check_equal(rotation1(e2   ), e1   ); 

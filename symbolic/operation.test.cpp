@@ -34,6 +34,9 @@ int main(){
 	check_equal(abs(-2*x), 2*abs(x));
 	check_equal(abs(4*x*(-y)-x-2*y), 4l*abs(x)*abs(y)+abs(x)+2l*abs(y));
 	check_equal(abs(-one), one);
+	//abs(x)²=x²
+	check_equal(pow<2>(abs(k)), pow<2>(k));
+	check_equal(pow<-2>(abs(k)), pow<-2>(k));
 
 	//reverse of exp is exp of reverse
 	check_equal(reverse(exp(x*y)), exp(y*x));
