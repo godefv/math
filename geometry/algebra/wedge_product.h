@@ -11,6 +11,9 @@ namespace godefv::math::geometry{
 		static auto constexpr apply(auto const& a, auto const& b){
 			return a^b;
 		}
+		auto constexpr operator()(auto const& a, auto const& b) const{
+			return std::decay_t<decltype(*this)>::apply(a,b);
+		}
 	};
 	using bilinear_wedge_operation_t=bilinear_operation_t<wedge_operation_t>;
 

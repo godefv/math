@@ -45,7 +45,7 @@ namespace godefv::math::geometry{
 				auto const& coordinate=direction_coordinate[1_c];
 				return direction*differentiate(coordinate,operand);
 			})
-			|hana::fold_with([](auto const & a, auto const& b){return a+b;})
+			|hana::fold_with(add_operation_t{})
 		;
 	}
 
