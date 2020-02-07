@@ -1,6 +1,10 @@
 #include"from_vector_transform.h"
 #include"unit_test.h"
 #include"../../eval.h"
+#include"../../cpp20_array.h"
+#include"../export/coordinates.h"
+
+#include<fstream>
 
 //auto constexpr test(auto const&... transforms){
 	//auto total_transform=(transforms...)
@@ -80,18 +84,40 @@ int main(){
 	auto constexpr rotation_c=math::geometry::make_point_rotation(O, math::geometry::plane(e0,e2), k*half_turn);
 	auto constexpr rotation_C=math::geometry::make_point_rotation(O, math::geometry::plane(e0,e1), l*half_turn);
 	auto constexpr torus_equation=(translation_r,rotation_c,translation_R,rotation_C)(O);
+	auto constexpr torus_normals_equation=(rotation_c.vector_transform,rotation_C.vector_transform)(e0);
 	std::cout<<"torus equation : "<<torus_equation<<std::endl;
-    for(float i=0; i<2.0f; i+=0.2)
-    for(float j=0; j<2.0f; j+=0.2){
-		std::cout<<math::eval_with_data(torus_equation.transform.vector, [i,j](auto symbol){
-			     if(symbol==m){return 1.0f;}
-			else if(symbol==n){return 5.0f;}
-			else if(symbol==k){return i;}
-			else if(symbol==l){return j;}
-			return 10000.0f;
-		})<<" ; ";
-		return 0;
+	std::vector<decltype(1.0*e0+1.0*e1+1.0*e2)> torus_points;
+	std::vector<decltype(1.0*e0+1.0*e1+1.0*e2)> torus_normals;
+	auto step_k=0.1;
+	auto step_l=0.05;
+    for(auto i=0; i*step_k<2.0; ++i)
+    for(auto j=0; j*step_l<2.0; ++j){
+		//at each step draw a quad
+		for(auto [di,dj]:std20::to_array<std::pair<int,int>>({{0,0},{0,1},{1,1},{1,0}})){
+			auto evaluate_parameters=[&](auto symbol){
+				     if(symbol==m){return 1.0;}
+				else if(symbol==n){return 5.0;}
+				else if(symbol==k){return (i+di)*step_k;}
+				else if(symbol==l){return (j+dj)*step_l;}
+				return 10000.0;
+			};
+			torus_points.push_back(eval_with_data(torus_equation.transform.vector, evaluate_parameters));
+			torus_normals.push_back(eval_with_data(torus_normals_equation, evaluate_parameters)); 
+		}
 	}
+	// export to x3d file
+	std::ofstream torus_file{"/tmp/godefv_math_torus.x3d"};
+	torus_file<<"<x3d width='500px' height='500px'><scene>"<<std::endl;
+	torus_file<<"<viewpoint position='0 0 30'></viewpoint>"<<std::endl;
+	torus_file<<"<shape><appearance><material></material></appearance><QuadSet>"<<std::endl;
+	torus_file<<"<Coordinate point='";
+	math::geometry::print_coordinates(torus_file, torus_points, boost::hana::make_tuple(e0,e1,e2));
+	torus_file<<"'/>\n";
+	torus_file<<"<Normal vector='";
+	math::geometry::print_coordinates(torus_file, torus_normals, boost::hana::make_tuple(e0,e1,e2));
+	torus_file<<"'/>\n";
+	torus_file<<"</QuadSet></shape>"<<std::endl;
+	torus_file<<"</scene></x3d>"<<std::endl;
 
 	return 0;
 }
