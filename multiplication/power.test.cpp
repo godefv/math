@@ -1,5 +1,10 @@
 #include"power.h"
 #include"../symbolic/unit_test.h"
+#include"../symbolic/operation/all.h"
+
+namespace godefv::math{
+	auto constexpr operator>=(k_t,zero_t){return std::true_type{};}
+}
 
 int main(){
 	using math::pow;
@@ -38,8 +43,10 @@ int main(){
 	check_equal(square(2.0*x+4.0*y+3.0),4.0*x*x+16.0*y*y+9.0+8.0*(x*y+y*x)+12.0*x+24.0*y);
 
 	//power of power
-	check_equal(pow<4>(nth_root<3>(x)), pow(x, ratio<4,3>));
-	check_equal(pow<4>(nth_root<2>(x)), pow<2>(x));
+	check_equal(pow<4>(pow<3>(x)), pow<4*3>(x));
+	check_equal(pow<4>(nth_root<3>(k)), pow(k, ratio<4,3>));
+	check_equal(pow<4>(nth_root<2>(k)), pow<2>(k));
+	check_equal(nth_root<2>(pow<2>(l)), abs(l));
 
 	//(ka)^n = (k^n)(a^n) because k is a scalar
 	check_equal(pow<2>(x+x),x*x+x*x+x*x+x*x);

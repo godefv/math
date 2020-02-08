@@ -46,28 +46,29 @@ namespace godefv::math::group{
 	auto constexpr power(auto op, auto const& exponent, OperandT const& operand){
 		return generated_power(op,exponent,operand);
 	}
-	//power of identity is identity
+	//1^n=1
 	template<class OperatorT> requires true //gives priority to this overload
 	auto constexpr power(OperatorT, auto, identity_t<OperatorT> const& identity){
 		return identity;
 	}
-	//special powers
+	//x^0=1
 	template<class OperatorT, class OperandT> requires !std::is_same<OperandT,identity_t<OperatorT>>::value
 	auto constexpr power(OperatorT op, integer_t<0>, OperandT const&){
 		return identity(op);
 	}
+	//x^1=x
 	template<class OperatorT, class OperandT> requires !std::is_same<OperandT,identity_t<OperatorT>>::value
 	auto constexpr power(OperatorT, integer_t<1>, OperandT const& operand){
 		return operand;
 	}
-	//power of power is a power
-	template<class OperatorT, Scalar ExponentT, Scalar ScalarT> 
-		requires !std::is_same<ExponentT,integer_t<1>>::value
-	auto constexpr power(OperatorT op, ExponentT exponent, generated_power_t<OperatorT,ScalarT,auto> const& operand){
+	//(x^n)^m=x^(nm) !! n,m need to be integers sqrt((x)²)=abs(x)≠x
+	template<class OperatorT, Integer Exponent1, Integer Exponent2> 
+		requires !std::is_same<Exponent1,integer_t<1>>::value
+	auto constexpr power(OperatorT op, Exponent1 exponent, generated_power_t<OperatorT,Exponent2,auto> const& operand){
 		return power(op, exponent*operand.exponent, operand.operand);
 	} 
-	//Integer powers of SimpleScalar can be processed immediatly
-	template<class OperatorT, Integer ExponentT, SimpleScalar OperandT> requires ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
+	//StaticInteger powers of SimpleScalar can be processed immediatly
+	template<class OperatorT, StaticInteger ExponentT, SimpleScalar OperandT> requires ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value
 	auto constexpr power(OperatorT op, ExponentT, OperandT const& operand){
 		return OperatorT::apply(power(op, integer_t<ExponentT::num-1>{}, operand), operand);
 	}

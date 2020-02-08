@@ -4,6 +4,7 @@
 #include"operation.h"
 #include"commutator.h"
 #include"../group/power.h"
+#include"../abs.h"
 
 #include<cmath>
 
@@ -33,12 +34,12 @@ namespace godefv::math{
 	auto constexpr sqrt(auto const& operand){return nth_root<2>(operand);}
 
 	//static square root function for integers
-	template<Integer Integer1, Integer Integer2>
-	auto constexpr static_sqrt_linear(one_t,Integer1,Integer2){
+	template<StaticInteger StaticInteger1, StaticInteger StaticInteger2>
+	auto constexpr static_sqrt_linear(one_t,StaticInteger1,StaticInteger2){
 		return integer<1>;
 	}
-	template<Integer Integer1, Integer Integer2>
-	auto constexpr static_sqrt_linear(Integer operand, Integer1 exponent, Integer2 i){
+	template<StaticInteger StaticInteger1, StaticInteger StaticInteger2>
+	auto constexpr static_sqrt_linear(StaticInteger operand, StaticInteger1 exponent, StaticInteger2 i){
 		auto constexpr power=group::power(mult_operation_t{}, exponent, i);
 		auto constexpr ratio=operand/power;
 		if constexpr(ratio.denominator()==1){
@@ -50,7 +51,7 @@ namespace godefv::math{
 		}
 	}
 	template<std::intmax_t Exponent>
-	auto constexpr static_sqrt(Integer operand){
+	auto constexpr static_sqrt(StaticInteger operand){
 		return static_sqrt_linear(operand, integer<Exponent>, integer<2>);
 	}
 
@@ -60,7 +61,7 @@ namespace godefv::math{
 		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}
 	//apply inverse if different than power<-1> (only with rational operands for now, because we know they can then be processed immediately)
-	template<SimpleScalar ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(Integer<OperandT> && !Integer<ExponentT>)
+	template<SimpleScalar ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(StaticInteger<OperandT> && !StaticInteger<ExponentT>)
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, OperandT const& operand){
 		return group::power(mult_operation_t{}, -exponent, inverse(operand));
 	}
@@ -70,7 +71,7 @@ namespace godefv::math{
 		using group::power;
 		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
 	}
-	//power of multiplication with a scalar (ka)^n = (k^n)(a^n) because k is a scalar
+	//power of multiplication with a scalar (ka)^n = (k^n)(a^n) because scalars commute with everything
 	//typically, multiplicaation with sqrt(2) or pi are kept as multiplication, not addition power
 	template<Scalar Exponent1, class A, class B> requires Scalar<A> || Scalar<B>
 	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_by_operation_t<mult_operation_t, A, B> const& ab){
@@ -93,6 +94,18 @@ namespace godefv::math{
 	//powers of runtime values
 	auto constexpr generated_power(mult_operation_t, SimpleScalar const& exponent, Number const& operand){
 		return std::pow(operand, eval(exponent));
+	}
+	//(x^n)^m=x^(nm) even for non integral n,m if x>0
+	template<Scalar Exponent1, Scalar Exponent2, PositiveScalar OperandT> 
+	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<mult_operation_t,Exponent2,OperandT> const& operand){
+		return group::power(mult_operation_t{}, exponent*operand.exponent, operand.operand);
+	} 
+	//(x^(2n))^(m/2)=abs(x)^(nm) for n,m integer and x scalar
+	template<StaticInteger Exponent1, Ratio Exponent2, Scalar OperandT> 
+		requires Integer<decltype(Exponent1{}/integer<2>)> && !Integer<decltype(Exponent1{}*Exponent2{}/integer<2>)>
+		&& !PositiveScalar<OperandT> //use (x^n)^m=x^(nm) in this case
+	auto constexpr generated_power(mult_operation_t, Exponent2 exponent, group::generated_power_t<mult_operation_t,Exponent1,OperandT> const& operand){
+		return group::power(mult_operation_t{}, exponent*operand.exponent, abs(operand.operand));
 	}
 
 	//eval

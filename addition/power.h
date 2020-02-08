@@ -13,6 +13,11 @@ namespace godefv::math{
 	auto constexpr generated_power(add_operation_t, auto exponent, SimpleScalar scalar){
 		return exponent*scalar;
 	}
+	//(x^n)^m=x^(nm) even for non integral n,m 
+	template<Scalar Exponent1, Scalar Exponent2> 
+	auto constexpr generated_power(add_operation_t, Exponent1 exponent, group::generated_power_t<add_operation_t,Exponent2,auto> const& operand){
+		return group::power(add_operation_t{}, exponent*operand.exponent, operand.operand);
+	} 
 
 	//eval
 	auto constexpr eval_with_data(group::generated_power_t<add_operation_t,auto,auto> const& pow, auto const& eval_data){

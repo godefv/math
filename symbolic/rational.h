@@ -36,9 +36,10 @@ namespace godefv::math{
 
 	template<class T> concept bool RatioLessThanOne=Ratio<T> && std::ratio_less<T,integer_t<1>>::value;
 
-	template<class T> struct is_integer:std::false_type{};
-	template<std::intmax_t Numerator> struct is_integer<ratio_t<Numerator,1>>:std::true_type{};
-	template<class T> concept bool Integer=is_integer<T>::value;
+	template<class T> struct is_static_integer:std::false_type{};
+	template<std::intmax_t Numerator> struct is_static_integer<ratio_t<Numerator,1>>:std::true_type{};
+	template<class T> concept bool StaticInteger=is_static_integer<T>::value;
+	template<class T> concept bool Integer=is_static_integer<T>::value || std::is_integral<T>::value;
 
 	template<class T> struct is_zero:std::false_type{};
 	template<std::intmax_t Denominator> struct is_zero<ratio_t<0,Denominator>>:std::true_type{};
@@ -46,6 +47,7 @@ namespace godefv::math{
 	template<class T> concept bool NonZero=!is_zero<T>::value;
 	template<class T> concept bool NonZeroRatio=Ratio<T> && !Zero<T>;
 	template<class T> concept bool NonZeroScalar=Scalar<T> && !Zero<T>;
+	template<class T> concept bool PositiveScalar=Scalar<T> && requires(T x){{x>=integer<0>}->std::true_type;};
 
 	template<Ratio RatioT> struct is_simple_scalar<RatioT>:std::true_type{};
 	template<Ratio RatioT> struct is_symbol<RatioT>: std::true_type{};
@@ -115,6 +117,8 @@ namespace godefv::math{
 	std::ostream& operator<<(std::ostream& out, Ratio a){
 		return out<<a.numerator()<<"/"<<a.denominator();
 	}
+	template<class T> requires std::is_arithmetic<T>::value && !std::is_signed<T>::value
+	auto constexpr operator>=(T a, integer_t<0>){return std::true_type{};}
 
 	//inverse
 	auto constexpr inverse(Ratio a){
