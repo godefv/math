@@ -58,6 +58,8 @@ namespace godefv::math{
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, operation_t<abs_t,Scalar> abs_x){
 		return group::power(mult_operation_t{}, exponent, abs_x.operand());
 	}
+	//abs(x)>0
+	auto constexpr operator>=(operation_t<abs_t,auto>, integer_t<0>){return std::true_type{};}
 
 	//reverse
 	auto constexpr reverse(operation_t<exp_t,auto> const& op){

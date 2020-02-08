@@ -42,6 +42,9 @@ int main(){
 	check_equal(abs(pi), pi);
 	check_equal(abs(ratio<1,4>), ratio<1,4>);
 	check_equal(abs(ratio<-1,4>), ratio<1,4>);
+	//abs(x)>0
+	check_equal(abs(k)>=integer<0>, std::true_type{});
+	check_equal(abs(abs(k)), abs(k));
 
 	//reverse of exp is exp of reverse
 	check_equal(reverse(exp(x*y)), exp(y*x));
