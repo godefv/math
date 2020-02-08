@@ -12,12 +12,6 @@
 	//check_equal(total_transform(O), )
 //}
 
-// for angles, the library needs to know the sign of their square
-namespace godefv::math{
-	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,integer_t<2>,k_t>, decltype(boost::hana::nothing)){return 1;}
-	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,integer_t<2>,l_t>, decltype(boost::hana::nothing)){return 1;}
-}
-
 int main(){
 	using math::half_turn;
 	using math::ratio;

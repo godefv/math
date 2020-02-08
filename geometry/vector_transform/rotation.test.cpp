@@ -1,11 +1,6 @@
 #include"rotation.h"
 #include"../algebra/unit_test.h"
 
-// for angles, the library needs to know the sign of their square
-namespace godefv::math{
-	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,integer_t<2>,k_t>, decltype(boost::hana::nothing)){return 1;}
-}
-
 auto test_bivector(math::geometry::simple_rotation_t<auto,auto,auto> const& rotation){
 	auto B=rotation.bivector();
 

@@ -47,6 +47,7 @@ namespace godefv::math{
 	template<class T> concept bool NonZero=!is_zero<T>::value;
 	template<class T> concept bool NonZeroRatio=Ratio<T> && !Zero<T>;
 	template<class T> concept bool NonZeroScalar=Scalar<T> && !Zero<T>;
+	template<class T> concept bool NonZeroInteger=Integer<T> && !Zero<T>;
 	template<class T> concept bool PositiveScalar=Scalar<T> && requires(T x){{x>=integer<0>}->std::true_type;};
 
 	template<Ratio RatioT> struct is_simple_scalar<RatioT>:std::true_type{};

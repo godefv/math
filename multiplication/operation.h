@@ -148,6 +148,9 @@ namespace godefv::math{
 	//contract kac+bc=(ka+b)c if (ka+b) can be processed
 	//done because we collapse ka+b as k(a+b/k) if a+b/k can be processed
 
+	//ab>=0 if a,b>=0
+	template<PositiveScalar A, PositiveScalar B>
+	auto constexpr operator>=(group::generated_by_operation_t<mult_operation_t,A,B>, zero_t){return std::true_type{};}
 	
 	//formatting
 	namespace detail{

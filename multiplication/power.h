@@ -96,17 +96,21 @@ namespace godefv::math{
 		return std::pow(operand, eval(exponent));
 	}
 	//(x^n)^m=x^(nm) even for non integral n,m if x>0
-	template<Scalar Exponent1, Scalar Exponent2, PositiveScalar OperandT> 
+	template<Scalar Exponent1, NonZeroScalar Exponent2, PositiveScalar OperandT> 
 	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<mult_operation_t,Exponent2,OperandT> const& operand){
 		return group::power(mult_operation_t{}, exponent*operand.exponent, operand.operand);
 	} 
 	//(x^(2n))^(m/2)=abs(x)^(nm) for n,m integer and x scalar
-	template<StaticInteger Exponent1, Ratio Exponent2, Scalar OperandT> 
-		requires Integer<decltype(Exponent1{}/integer<2>)> && !Integer<decltype(Exponent1{}*Exponent2{}/integer<2>)>
+	template<Integer Exponent1, NonZeroRatio Exponent2, Scalar OperandT> 
+		requires Integer<decltype(Exponent1{}/integer<2>)>
 		&& !PositiveScalar<OperandT> //use (x^n)^m=x^(nm) in this case
 	auto constexpr generated_power(mult_operation_t, Exponent2 exponent, group::generated_power_t<mult_operation_t,Exponent1,OperandT> const& operand){
 		return group::power(mult_operation_t{}, exponent*operand.exponent, abs(operand.operand));
 	}
+
+	//x^(2n)>0 for x scalar
+	template<Integer ExponentT, Scalar OperandT> requires Integer<decltype(ExponentT{}/integer<2>)>
+	auto constexpr operator>=(group::generated_power_t<mult_operation_t,ExponentT,OperandT>,zero_t){return std::true_type{};}
 
 	//eval
 	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,auto,auto> const& pow, auto const& eval_data){

@@ -7,14 +7,14 @@
 
 namespace godefv::math::geometry{
 	template<KBlade<2> BivectorT> 
-		requires Symbol<BivectorT> && std::is_same<decltype(square(BivectorT{})),zero_t>::value 
+		requires Zero<decltype(square(BivectorT{}))>
 	constexpr auto exp(BivectorT const& a){
 			return one+a;
 	}
 
 	template<KBlade<2> BivectorT> 
-		requires Symbol<BivectorT> && !std::is_same<decltype(square(BivectorT{})),zero_t>::value 
-			  && eval(square(BivectorT{}))>0
+		requires PositiveScalar<decltype(square(BivectorT{}))>
+			  && !Zero<decltype(square(BivectorT{}))>
 	constexpr auto exp(BivectorT const& a){
 		Scalar angle=norm(a);
 		using std::cosh;
@@ -23,8 +23,8 @@ namespace godefv::math::geometry{
 	}
 
 	template<KBlade<2> BivectorT> 
-		requires Symbol<BivectorT> && !std::is_same<decltype(square(BivectorT{})),zero_t>::value 
-			  && eval(square(BivectorT{}))<0
+		requires PositiveScalar<decltype(-square(BivectorT{}))>
+			  && !Zero<decltype(square(BivectorT{}))>
 	constexpr auto exp(BivectorT const& a){
 		Scalar angle=norm(a);
 		using std::cos;
@@ -33,7 +33,9 @@ namespace godefv::math::geometry{
 	}
 
 	template<KVector<2> BivectorT> 
-		requires !Symbol<BivectorT> && Scalar<decltype(square(BivectorT{}))>
+		requires Scalar<decltype(square(BivectorT{}))>
+			  && !PositiveScalar<decltype(square(BivectorT{}))>
+			  && !PositiveScalar<decltype(-square(BivectorT{}))>
 	constexpr auto exp(BivectorT const& a){
 		using godefv::math::eval;
 		double square=eval(a|a);

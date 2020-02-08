@@ -79,6 +79,13 @@ namespace godefv::math{
 		return group::power(add_operation_t{}, ka.exponent, ka.operand+group::power(add_operation_t{}, integer<1>/ka.exponent, b));
 	}
 
+	//a+b>=0 if a,b>=0
+	template<PositiveScalar A, PositiveScalar B>
+	auto constexpr operator>=(group::generated_by_operation_t<add_operation_t,A,B>, zero_t){return std::true_type{};}
+	//ka>=0 if k,a>=0
+	template<PositiveScalar K, PositiveScalar A>
+	auto constexpr operator>=(group::generated_power_t<add_operation_t,K,A>, zero_t){return std::true_type{};}
+
 	//formatting
 	namespace detail{
 		template<class T> requires !group::Generated<T,add_operation_t>
