@@ -2,7 +2,6 @@
 #define RATIONAL_H 
 
 #include"symbol.h"
-#include"../abs.h"
 #include"../scalar.h"
 #include"../eval.h"
 
@@ -120,15 +119,12 @@ namespace godefv::math{
 	}
 	template<class T> requires std::is_arithmetic<T>::value && !std::is_signed<T>::value
 	auto constexpr operator>=(T a, integer_t<0>){return std::true_type{};}
+	template<class NameT> requires Scalar<decltype(eval(symbol_t<NameT>{}))> && eval(symbol_t<NameT>{})>=0
+	auto constexpr operator>=(symbol_t<NameT>, integer_t<0>){return std::true_type{};}
 
 	//inverse
 	auto constexpr inverse(Ratio a){
 		return integer<1>/a;
-	}
-
-	//abs
-	auto constexpr abs(Ratio a){
-		return ratio<abs(a.numerator()),a.denominator()>;
 	}
 
 	//nth_root

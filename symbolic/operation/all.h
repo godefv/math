@@ -32,9 +32,14 @@ namespace godefv::math{
 	DEFINE_OPERATION(atanh, 14, true)
 #undef DEFINE_OPERATION
 
+	//abs(x)=x if x>=0
+	auto constexpr abs(PositiveScalar const & a){return a;}
+	//abs(x)=-x if x<0
+	template<class OperandT> requires !PositiveScalar<OperandT> && PositiveScalar<decltype(-OperandT{})>
+	auto constexpr abs(OperandT a){return -a;}
 	//abs is an endomorphism over *
 	auto constexpr abs_endomorphism=group::endomorphism(mult_operation_t{}, [](auto const& a){return abs(a);});
-	template<class T> requires group::Generated<T,add_operation_t> || group::Generated<T,mult_operation_t>
+	template<class T> requires !PositiveScalar<T> && (group::Generated<T,add_operation_t> || group::Generated<T,mult_operation_t>)
 	auto constexpr abs(T const& a){
 		return abs_endomorphism(a);
 	}

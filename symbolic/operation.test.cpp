@@ -1,5 +1,6 @@
 #include"operation/all.h"
 #include"rational.h"
+#include"constant.h"
 #include"unit_test.h"
 #include"../multiplication/operation.h"
 #include"../multiplication/power.h"
@@ -37,6 +38,10 @@ int main(){
 	//abs(x)²=x²
 	check_equal(pow<2>(abs(k)), pow<2>(k));
 	check_equal(pow<-2>(abs(k)), pow<-2>(k));
+	//abs(constants)
+	check_equal(abs(pi), pi);
+	check_equal(abs(ratio<1,4>), ratio<1,4>);
+	check_equal(abs(ratio<-1,4>), ratio<1,4>);
 
 	//reverse of exp is exp of reverse
 	check_equal(reverse(exp(x*y)), exp(y*x));
