@@ -113,26 +113,40 @@ namespace godefv::math{
    	}
 
 	//contract ab+ac=a(b+c) if (b+c) can be processed
-	template<Symbol A, class B, class C> requires !std::is_same<decltype(B{}+C{}), group::generated_by_operation_t<add_operation_t,B,C>>::value 
+	template<Symbol A, class B, class C> 
+		requires !std::is_same<decltype(B{}+C{}), group::generated_by_operation_t<add_operation_t,B,C>>::value 
+	          && !(Symbol<B> && std::is_same<B,C>::value) //else we have ab+ab=2ab
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,B> const& ab, group::generated_by_operation_t<mult_operation_t, A,C> const& ac){
 		using ::operator+;
 		return A{}*(ab.second+ac.second);
 	}
 	//contract ac+bc=(a+b)c if (a+b) can be processed
-	template<class A, class B, Symbol C> requires !std::is_same<decltype(A{}+B{}), group::generated_by_operation_t<add_operation_t,A,B>>::value 
-	                                           && !std::is_same<A,B>::value //so that this template is exclusive with the above template
+	template<class A, class B, Symbol C> 
+		requires !std::is_same<decltype(A{}+B{}), group::generated_by_operation_t<add_operation_t,A,B>>::value 
+	          && !(Symbol<B> && std::is_same<A,B>::value) //else we have ac+ac=2ac
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_by_operation_t<mult_operation_t, B,C> const& bc){
 		using ::operator+;
 		return (ac.first+bc.first)*C{};
 	}
-
 	//contract ab+kac=a(b+kc) if (b+kc) can be processed
+	template<Symbol A, class B, class C, class K> 
+		requires !std::is_same<decltype(B{}+K{}*C{}), group::generated_by_operation_t<add_operation_t,B,group::generated_power_t<add_operation_t,K,C>>>::value 
+	          && !(Symbol<B> && std::is_same<B,C>::value) //else we have ab+kab=(1+k)ab
+	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,B> const& ab, group::generated_power_t<add_operation_t, K, group::generated_by_operation_t<mult_operation_t, A,C>> const& kac){
+		using ::operator+;
+		return A{}*(ab.second+kac.exponent*kac.operand.second);
+	}
 	//contract ac+kbc=(a+kb)c if (a+kb) can be processed
-	template<class A, class B, Symbol C, class K> requires !std::is_same<decltype(A{}+K{}*B{}), group::generated_by_operation_t<add_operation_t,A,group::generated_power_t<add_operation_t,K,B>>>::value 
+	template<class A, class B, Symbol C, class K> 
+		requires !std::is_same<decltype(A{}+K{}*B{}), group::generated_by_operation_t<add_operation_t,A,group::generated_power_t<add_operation_t,K,B>>>::value 
+		      && !(Symbol<B> && std::is_same<A,B>::value) //else we have ac+kac=(1+k)ac
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_power_t<add_operation_t, K, group::generated_by_operation_t<mult_operation_t, B,C>> const& kbc){
 		using ::operator+;
 		return (ac.first+kbc.exponent*kbc.operand.first)*C{};
 	}
+	//contract kab+ac=a(kb+c) if (kb+c) can be processed
+	//contract kac+bc=(ka+b)c if (ka+b) can be processed
+	//done because we collapse ka+b as k(a+b/k) if a+b/k can be processed
 
 	
 	//formatting

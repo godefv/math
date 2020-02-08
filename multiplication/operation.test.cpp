@@ -1,8 +1,10 @@
 #include"operation.h"
 #include"../symbolic/unit_test.h"
 
+namespace godefv::math{
 auto constexpr operator+(y_t,z_t){return k;}
-auto constexpr operator+(y_t,math::minus_t<z_t>){return m;}
+auto constexpr operator+(y_t,minus_t<z_t>){return m;}
+}
 
 
 int main(){
@@ -26,7 +28,7 @@ int main(){
 	check_equal(y*(x+y), y*x+y*y);
 	check_equal((x+y)*z, x*z+y*z);
 	check_equal((1+3*x)*(1+3*x), 1+6*x+9*x*x);
-	//check_equal((z+y)*(x+y), z*x+z*y+y*x+y*y);
+	check_equal((k+y)*(x+y), k*x+k*y+y*x+y*y);
 
 	//multiplying by zero gives zero
 	check_equal(2*math::zero, math::zero);
@@ -58,9 +60,8 @@ int main(){
 	check_equal(y*x+z*x, k*x);
 	check_equal(z*x+y*x, k*x);
 	//contract ab+kac=a(b+kc) if (b+kc) can be processed
-	//check_equal(x*y+l*x*z, m*x);
+	check_equal(x*y-x*z, m*x);
 	//contract ac+kbc=(a+kb)c if (a+kb) can be processed
-	check_equal(y*x+(-z*x), m*x);
 	check_equal(y*x-z*x, m*x);
 	
 	//commutation
