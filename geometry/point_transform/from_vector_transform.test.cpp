@@ -12,6 +12,12 @@
 	//check_equal(total_transform(O), )
 //}
 
+// for angles, the library needs to know the sign of their square
+namespace godefv::math{
+	auto constexpr operator>=(k_t, zero_t){return std::true_type{};}
+	auto constexpr operator>=(l_t, zero_t){return std::true_type{};}
+}
+
 int main(){
 	using math::half_turn;
 	using math::ratio;

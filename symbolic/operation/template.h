@@ -59,10 +59,14 @@ namespace godefv::math{
 	}
 
 	//ordering for commutation
+	auto constexpr sort_operation_operand_as(auto, auto const& a){return a;}
 	Operation{Operation2}
 	constexpr int static_compare(auto op, Operation const& a, Operation2 const& b){
 		if(index(b.operation)==index(a.operation)){
-			return static_compare(op, a.operand(),b.operand());
+			return static_compare(op
+				,sort_operation_operand_as(a.operation, a.operand())
+				,sort_operation_operand_as(b.operation, b.operand())
+			);
 		}else{
 			return index(b.operation)-index(a.operation);
 		}

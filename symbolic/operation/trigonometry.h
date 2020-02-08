@@ -57,6 +57,9 @@ namespace godefv::math{
 	auto constexpr sin(Angle const& angle){
 		return cos(angle_t<ratio_t<1,2>>{}-angle);
 	}
+	auto constexpr sort_operation_operand_as(cos_t, group::generated_by_operation_t<add_operation_t,angle_t<ratio_t<1,2>>,auto> const& a){
+		return -a.second;
+	}
 
 	//cos²+sin²=1
 	template<Symbol AngleT>
@@ -83,11 +86,12 @@ namespace godefv::math{
 	//cos(x)sin(y)+sin(x)cos(y)=sin(x+y)
 	template<Symbol Angle1, Symbol Angle2>
 	auto constexpr operator+(group::generated_by_operation_t<mult_operation_t
-	                        ,operation_t<cos_t,Angle1>
-	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle2{})>>
-							,group::generated_by_operation_t<mult_operation_t
-	                        ,operation_t<cos_t,Angle2>
-	                        ,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle1{})>>){
+								,operation_t<cos_t,Angle1>
+								,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle2{})>
+							>,group::generated_by_operation_t<mult_operation_t
+								,operation_t<cos_t,decltype(angle_t<ratio_t<1,2>>{}-Angle1{})>
+								,operation_t<cos_t,Angle2>
+							>){
 		return sin(Angle1{}+Angle2{});
 	}
 	//cos(x)²-sin(x)²=cos(2x)
