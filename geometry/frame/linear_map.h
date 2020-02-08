@@ -1,13 +1,15 @@
 #ifndef GODEFV_MATH_GEOMETRY_OBJECT_FRAME_H
 #define GODEFV_MATH_GEOMETRY_OBJECT_FRAME_H 
 
-#include"reference.h"
 #include"../algebra/definition.h"
 #include"../algebra/dot_product.h"
+#include"../algebra/reference_frame.h"
 #include"../object/point.h"
 #include"../point_transform/translation.h"
 #include"../vector_transform/rotation.h"
+#include"../../hana.h"
 
+#include<iostream>
 
 namespace godefv::math::geometry{
 	namespace hana=boost::hana;

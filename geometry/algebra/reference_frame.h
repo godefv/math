@@ -1,5 +1,5 @@
-#ifndef EXTERN_GODEFV_MATH_GEOMETRY_FRAME_REFERENCE_H
-#define EXTERN_GODEFV_MATH_GEOMETRY_FRAME_REFERENCE_H 
+#ifndef GODEFV_MATH_GEOMETRY_REFERENCE_FRAME_H
+#define GODEFV_MATH_GEOMETRY_REFERENCE_FRAME_H 
 
 #include"../object/direction.h"
 #include"../../group/morphism.h"
@@ -26,4 +26,4 @@ namespace godefv::math::geometry{
 
 }
 
-#endif /* EXTERN_GODEFV_MATH_GEOMETRY_FRAME_REFERENCE_H */
+#endif /* GODEFV_MATH_GEOMETRY_REFERENCE_FRAME_H */

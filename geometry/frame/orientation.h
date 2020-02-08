@@ -1,8 +1,8 @@
 #ifndef GODEFV_MATH_GEOMETRY_FRAME_ORIENTATION
 #define GODEFV_MATH_GEOMETRY_FRAME_ORIENTATION 
 
-#include"reference.h"
 #include"linear_map.h"
+#include"../algebra/reference_frame.h"
 #include"../object/direction.h"
 #include"../vector_transform/rotation.h"
 #include"../vector_transform/composition.h"

@@ -3,8 +3,8 @@
 
 #include"dot_product.h"
 #include"grade.h"
+#include"reference_frame.h"
 #include"../object/direction.h"
-#include"../frame/reference.h"
 #include"../../hana.h"
 
 namespace godefv::math::geometry{
