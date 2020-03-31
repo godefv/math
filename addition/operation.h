@@ -42,7 +42,12 @@ namespace godefv::math{
 	auto constexpr operator-(NonSimpleScalarExpression const& a){
 		return group::inverse(add_operation_t{}, a);
 	}
-   	template<Expression A, Expression B> requires !(SimpleScalar<A> && SimpleScalar<B>)
+   	template<Expression A, Expression B> requires !(
+		   (Number<A> && Number<B>) //built-in
+		|| (Number<A> && NonZeroRatio<B>) //defined in symbolic/rational.h
+		|| (NonZeroRatio<A> && Number<B>) //defined in symbolic/rational.h
+		|| (Ratio<A> && Ratio<B>) //defined in symbolic/rational.h
+	)
 	auto constexpr operator+(A const& a, B const& b){
 		return group::operation(add_operation_t{},a,b);
 	}
@@ -53,7 +58,12 @@ namespace godefv::math{
 
    	//commutation rule
    	template<Expression A, Expression B>
-   		requires !(SimpleScalar<A> && SimpleScalar<B>)
+   		requires !(
+			  	(Number<A> && Number<B>) //built-in
+			  	|| (Number<A> && NonZeroRatio<B>) //defined in symbolic/rational.h
+			  	|| (NonZeroRatio<A> && Number<B>) //defined in symbolic/rational.h
+			  	|| (Ratio<A> && Ratio<B>) //defined in symbolic/rational.h
+			  )
 		      && !std::is_same<A,B>::value 
 		      && !group::Operation<A,add_operation_t>
 		      && !group::Operation<B,add_operation_t>
