@@ -15,7 +15,9 @@ namespace godefv::math{
 		constexpr operator double() const requires Denominator>1 {
 			return static_cast<double>(Numerator)/Denominator;
 		}
-		constexpr operator std::intmax_t() const requires Denominator==1{
+		//integers should be cast to an integral type
+		//zero should not be cast at all : it should either be used directly or be optimized out
+		constexpr operator std::intmax_t() const requires Denominator==1 && Numerator!=0{
 			return Numerator;
 		}
 		auto constexpr numerator()   const{return Numerator;}
