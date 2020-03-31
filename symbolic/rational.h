@@ -12,8 +12,13 @@
 namespace godefv::math{
 	template<std::intmax_t Numerator, std::intmax_t Denominator> requires Denominator>=0
 	struct ratio_t: std::ratio<Numerator,Denominator>{
-		constexpr operator double() const{return static_cast<double>(Numerator)/Denominator;}
-		auto constexpr numerator() const{return Numerator;}
+		constexpr operator double() const requires Denominator>1 {
+			return static_cast<double>(Numerator)/Denominator;
+		}
+		constexpr operator std::intmax_t() const requires Denominator==1{
+			return Numerator;
+		}
+		auto constexpr numerator()   const{return Numerator;}
 		auto constexpr denominator() const{return Denominator;}
 	};
 
