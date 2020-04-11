@@ -8,6 +8,7 @@
 #include<iostream>
 #include<ratio>
 #include<type_traits>
+#include<limits>
 
 namespace godefv::math{
 	template<std::intmax_t Numerator, std::intmax_t Denominator> requires Denominator>=0
@@ -17,8 +18,17 @@ namespace godefv::math{
 		}
 		//integers should be cast to an integral type
 		//zero should not be cast at all : it should either be used directly or be optimized out
-		constexpr operator std::intmax_t() const requires Denominator==1 && Numerator!=0{
+		constexpr operator std::intmax_t() const requires Denominator==1 && Numerator!=0 &&
+		!( Numerator>std::numeric_limits<int>::min() 
+		&& Numerator<std::numeric_limits<int>::max())
+		{
 			return Numerator;
+		}
+		constexpr operator int() const requires Denominator==1 && Numerator!=0 &&
+		(  Numerator>std::numeric_limits<int>::min() 
+		&& Numerator<std::numeric_limits<int>::max())
+		{
+			return static_cast<int>(Numerator);
 		}
 		auto constexpr numerator()   const{return Numerator;}
 		auto constexpr denominator() const{return Denominator;}
@@ -67,8 +77,6 @@ namespace godefv::math{
 	//operators
 	auto constexpr operator*(Number, Zero){return integer<0>;}
 	auto constexpr operator*(Zero, Number){return integer<0>;}
-	auto constexpr operator*(Number a, NonZeroRatio b){return a*eval(b);}
-	auto constexpr operator*(NonZeroRatio a, Number b){return eval(a)*b;}
 	Ratio{Ratio2}
 	auto constexpr operator*(Ratio a, Ratio2 b){
 		using result_t=std::ratio_multiply<typename decltype(a)::type, typename decltype(b)::type>;

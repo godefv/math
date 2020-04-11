@@ -31,6 +31,12 @@ int main(){
 	check_less(static_compare(math::add_operation_t{}, power(op,integer<2>,y), power(math::add_operation_t{},integer<-1>,power(op,integer<2>,x))), 0);
 	check_less(static_compare(math::add_operation_t{}, power(math::add_operation_t{},integer<-1>,power(op,integer<2>,y)), power(op,integer<2>,x)), 0);
 
+	//casts with zero
+	using math::zero;
+	check_equal(zero+2.4 , 2.4 );
+	check_equal(zero+2.4f, 2.4f);
+	check_equal(zero+2   , 2   );
+	
 	return 0;
 }
 
