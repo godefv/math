@@ -3,6 +3,7 @@
 
 #include<boost/hana.hpp>
 #include"cpp20_concepts.h"
+#include"cpp20_array.h"
 #include<type_traits>
 
 namespace boost::hana{
@@ -44,6 +45,14 @@ namespace boost::hana{
 			return hana::equal(hana::decltype_(x), hana::type_c<const T>);
 		});
 	}
+
+	//to_array, like to_tuple
+	template<class T>
+	auto constexpr to_array=[](auto const& xs){
+		return hana::unpack(xs, [](auto const&... x){return std20::make_array(static_cast<T>(x)...);});
+	};
+
 }
+
 
 #endif /* HANA_PIPE_H */

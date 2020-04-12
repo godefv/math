@@ -15,6 +15,17 @@ namespace boost::hana{
 	}
 }
 
+namespace std{
+	template<long unsigned N>
+	std::ostream& operator<<(std::ostream& out, std::array<auto,N> const& a){
+		out<<"{";
+		for(auto const& x:a) {
+			out<<x<<", ";
+		}
+		return out<<"}";
+	}
+}
+
 template<class T> struct is_hana_set:std::false_type{};
 template<class... Ts> struct is_hana_set<boost::hana::set<Ts...>>:std::true_type{};
 template<class... Ts> struct is_hana_set<boost::hana::detail::map_impl<Ts...>>:std::true_type{};
