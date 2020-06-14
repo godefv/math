@@ -8,8 +8,8 @@
 #include"scalar.h"
 
 namespace godefv::math{
-	template<class T> concept bool Expression=Scalar<T> || Symbol<T> || group::GeneratedByAnyOperation<T>;
-	template<class T> concept bool NonSimpleScalarExpression=!SimpleScalar<T> && Expression<T>;
+	template<class T> concept Expression=Scalar<T> || Symbol<T> || group::GeneratedByAnyOperation<T>;
+	template<class T> concept NonSimpleScalarExpression=NonSimpleScalar<T> && Expression<T>;
 }
 
 #endif /* EXPRESSION_H */

@@ -4,7 +4,7 @@
 #include<functional>
 
 template< class F, class... Args >
-concept bool Invocable =
+concept Invocable =
 requires(F f, Args&&... args) {
 	std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
 	/* not required to be equality preserving */

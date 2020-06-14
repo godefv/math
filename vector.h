@@ -11,7 +11,7 @@ namespace godefv::math{
 	template<class DirectionT> struct is_vector<DirectionT, zero_t    >:std::true_type{};
 	template<class DirectionT> struct is_vector<DirectionT, DirectionT>:std::true_type{};
 
-	template<class T, class DirectionT> concept bool Vector=is_vector<DirectionT,T>::value;
+	template<class T, class DirectionT> concept Vector=is_vector<DirectionT,T>::value;
 
 	template<class DirectionT, Vector<DirectionT> VectorT, Scalar ScalarT> struct is_vector<DirectionT, group::generated_by_operation_t<mult_operation_t,ScalarT,VectorT>>:std::true_type{};
 	template<class DirectionT, Vector<DirectionT> VectorT, Scalar ScalarT> struct is_vector<DirectionT, group::generated_by_operation_t<mult_operation_t,VectorT,ScalarT>>:std::true_type{};

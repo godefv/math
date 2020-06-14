@@ -86,12 +86,12 @@ namespace godefv::math{
 		return group::inverse(mult_operation_t{}, a);
 	}
 	template<Expression A, Expression B> 
-		requires (!SimpleScalar<A> || !SimpleScalar<B>) //avoid negating a boolean expression inside constraints, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67070
+		requires ((NonSimpleScalar<A> || NonSimpleScalar<B>)
 		&& (
-		   ((!Scalar<A> && !Scalar<B>) || !(static_compare(mult_operation_t{}, A{},B{})<0))
+		   ((NonScalar<A> && NonScalar<B>) || !(static_compare(mult_operation_t{}, A{},B{})<0))
 		|| group::Operation<A,mult_operation_t>
 		|| group::Operation<B,mult_operation_t>
-		)
+		))
 	auto constexpr operator*(A const& a, B const& b){
 		return bilinear_operation_t<mult_operation_t>::apply(a,b);
 	}

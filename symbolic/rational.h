@@ -51,23 +51,23 @@ namespace godefv::math{
 	template<class T> struct is_ratio: std::false_type{};
 	template<std::intmax_t Numerator, std::intmax_t Denominator> 
 	struct is_ratio<ratio_t<Numerator,Denominator>>: std::true_type{};
-	template<class T> concept bool Ratio=is_ratio<T>::value;
+	template<class T> concept Ratio=is_ratio<T>::value;
 
-	template<class T> concept bool RatioLessThanOne=Ratio<T> && std::ratio_less<T,integer_t<1>>::value;
+	template<class T> concept RatioLessThanOne=Ratio<T> && std::ratio_less<T,integer_t<1>>::value;
 
 	template<class T> struct is_static_integer:std::false_type{};
 	template<std::intmax_t Numerator> struct is_static_integer<ratio_t<Numerator,1>>:std::true_type{};
-	template<class T> concept bool StaticInteger=is_static_integer<T>::value;
-	template<class T> concept bool Integer=is_static_integer<T>::value || std::is_integral<T>::value;
+	template<class T> concept StaticInteger=is_static_integer<T>::value;
+	template<class T> concept Integer=is_static_integer<T>::value || std::is_integral<T>::value;
 
 	template<class T> struct is_zero:std::false_type{};
 	template<std::intmax_t Denominator> struct is_zero<ratio_t<0,Denominator>>:std::true_type{};
-	template<class T> concept bool Zero=is_zero<T>::value;
-	template<class T> concept bool NonZero=!is_zero<T>::value;
-	template<class T> concept bool NonZeroRatio=Ratio<T> && !Zero<T>;
-	template<class T> concept bool NonZeroScalar=Scalar<T> && !Zero<T>;
-	template<class T> concept bool NonZeroInteger=Integer<T> && !Zero<T>;
-	template<class T> concept bool PositiveScalar=Scalar<T> && requires(T x){{x>=integer<0>}->std::true_type;};
+	template<class T> concept Zero=is_zero<T>::value;
+	template<class T> concept NonZero=!is_zero<T>::value;
+	template<class T> concept NonZeroRatio=Ratio<T> && !Zero<T>;
+	template<class T> concept NonZeroScalar=Scalar<T> && !Zero<T>;
+	template<class T> concept NonZeroInteger=Integer<T> && !Zero<T>;
+	template<class T> concept PositiveScalar=Scalar<T> && requires(T x){{x>=integer<0>}->std::true_type;};
 
 	template<Ratio RatioT> struct is_simple_scalar<RatioT>:std::true_type{};
 	template<Ratio RatioT> struct is_symbol<RatioT>: std::true_type{};

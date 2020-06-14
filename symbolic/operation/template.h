@@ -36,7 +36,7 @@ namespace godefv::math{
 	template<class> struct is_operation:std::false_type{};
 	template<class OperationT, class... OperandsT>
 	struct is_operation<operation_t<OperationT, OperandsT...>>:std::true_type{};
-	template<class T> concept bool Operation=is_operation<T>::value;
+	template<class T> concept Operation=is_operation<T>::value;
 
 	//comparisons
 	Operation{Operation2}

@@ -7,7 +7,7 @@
 namespace godefv::math::geometry{
 	//concept
 	template<class T> struct is_orthographic_projection:std::false_type{};
-	template<class T> concept bool OrthographicProjection=is_orthographic_projection<T>::value;
+	template<class T> concept OrthographicProjection=is_orthographic_projection<T>::value;
 
 	//apply
 	auto constexpr apply(OrthographicProjection const& projection, Vector const& operand){

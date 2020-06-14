@@ -39,7 +39,7 @@ namespace godefv::math::geometry{
 	template<class> struct is_translation:std::false_type{};
 	template<Vector VectorT>
 	struct is_translation<translation_t<VectorT>>:std::true_type{};
-	template<class T> concept bool Translation=is_translation<T>::value;
+	template<class T> concept Translation=is_translation<T>::value;
 
 	//inverse
 	auto constexpr inverse(translation_t<auto> const& operand){

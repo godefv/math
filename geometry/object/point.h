@@ -7,11 +7,11 @@
 namespace godefv::math::geometry{
 	//Point
 	template<class> struct is_point:std::false_type{};
-	template<class T> concept bool Point=is_point<T>::value;
+	template<class T> concept Point=is_point<T>::value;
 
 	//point
 	template<class Name>
-	class point_t{
+	struct point_t{
 		Name name;
 	};
 	template<class Name> point_t(Name const&)->point_t<Name>;
@@ -39,7 +39,7 @@ namespace godefv::math::geometry{
 
 	//PointTransform
 	template<class T> struct is_point_transform:std::false_type{};
-	template<class F> concept bool PointTransform=is_point_transform<F>::value;
+	template<class F> concept PointTransform=is_point_transform<F>::value;
 
 	//transformed point
 	template<class Name, class PointTransformT>

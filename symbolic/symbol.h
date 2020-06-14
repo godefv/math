@@ -13,7 +13,7 @@ namespace godefv::math{
 
 	//Symbol concept, is_symbol<> can be specialized to make a type a Symbol
 	template<class T> struct is_symbol: std::false_type{};
-	template<class T> concept bool Symbol=is_symbol<T>::value;
+	template<class T> concept Symbol=is_symbol<T>::value;
 
 	//name_t is a Symbol
 	template<char... Name> struct is_symbol<name_t<Name...>>: std::true_type{};

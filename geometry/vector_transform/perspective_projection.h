@@ -11,7 +11,7 @@
 namespace godefv::math::geometry{
 	//concept
 	template<class T> struct is_perspective_projection:std::false_type{};
-	template<class T> concept bool PerspectiveProjection=is_perspective_projection<T>::value;
+	template<class T> concept PerspectiveProjection=is_perspective_projection<T>::value;
 
 	//apply
 	auto constexpr apply(PerspectiveProjection const& projection, Vector const& operand){

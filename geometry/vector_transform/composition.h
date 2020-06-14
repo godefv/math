@@ -6,7 +6,7 @@
 #include"../../composition/operation.h"
 
 namespace godefv::math::geometry{
-	template<class F> concept bool VectorTransform=requires(F f){
+	template<class F> concept VectorTransform=requires(F f){
 		requires KVector<decltype(
 			f(2.5*direction_negative_t<name_t<'x'>>{}+ratio<3,5>*direction_positive_t<name_t<'t'>>{})
 		), 1>;

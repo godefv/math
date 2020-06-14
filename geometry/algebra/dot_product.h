@@ -16,9 +16,9 @@ namespace godefv::math::geometry{
 	using bilinear_dot_operation_t=bilinear_operation_t<dot_operation_t>;
 
 	//operation on blades
-	Blade{Blade2}
-	auto constexpr operator|(Blade const& a, Blade2 const& b){
-		return project(a*b, grades<abs(grade(a)-grade(b))>());
+	template<Blade Blade1, Blade Blade2>
+	auto constexpr operator|(Blade1 const& a, Blade2 const& b){
+		return project(a*b, grades<abs(grade(Blade1{})-grade(Blade2{}))>());
 	}
 	//extand operation by bilinearity
 	template<MultiVector A, MultiVector B> 

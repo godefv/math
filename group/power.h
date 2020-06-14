@@ -96,7 +96,7 @@ namespace godefv::math::group{
 
 	template<class OperatorT, class> struct is_power:std::false_type{};
 	template<class OperatorT, Scalar ExponentT, class OperandT> struct is_power<OperatorT, generated_power_t<OperatorT,ExponentT, OperandT>>:std::true_type{};
-	template<class T, class OperatorT> concept bool Power=is_power<OperatorT, T>::value;
+	template<class T, class OperatorT> concept Power=is_power<OperatorT, T>::value;
 }
 
 namespace godefv::math{

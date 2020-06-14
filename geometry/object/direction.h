@@ -21,7 +21,7 @@ namespace godefv::math::geometry{
 	template<class Name> struct is_direction_t<direction_positive_t<Name>>: std::true_type{};
 	template<class Name> struct is_direction_t<direction_negative_t<Name>>: std::true_type{};
 	template<class Name> struct is_direction_t<direction_null_t<Name>>: std::true_type{};
-	template<class A> concept bool Direction=is_direction_t<A>::value && Symbol<A> && !Scalar<A> && !SimpleScalar<A>; // last term is needed because gcc does not expand !(x||y) to (!x && !y)
+	template<class A> concept Direction=is_direction_t<A>::value && Symbol<A> && NonScalar<A>;
 
 	//operators
 	template<template<class> class DirectionT, class Name1, class Name2> requires Direction<DirectionT<Name1>> && Direction<DirectionT<Name2>>

@@ -16,19 +16,19 @@ namespace godefv::math{
 	auto constexpr half_turn=angle_t<integer_t<1>>{};
 	auto constexpr full_turn=angle_t<integer_t<2>>{};
 
-	template<class T> concept bool Angle=Vector<T,pi_t>;
+	template<class T> concept Angle=Vector<T,pi_t>;
 
 	auto constexpr turns(Angle const& angle){return ratio<1,2>*coordinate(pi, angle);}
 
-	template<class T> concept bool NegativeAngle=Angle<T> && requires(T angle){{turns(angle)< integer<0>} -> std::true_type;};
-	template<class T> concept bool PositiveAngle=Angle<T> && requires(T angle){{turns(angle)>=integer<0>} -> std::true_type;};
-	template<class T> concept bool NegativeAngleMoreThanHalfTurn=NegativeAngle<T> && requires(T angle){{turns(angle)< ratio<-1,2>} -> std::true_type;};
-	template<class T> concept bool PositiveAngleMoreThanHalfTurn=PositiveAngle<T> && requires(T angle){{turns(angle)>=ratio< 1,2>} -> std::true_type;};
-	template<class T> concept bool AngleMoreThanHalfTurn=NegativeAngleMoreThanHalfTurn<T> || PositiveAngleMoreThanHalfTurn<T>;
-	template<class T> concept bool AngleQuadrant1=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio< 1,4>} -> std::true_type;};
-	template<class T> concept bool AngleQuadrant2=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio< 1,4>} -> std::true_type;};
-	template<class T> concept bool AngleQuadrant3=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio<-1,4>} -> std::true_type;};
-	template<class T> concept bool AngleQuadrant4=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio<-1,4>} -> std::true_type;};
+	template<class T> concept NegativeAngle=Angle<T> && requires(T angle){{turns(angle)< integer<0>} -> std::true_type;};
+	template<class T> concept PositiveAngle=Angle<T> && requires(T angle){{turns(angle)>=integer<0>} -> std::true_type;};
+	template<class T> concept NegativeAngleMoreThanHalfTurn=NegativeAngle<T> && requires(T angle){{turns(angle)< ratio<-1,2>} -> std::true_type;};
+	template<class T> concept PositiveAngleMoreThanHalfTurn=PositiveAngle<T> && requires(T angle){{turns(angle)>=ratio< 1,2>} -> std::true_type;};
+	template<class T> concept AngleMoreThanHalfTurn=NegativeAngleMoreThanHalfTurn<T> || PositiveAngleMoreThanHalfTurn<T>;
+	template<class T> concept AngleQuadrant1=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio< 1,4>} -> std::true_type;};
+	template<class T> concept AngleQuadrant2=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio< 1,4>} -> std::true_type;};
+	template<class T> concept AngleQuadrant3=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio<-1,4>} -> std::true_type;};
+	template<class T> concept AngleQuadrant4=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio<-1,4>} -> std::true_type;};
 
 	//first quadrant exact values
 	auto constexpr cos(zero_t){return integer<1>;}

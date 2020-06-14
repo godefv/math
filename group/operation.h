@@ -41,7 +41,7 @@ namespace godefv::math::group{
 	//concept Operation
 	template<class OperatorT, class> struct is_generated_by_operation:std::false_type{};
 	template<class OperatorT, class A,class B> struct is_generated_by_operation<OperatorT, generated_by_operation_t<OperatorT,A,B>>:std::true_type{};
-	template<class T, class OperatorT> concept bool Operation=is_generated_by_operation<OperatorT, T>::value;
+	template<class T, class OperatorT> concept Operation=is_generated_by_operation<OperatorT, T>::value;
 
 	//concept Generated<OperatorT>
 	template<class T, class OperatorT> 
@@ -51,7 +51,7 @@ namespace godefv::math::group{
 
 	//concept GeneratedByAnyOperation
 	template<class T> struct is_generated_by_any_operation: std::false_type{};
-	template<class T> concept bool GeneratedByAnyOperation=is_generated_by_any_operation<T>::value;
+	template<class T> concept GeneratedByAnyOperation=is_generated_by_any_operation<T>::value;
 
 	template<class OperatorT> 
 	struct is_generated_by_any_operation<group::generated_identity_t<OperatorT>>: std::true_type{};

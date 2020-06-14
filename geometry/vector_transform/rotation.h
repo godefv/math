@@ -10,7 +10,7 @@
 namespace godefv::math::geometry{
 	//concept
 	template<class> struct is_rotation:std::false_type{};
-	template<class T> concept bool VectorRotation=is_rotation<T>::value;
+	template<class T> concept VectorRotation=is_rotation<T>::value;
 
 	//apply
 	auto constexpr apply(VectorRotation const& rotation, MultiVector const& operand){

@@ -13,8 +13,8 @@ namespace godefv::math::geometry{
 	template<Direction DirectionT> struct is_blade<DirectionT>: std::true_type{};
 	template<Scalar    ScalarT   > struct is_blade<ScalarT   >: std::true_type{};
 	
-	template<class T> concept bool Blade=is_blade<T>::value;
-	template<class T> concept bool NonZeroBlade=Blade<T> && !Zero<T>;
+	template<class T> concept Blade=is_blade<T>::value;
+	template<class T> concept NonZeroBlade=Blade<T> && !Zero<T>;
 	
 	template<Blade Blade1, Blade Blade2> 
 	struct is_blade<group::generated_by_operation_t<mult_operation_t,Blade1,Blade2>>: std::true_type{};
@@ -25,7 +25,7 @@ namespace godefv::math::geometry{
 	template<class> struct is_multivector: std::false_type{};
 	template<Blade BladeT> struct is_multivector<BladeT>: std::true_type{};
 	
-	template<class T> concept bool MultiVector=is_multivector<T>::value;
+	template<class T> concept MultiVector=is_multivector<T>::value;
 	
 	template<MultiVector MultiVectorT, Blade BladeT> 
 	struct is_multivector<group::generated_by_operation_t<add_operation_t,MultiVectorT,BladeT>>: std::true_type{};

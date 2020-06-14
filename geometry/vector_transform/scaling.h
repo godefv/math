@@ -9,7 +9,7 @@
 namespace godefv::math::geometry{
 	//concept
 	template<class T> struct is_scaling:std::false_type{};
-	template<class T> concept bool Scaling=is_scaling<T>::value;
+	template<class T> concept Scaling=is_scaling<T>::value;
 
 	//apply
 	auto constexpr apply(Scaling const& scaling, Vector const& operand){
