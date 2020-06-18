@@ -47,8 +47,7 @@ namespace godefv::math::geometry{
 	}
 
 	//composition of point transformations - translations
-	Translation{Translation2}
-	auto constexpr operator,(Translation const& a, Translation2 const& b){
+	auto constexpr operator,(Translation auto const& a, Translation auto const& b){
 		return translation_t{a.vector+b.vector};
 	}
 
@@ -61,10 +60,10 @@ namespace godefv::math::geometry{
 	}
 
 	//point
-	auto constexpr point(Point const& origin, Vector const& vector){
+	auto constexpr point(Point auto const& origin, Vector auto const& vector){
 		return translation_t{vector}(origin);
 	}
-	auto constexpr point(Vector const& vector){
+	auto constexpr point(Vector auto const& vector){
 		return translation_t{vector}(default_origin);
 	}
 }

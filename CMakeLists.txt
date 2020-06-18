@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.8)
 project(math CXX)
 
-if(NOT CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
+if(NOT CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10.1)
 	if(DISABLE_COMPILER_CHECK)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fconcepts" ) 
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a" ) 
 	else()
-		message(FATAL_ERROR "Require at least g++-7.0")
+		message(FATAL_ERROR "Require at least g++-10.1.0")
 	endif()
 endif()
 
@@ -32,11 +32,11 @@ set(GCC_WARNING_FLAGS
 find_package(Boost 1.62.0 REQUIRED)
 
 add_library(math INTERFACE)
-target_compile_features(math INTERFACE cxx_std_17)
+target_compile_features(math INTERFACE cxx_std_20)
 #target_compile_features(math INTERFACE cxx_concepts)
-if(CMAKE_COMPILER_IS_GNUCXX)
-	target_compile_options(math INTERFACE "-fconcepts")
-endif()
+#if(CMAKE_COMPILER_IS_GNUCXX)
+	#target_compile_options(math INTERFACE "-fconcepts")
+#endif()
 
 enable_testing()
 

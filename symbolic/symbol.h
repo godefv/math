@@ -2,8 +2,8 @@
 #define SYMBOLIC_SYMBOL_H 
 
 #include"name.h"
-#include"../cpp20_concepts.h"
 #include<type_traits>
+#include<concepts>
 
 namespace godefv::math{
 	//!A Symbol is any type which represents a specific instance of a mathematical object. 
@@ -44,7 +44,7 @@ namespace godefv::math{
 	}
 
 	//eval
-	template<class NameT, class EvaluatorT> requires Invocable<EvaluatorT, symbol_t<NameT>>
+	template<class NameT, class EvaluatorT> requires std::invocable<EvaluatorT, symbol_t<NameT>>
 	auto constexpr eval_with_data(symbol_t<NameT> symbol, EvaluatorT const& evaluator){return evaluator(symbol);}
 }
 

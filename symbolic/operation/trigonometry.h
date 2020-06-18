@@ -18,17 +18,17 @@ namespace godefv::math{
 
 	template<class T> concept Angle=Vector<T,pi_t>;
 
-	auto constexpr turns(Angle const& angle){return ratio<1,2>*coordinate(pi, angle);}
+	auto constexpr turns(Angle auto const& angle){return ratio<1,2>*coordinate(pi, angle);}
 
-	template<class T> concept NegativeAngle=Angle<T> && requires(T angle){{turns(angle)< integer<0>} -> std::true_type;};
-	template<class T> concept PositiveAngle=Angle<T> && requires(T angle){{turns(angle)>=integer<0>} -> std::true_type;};
-	template<class T> concept NegativeAngleMoreThanHalfTurn=NegativeAngle<T> && requires(T angle){{turns(angle)< ratio<-1,2>} -> std::true_type;};
-	template<class T> concept PositiveAngleMoreThanHalfTurn=PositiveAngle<T> && requires(T angle){{turns(angle)>=ratio< 1,2>} -> std::true_type;};
+	template<class T> concept NegativeAngle=Angle<T> && requires(T angle){{turns(angle)< integer<0>} -> std::derived_from<std::true_type>;};
+	template<class T> concept PositiveAngle=Angle<T> && requires(T angle){{turns(angle)>=integer<0>} -> std::derived_from<std::true_type>;};
+	template<class T> concept NegativeAngleMoreThanHalfTurn=NegativeAngle<T> && requires(T angle){{turns(angle)< ratio<-1,2>} -> std::derived_from<std::true_type>;};
+	template<class T> concept PositiveAngleMoreThanHalfTurn=PositiveAngle<T> && requires(T angle){{turns(angle)>=ratio< 1,2>} -> std::derived_from<std::true_type>;};
 	template<class T> concept AngleMoreThanHalfTurn=NegativeAngleMoreThanHalfTurn<T> || PositiveAngleMoreThanHalfTurn<T>;
-	template<class T> concept AngleQuadrant1=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio< 1,4>} -> std::true_type;};
-	template<class T> concept AngleQuadrant2=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio< 1,4>} -> std::true_type;};
-	template<class T> concept AngleQuadrant3=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio<-1,4>} -> std::true_type;};
-	template<class T> concept AngleQuadrant4=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio<-1,4>} -> std::true_type;};
+	template<class T> concept AngleQuadrant1=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio< 1,4>} -> std::derived_from<std::true_type>;};
+	template<class T> concept AngleQuadrant2=PositiveAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio< 1,4>} -> std::derived_from<std::true_type>;};
+	template<class T> concept AngleQuadrant3=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)< ratio<-1,4>} -> std::derived_from<std::true_type>;};
+	template<class T> concept AngleQuadrant4=NegativeAngle<T> && !AngleMoreThanHalfTurn<T> && requires(T angle){{turns(angle)>=ratio<-1,4>} -> std::derived_from<std::true_type>;};
 
 	//first quadrant exact values
 	auto constexpr cos(zero_t){return integer<1>;}
@@ -39,13 +39,13 @@ namespace godefv::math{
 	auto constexpr cos(angle_t<ratio_t<1,2>>){return integer<0>;}
 	auto constexpr cos(angle_t<ratio_t<3,5>>){return integer<1>+sqrt(integer<5>)*ratio<-1,4>;}
 	//express every angle in terms of the corresponding first quadrant angle
-	auto constexpr cos(NegativeAngle const& angle){
+	auto constexpr cos(NegativeAngle auto const& angle){
 		return cos(-angle);
 	}
-	auto constexpr cos(PositiveAngleMoreThanHalfTurn const& angle){
+	auto constexpr cos(PositiveAngleMoreThanHalfTurn auto const& angle){
 		return cos(angle-full_turn);
 	}
-	auto constexpr cos(AngleQuadrant2 const& angle){
+	auto constexpr cos(AngleQuadrant2 auto const& angle){
 		return -cos(half_turn-angle);
 	}
 	//avoid problematic value of one half turn exactly
@@ -54,7 +54,7 @@ namespace godefv::math{
 	}
 
 	//implement sin over cos
-	auto constexpr sin(Angle const& angle){
+	auto constexpr sin(Angle auto const& angle){
 		return cos(angle_t<ratio_t<1,2>>{}-angle);
 	}
 	auto constexpr sort_operation_operand_as(cos_t, group::generated_by_operation_t<add_operation_t,angle_t<ratio_t<1,2>>,auto> const& a){

@@ -35,14 +35,14 @@ namespace godefv::math::group{
 	struct is_generated_by_operation<geometry::compose_operation_t, geometry::generated_by_composition_t<A,B>>:std::true_type{};
 
 	template<class A,class B> 
-		requires !group::Generated<A,geometry::compose_operation_t>
-		      && !group::Generated<B,geometry::compose_operation_t>
+		requires (!group::Generated<A,geometry::compose_operation_t>
+		       && !group::Generated<B,geometry::compose_operation_t>)
 	auto constexpr operation(geometry::compose_operation_t, A const& a, B const& b){
 		return geometry::generated_by_composition_t{a,b};
 	}
 	template<class A,class B,class C> 
-		requires std::is_base_of<generated_by_operation_t<geometry::compose_operation_t,B,C>, decltype(geometry::compose_operation_t::apply(B{},C{}))>::value 
-		      && !group::Generated<C,geometry::compose_operation_t>
+		requires (std::is_base_of<generated_by_operation_t<geometry::compose_operation_t,B,C>, decltype(geometry::compose_operation_t::apply(B{},C{}))>::value 
+		      && !group::Generated<C,geometry::compose_operation_t>)
 	auto constexpr operation(geometry::compose_operation_t, geometry::generated_by_composition_t<A,B> const& ab, C const& c){
 		return geometry::generated_by_composition_t{ab,c};
 	}

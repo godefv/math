@@ -8,14 +8,13 @@
 
 namespace godefv::math::geometry{
 	//grade of blades
-	auto constexpr grade(Scalar){return 0;}
-	auto constexpr grade(Direction){return 1;}
+	auto constexpr grade(Scalar auto){return 0;}
+	auto constexpr grade(Direction auto){return 1;}
 	//grade is a morphism from * to +
-	Blade{Blade2}
-	auto constexpr grade(group::generated_by_operation_t<mult_operation_t, Blade,Blade2> const& a){
+	auto constexpr grade(group::generated_by_operation_t<mult_operation_t, Blade auto,Blade auto> const& a){
 		return grade(a.first)+grade(a.second);
 	}
-	auto constexpr grade(group::generated_power_t<add_operation_t, Scalar, Blade> const& a){
+	auto constexpr grade(group::generated_power_t<add_operation_t, Scalar auto, Blade auto> const& a){
 		return grade(a.operand);
 	}
 
@@ -27,7 +26,7 @@ namespace godefv::math::geometry{
 	
 	//grades is a morphism from (auto,+) to (hana::set,hana::union)
 	auto constexpr grades_functor=group::morphism_t{add_operation_t{}, hana::union_, []<Blade BladeT>(BladeT){return grades<grade(BladeT{})>();}};
-	auto constexpr grades(MultiVector const& operand){return grades_functor(operand);}
+	auto constexpr grades(MultiVector auto const& operand){return grades_functor(operand);}
 
 	//KVector concept
 	template<class T, int K> concept KVector=hana::value(grades(T{})==grades<K>()) || Zero<T>;

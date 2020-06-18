@@ -9,8 +9,8 @@
 #include<cmath>
 
 namespace godefv::math::geometry{
-	auto constexpr norm(MultiVector const& a){
-		Scalar a_square=(a|a);
+	auto constexpr norm(MultiVector auto const& a){
+		Scalar auto a_square=(a|a);
 		using std::sqrt;
 		using std::abs;
 		return sqrt(abs(a_square));

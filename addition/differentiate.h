@@ -6,8 +6,8 @@
 #include"../group/morphism.h"
 
 namespace godefv::math{
-	Symbol{SymbolT}
-	auto constexpr differentiate(SymbolT, group::Generated<add_operation_t> const& operand){
+	template<Symbol SymbolT>
+	auto constexpr differentiate(SymbolT, group::Generated<add_operation_t> auto const& operand){
 		auto constexpr morphism=group::endomorphism(add_operation_t{}, [](auto const& x){return differentiate(SymbolT{}, x);});
 		return morphism(operand);
 	}

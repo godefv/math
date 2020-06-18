@@ -26,6 +26,8 @@ int main(){
 	check_equal(pi>=integer<0>, std::true_type{});
 
 	static_assert(Symbol<ratio_t<1,4>>);
+	static_assert(PositiveScalar<integer_t<2>>);
+	static_assert(!PositiveScalar<int>);
 	
 	return 0;
 }

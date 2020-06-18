@@ -28,13 +28,13 @@ namespace godefv::math::geometry{
 	bool constexpr operator==(DirectionT<Name1> const& a, DirectionT<Name2> const& b){
 		return a.name==b.name;
 	}
-	//bool constexpr operator==(Direction const& a, Direction const& b){
+	//bool constexpr operator==(Direction auto const& a, Direction auto const& b){
 		//return false;
 	//}
-	bool constexpr operator!=(Direction const& a, Direction const& b){
+	bool constexpr operator!=(Direction auto const& a, Direction auto const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, Direction const& operand){
+	std::ostream& operator<<(std::ostream& out, Direction auto const& operand){
 		return out<<operand.name;
 	}
 	template<char... letters>
@@ -53,7 +53,7 @@ namespace godefv::math::geometry{
 	}
 
 	//differentiate
-	auto constexpr differentiate(symbol_t<auto>, Direction){
+	auto constexpr differentiate(symbol_t<auto>, Direction auto){
 		return integer<0>;
 	}
 }
@@ -71,8 +71,7 @@ namespace boost::hana {
 
     template <>
     struct equal_impl<godefv::math::geometry::direction_tag_t, godefv::math::geometry::direction_tag_t> {
-		godefv::math::geometry::Direction{Direction2}
-        static constexpr auto apply(godefv::math::geometry::Direction const& a, Direction2 const& b)
+        static constexpr auto apply(godefv::math::geometry::Direction auto const& a, godefv::math::geometry::Direction auto const& b)
             -> hana::bool_<std::is_same_v<decltype(a), decltype(b)>>
         { return {}; }
 

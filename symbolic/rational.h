@@ -11,9 +11,9 @@
 #include<limits>
 
 namespace godefv::math{
-	template<std::intmax_t Numerator, std::intmax_t Denominator> requires Denominator>=0
+	template<std::intmax_t Numerator, std::intmax_t Denominator> requires (Denominator>=0)
 	struct ratio_t: std::ratio<Numerator,Denominator>{
-		constexpr operator double() const requires Denominator>1 {
+		constexpr operator double() const requires (Denominator>1) {
 			return static_cast<double>(Numerator)/Denominator;
 		}
 		explicit constexpr operator double() const{
@@ -21,15 +21,15 @@ namespace godefv::math{
 		}
 		//integers should be cast to an integral type
 		//zero should not be cast at all : it should either be used directly or be optimized out
-		constexpr operator std::intmax_t() const requires Denominator==1 && Numerator!=0 &&
+		constexpr operator std::intmax_t() const requires (Denominator==1 && Numerator!=0 &&
 		!( Numerator>std::numeric_limits<int>::min() 
-		&& Numerator<std::numeric_limits<int>::max())
+		&& Numerator<std::numeric_limits<int>::max()))
 		{
 			return Numerator;
 		}
-		constexpr operator int() const requires Denominator==1 && Numerator!=0 &&
+		constexpr operator int() const requires (Denominator==1 && Numerator!=0 &&
 		(  Numerator>std::numeric_limits<int>::min() 
-		&& Numerator<std::numeric_limits<int>::max())
+		&& Numerator<std::numeric_limits<int>::max()))
 		{
 			return static_cast<int>(Numerator);
 		}
@@ -67,7 +67,7 @@ namespace godefv::math{
 	template<class T> concept NonZeroRatio=Ratio<T> && !Zero<T>;
 	template<class T> concept NonZeroScalar=Scalar<T> && !Zero<T>;
 	template<class T> concept NonZeroInteger=Integer<T> && !Zero<T>;
-	template<class T> concept PositiveScalar=Scalar<T> && requires(T x){{x>=integer<0>}->std::true_type;};
+	template<class T> concept PositiveScalar=Scalar<T> && requires(T x){{x>=integer<0>}->std::derived_from<std::true_type>;};
 
 	template<Ratio RatioT> struct is_simple_scalar<RatioT>:std::true_type{};
 	template<Ratio RatioT> struct is_symbol<RatioT>: std::true_type{};
@@ -75,73 +75,63 @@ namespace godefv::math{
 	//eval
 	template<std::intmax_t N>
 	auto constexpr eval_with_data(integer_t<N> const&, auto const&){return N;}
-	auto constexpr eval_with_data(Ratio const& a, auto const&){return static_cast<double>(a);}
+	auto constexpr eval_with_data(Ratio auto const& a, auto const&){return static_cast<double>(a);}
 
 	//operators
-	auto constexpr operator*(Number, Zero){return integer<0>;}
-	auto constexpr operator*(Zero, Number){return integer<0>;}
-	Ratio{Ratio2}
-	auto constexpr operator*(Ratio a, Ratio2 b){
+	auto constexpr operator*(Number auto, Zero auto){return integer<0>;}
+	auto constexpr operator*(Zero auto, Number auto){return integer<0>;}
+	auto constexpr operator*(Ratio auto a, Ratio auto b){
 		using result_t=std::ratio_multiply<typename decltype(a)::type, typename decltype(b)::type>;
 		return ratio<result_t::num, result_t::den>;
 	}
-	Ratio{Ratio2}
-	auto constexpr operator/(Ratio a, Ratio2 b){
+	auto constexpr operator/(Ratio auto a, Ratio auto b){
 		using result_t=std::ratio_divide<typename decltype(a)::type, typename decltype(b)::type>;
 		return ratio<result_t::num, result_t::den>;
 	}
-	auto constexpr operator/(Number a, NonZeroRatio b){return a/eval(b);}
-	auto constexpr operator/(NonZeroRatio a, Number b){return eval(a)/b;}
-	auto constexpr operator/(Zero, Number){return integer<0>;}
-	Ratio{Ratio2}
-	auto constexpr operator+(Ratio a, Ratio2 b){
+	auto constexpr operator/(Number auto a, NonZeroRatio auto b){return a/eval(b);}
+	auto constexpr operator/(NonZeroRatio auto a, Number auto b){return eval(a)/b;}
+	auto constexpr operator/(Zero auto, Number auto){return integer<0>;}
+	auto constexpr operator+(Ratio auto a, Ratio auto b){
 		using result_t=std::ratio_add<typename decltype(a)::type, typename decltype(b)::type>;
 		return ratio<result_t::num, result_t::den>;
 	}
-	auto constexpr operator+(Number a, NonZeroRatio b){return a+eval(b);}
-	auto constexpr operator+(NonZeroRatio a, Number b){return eval(a)+b;}
-	Ratio{Ratio2}
-	auto constexpr operator-(Ratio a, Ratio2 b){
+	auto constexpr operator+(Number auto a, NonZeroRatio auto b){return a+eval(b);}
+	auto constexpr operator+(NonZeroRatio auto a, Number auto b){return eval(a)+b;}
+	auto constexpr operator-(Ratio auto a, Ratio auto b){
 		using result_t=std::ratio_subtract<typename decltype(a)::type, typename decltype(b)::type>;
 		return ratio<result_t::num, result_t::den>;
 	}
-	auto constexpr operator-(Ratio a){
+	auto constexpr operator-(Ratio auto a){
 		return integer<0>-a;
 	}
-	Ratio{Ratio2}
-	auto constexpr operator<(Ratio a, Ratio2 b){
+	auto constexpr operator<(Ratio auto a, Ratio auto b){
 		return std::ratio_less<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	Ratio{Ratio2}
-	auto constexpr operator>(Ratio a, Ratio2 b){
+	auto constexpr operator>(Ratio auto a, Ratio auto b){
 		return std::ratio_greater<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	Ratio{Ratio2}
-	auto constexpr operator<=(Ratio a, Ratio2 b){
+	auto constexpr operator<=(Ratio auto a, Ratio auto b){
 		return std::ratio_less_equal<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	Ratio{Ratio2}
-	auto constexpr operator>=(Ratio a, Ratio2 b){
+	auto constexpr operator>=(Ratio auto a, Ratio auto b){
 		return std::ratio_greater_equal<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	Ratio{Ratio2}
-	auto constexpr operator==(Ratio a, Ratio2 b){
+	auto constexpr operator==(Ratio auto a, Ratio auto b){
 		return std::ratio_equal<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	Ratio{Ratio2}
-	auto constexpr operator!=(Ratio a, Ratio2 b){
+	auto constexpr operator!=(Ratio auto a, Ratio auto b){
 		return std::ratio_not_equal<typename decltype(a)::type, typename decltype(b)::type>{};
 	}
-	std::ostream& operator<<(std::ostream& out, Ratio a){
+	std::ostream& operator<<(std::ostream& out, Ratio auto a){
 		return out<<a.numerator()<<"/"<<a.denominator();
 	}
-	template<class T> requires std::is_arithmetic<T>::value && !std::is_signed<T>::value
+	template<class T> requires (std::is_arithmetic<T>::value && !std::is_signed<T>::value)
 	auto constexpr operator>=(T a, integer_t<0>){return std::true_type{};}
-	template<class NameT> requires Scalar<decltype(eval(symbol_t<NameT>{}))> && eval(symbol_t<NameT>{})>=0
+	template<class NameT> requires (Scalar<decltype(eval(symbol_t<NameT>{}))> && eval(symbol_t<NameT>{})>=0)
 	auto constexpr operator>=(symbol_t<NameT>, integer_t<0>){return std::true_type{};}
 
 	//inverse
-	auto constexpr inverse(Ratio a){
+	auto constexpr inverse(Ratio auto a){
 		return integer<1>/a;
 	}
 
@@ -165,13 +155,13 @@ namespace godefv::math{
 		return rounded_sqrt_impl(x, 0, x / 2 + 1);
 	}
 
-	template<std::intmax_t N, std::intmax_t D> requires rounded_sqrt(N)*rounded_sqrt(N)==N && rounded_sqrt(D)*rounded_sqrt(D)==D 
+	template<std::intmax_t N, std::intmax_t D> requires (rounded_sqrt(N)*rounded_sqrt(N)==N && rounded_sqrt(D)*rounded_sqrt(D)==D)
 	auto constexpr sqrt(ratio_t<N,D>){
 		return ratio<rounded_sqrt(N),rounded_sqrt(D)>;
 	}
 
 	//static_order
-	Ratio{Ratio2} int constexpr static_compare(Ratio const& a, Ratio2 const& b){return (b-a).numerator();}
+	int constexpr static_compare(Ratio auto const& a, Ratio auto const& b){return (b-a).numerator();}
 }
 
 #endif /* RATIONAL_H */

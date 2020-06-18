@@ -16,7 +16,7 @@ namespace godefv::math::group{
 		template<class... ArgsT> auto constexpr operator()(generated_by_operation_t<InnerOperatorT, auto,auto> const& ab, ArgsT&&... args) const{
 			return outer_operator(operator()(ab.first, std::forward<ArgsT>(args)...),operator()(ab.second, std::forward<ArgsT>(args)...));
 		}
-		template<class... ArgsT> auto constexpr operator()(generated_power_t<InnerOperatorT, SimpleScalar, auto> const& pow, ArgsT&&... args) const{
+		template<class... ArgsT> auto constexpr operator()(generated_power_t<InnerOperatorT, SimpleScalar auto, auto> const& pow, ArgsT&&... args) const{
 			return group::power(outer_operator, pow.exponent, operator()(pow.operand, std::forward<ArgsT>(args)...));
 		}
 		template<class... ArgsT> auto constexpr operator()(identity_t<InnerOperatorT>, ArgsT&&... ) const{

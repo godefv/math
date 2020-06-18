@@ -13,7 +13,7 @@ namespace godefv::math::geometry{
 	template<class T> concept VectorRotation=is_rotation<T>::value;
 
 	//apply
-	auto constexpr apply(VectorRotation const& rotation, MultiVector const& operand){
+	auto constexpr apply(VectorRotation auto const& rotation, MultiVector auto const& operand){
 		auto R=rotation.rotor();
 		return project(R*operand*reverse(R), grades(operand));
 	}
@@ -72,12 +72,10 @@ namespace godefv::math::geometry{
 	}
 
 	//comparison operators
-	VectorRotation{VectorRotation2}
-	bool constexpr operator==(VectorRotation const& a, VectorRotation2 const& b){
+	bool constexpr operator==(VectorRotation auto const& a, VectorRotation auto const& b){
 		return a.rotor()==b.rotor();
 	}
-	VectorRotation{VectorRotation2}
-	bool constexpr operator!=(VectorRotation const& a, VectorRotation2 const& b){
+	bool constexpr operator!=(VectorRotation auto const& a, VectorRotation auto const& b){
 		return !(a==b);
 	}
 	

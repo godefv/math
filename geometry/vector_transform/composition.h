@@ -13,13 +13,11 @@ namespace godefv::math::geometry{
 	};
 
 	//composition of vector transformations - scalings
-	Scaling{Scaling2}
-	auto constexpr operator,(Scaling const& a, Scaling2 const& b){
+	auto constexpr operator,(Scaling auto const& a, Scaling auto const& b){
 		return scaling_t{a.factor*b.factor};
 	}
 	//composition of vector transformations - rotations
-	VectorRotation{VectorRotation2}
-	auto constexpr operator,(VectorRotation const& a, VectorRotation2 const& b){
+	auto constexpr operator,(VectorRotation auto const& a, VectorRotation auto const& b){
 		auto ab_rotor=b.rotor()*a.rotor();
 		//auto bivector_part=project(ab_rotor, grades<2>());
 		//if constexpr(grades(ab_rotor)==grades<0,2>() && group::geometric::Blade<decltype(bivector_part)>){
@@ -33,7 +31,7 @@ namespace godefv::math::geometry{
 		//}
 	}
 	//composition of vector transformations - put scalings first
-   	auto constexpr operator,(VectorRotation const& a, Scaling const& b){
+   	auto constexpr operator,(VectorRotation auto const& a, Scaling auto const& b){
    		return b,a;
    	}
 

@@ -48,7 +48,7 @@ namespace godefv::math{
 
 
 	template<Symbol... SymbolTs, class ValueT=double>
-	auto constexpr to_dense_tensor(Expression const& expression, hana::tuple<SymbolTs...> frame){
+	auto constexpr to_dense_tensor(Expression auto const& expression, hana::tuple<SymbolTs...> frame){
 		return dense_tensor_t{
 			hana::make_tuple(frame),
 			frame
@@ -57,7 +57,7 @@ namespace godefv::math{
 		};
 	}
 	template<Symbol... Symbol1Ts, Symbol... Symbol2Ts, class... OtherFrameTs>
-	auto constexpr to_dense_tensor(Expression const& expression, hana::tuple<Symbol1Ts...> frame1, hana::tuple<Symbol2Ts...> frame2, OtherFrameTs... other_frames){
+	auto constexpr to_dense_tensor(Expression auto const& expression, hana::tuple<Symbol1Ts...> frame1, hana::tuple<Symbol2Ts...> frame2, OtherFrameTs... other_frames){
 		return dense_tensor_t{
 			hana::make_tuple(frame1, frame2, other_frames...),
 			frame1

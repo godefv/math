@@ -20,19 +20,19 @@ namespace godefv::math::geometry{
 	template<class CenterT, class TransformT> 
 	struct is_point_transform<point_transform_t<CenterT,TransformT>>:std::true_type{};
 
-	auto constexpr make_point_transform(point_t<auto> const& center, VectorTransform const& transform){
+	auto constexpr make_point_transform(point_t<auto> const& center, VectorTransform auto const& transform){
 		return point_transform_t{center,transform};
 	}
-	auto constexpr make_point_transform(transformed_point_t<auto,auto> const& center, VectorTransform const& transform){
+	auto constexpr make_point_transform(transformed_point_t<auto,auto> const& center, VectorTransform auto const& transform){
 		return inverse(center.transform),make_point_transform(center.origin, transform),center.transform;
 	}
 
 	template<Point CenterT, class ScalarT>
 	using homothecy_t=point_transform_t<CenterT,scaling_t<ScalarT>>;
-	inline auto constexpr make_homothecy(Point const& center, auto const& ratio){
+	inline auto constexpr make_homothecy(Point auto const& center, auto const& ratio){
 		return make_point_transform(center, scaling_t{ratio});
 	}
-	inline auto constexpr make_point_rotation(Point const& center, plane_t<auto,auto> const& plane, auto const& angle){
+	inline auto constexpr make_point_rotation(Point auto const& center, plane_t<auto,auto> const& plane, auto const& angle){
 		return make_point_transform(center, simple_rotation_t{plane,angle});
 	}
 
@@ -63,7 +63,7 @@ namespace godefv::math::geometry{
 		return point_transform_t{CenterT{}, (a.vector_transform,b.vector_transform)};
 	}
 	//composition of point transformations - put scalings first and translations last
-   	auto constexpr operator,(Translation const& a, point_transform_t<auto,auto> const& b){
+   	auto constexpr operator,(Translation auto const& a, point_transform_t<auto,auto> const& b){
    		return (b,translation_t{b.vector_transform(a.vector)});
    	}
 	

@@ -37,7 +37,7 @@ namespace godefv::math::geometry{
 	constexpr int static_compare(auto, direction_negative_t<auto> const&, direction_positive_t<auto> const&){return 1;}
 
 	//anticommutation rule : directions are assumed to be orthogonal
-	template<Direction A, Direction B> requires static_compare(mult_operation_t{}, A{},B{})<0
+	template<Direction A, Direction B> requires (static_compare(mult_operation_t{}, A{},B{})<0)
 	auto constexpr operator*(A const& a, B const& b){
 		return -(b*a);
 	}

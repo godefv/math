@@ -10,7 +10,7 @@ namespace godefv::math::geometry{
 	template<class T> concept OrthographicProjection=is_orthographic_projection<T>::value;
 
 	//apply
-	auto constexpr apply(OrthographicProjection const& projection, Vector const& operand){
+	auto constexpr apply(OrthographicProjection auto const& projection, Vector auto const& operand){
 		auto blade=projection.slice.blade();
 		return project(blade*(inverse(blade)|operand), grades(operand));
 	}

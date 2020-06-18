@@ -2,7 +2,7 @@
 #include"../symbolic/unit_test.h"
 
 
-auto constexpr test_with_variable(math::Symbol variable){
+auto constexpr test_with_variable(math::Symbol auto variable){
 	using math::ratio;
 	using math::integer;
 

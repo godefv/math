@@ -22,7 +22,7 @@ namespace godefv::math{
 	template<class OperandT>
 	using sqrt_t=nth_root_t<integer_t<2>, OperandT>;
 
-	auto constexpr pow(auto const& operand, Ratio exponent){
+	auto constexpr pow(auto const& operand, Ratio auto exponent){
 		using group::power;
 		return power(mult_operation_t{}, exponent, operand);
 	}
@@ -39,7 +39,7 @@ namespace godefv::math{
 		return integer<1>;
 	}
 	template<StaticInteger StaticInteger1, StaticInteger StaticInteger2>
-	auto constexpr static_sqrt_linear(StaticInteger operand, StaticInteger1 exponent, StaticInteger2 i){
+	auto constexpr static_sqrt_linear(StaticInteger auto operand, StaticInteger1 exponent, StaticInteger2 i){
 		auto constexpr power=group::power(mult_operation_t{}, exponent, i);
 		auto constexpr ratio=operand/power;
 		if constexpr(ratio.denominator()==1){
@@ -51,17 +51,17 @@ namespace godefv::math{
 		}
 	}
 	template<std::intmax_t Exponent>
-	auto constexpr static_sqrt(StaticInteger operand){
+	auto constexpr static_sqrt(StaticInteger auto operand){
 		return static_sqrt_linear(operand, integer<Exponent>, integer<2>);
 	}
 
 	//exact roots of rationals
-	template<SimpleScalar ExponentT, Ratio RatioT> requires ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same<RatioT,integer_t<1>>::value
+	template<SimpleScalar ExponentT, Ratio RatioT> requires (ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same<RatioT,integer_t<1>>::value)
 	auto constexpr generated_power(mult_operation_t, ExponentT, RatioT){
 		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}
 	//apply inverse if different than power<-1> (only with rational operands for now, because we know they can then be processed immediately)
-	template<SimpleScalar ExponentT, Ratio OperandT> requires ExponentT::num<0 && !(StaticInteger<OperandT> && !StaticInteger<ExponentT>)
+	template<SimpleScalar ExponentT, Ratio OperandT> requires (ExponentT::num<0 && !(StaticInteger<OperandT> && !StaticInteger<ExponentT>))
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, OperandT const& operand){
 		return group::power(mult_operation_t{}, -exponent, inverse(operand));
 	}
@@ -81,9 +81,10 @@ namespace godefv::math{
 	//expand powers of multiplication or addition a^n = a(a^(n-1)) with a=xy or x+y 
 	//this gives a chance to apply commutation rules, and expands (a+b)^n
 	template<SimpleScalar ExponentT, class T> 
-		requires ExponentT::num>0 
-		      && ExponentT::den==1 
-			  && (group::Operation<T,mult_operation_t> || group::Operation<T,add_operation_t>)
+	requires(ExponentT::num>0 
+	      && ExponentT::den==1 
+		  && (group::Operation<T,mult_operation_t> || group::Operation<T,add_operation_t>)
+	)
 	auto constexpr generated_power(mult_operation_t, ExponentT exponent, T const& a){
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
 	}
@@ -92,7 +93,7 @@ namespace godefv::math{
 		return square(ka_plus_lb.first)+square(ka_plus_lb.second)+anticommutator(ka_plus_lb.first, ka_plus_lb.second);
 	}
 	//powers of runtime values
-	auto constexpr generated_power(mult_operation_t, SimpleScalar const& exponent, Number const& operand){
+	auto constexpr generated_power(mult_operation_t, SimpleScalar auto const& exponent, Number auto const& operand){
 		return std::pow(operand, eval(exponent));
 	}
 	//(x^n)^m=x^(nm) even for non integral n,m if x>0
@@ -102,8 +103,9 @@ namespace godefv::math{
 	} 
 	//(x^(2n))^(m/2)=abs(x)^(nm) for n,m integer and x scalar
 	template<Integer Exponent1, NonZeroRatio Exponent2, Scalar OperandT> 
-		requires Integer<decltype(Exponent1{}/integer<2>)>
+	requires(Integer<decltype(Exponent1{}/integer<2>)>
 		&& !PositiveScalar<OperandT> //use (x^n)^m=x^(nm) in this case
+	)
 	auto constexpr generated_power(mult_operation_t, Exponent2 exponent, group::generated_power_t<mult_operation_t,Exponent1,OperandT> const& operand){
 		return group::power(mult_operation_t{}, exponent*operand.exponent, abs(operand.operand));
 	}
@@ -118,7 +120,7 @@ namespace godefv::math{
 	}
 
 	//formatting
-	inline std::ostream& operator<<(std::ostream& out, power_t<SimpleScalar,auto> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}
+	inline std::ostream& operator<<(std::ostream& out, power_t<SimpleScalar auto,auto> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}
 
 	using namespace std::string_view_literals;
 	std::string_view constexpr exponent_string(integer_t<2>){return "²"sv;}
@@ -128,7 +130,7 @@ namespace godefv::math{
 	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, auto> const& pow){
 		return out<<"("<<pow.operand<<")"<<exponent_string(pow.exponent);
 	}
-	template<SimpleScalar ExponentT> requires !requires(){exponent_string(ExponentT{});} && requires(){exponent_string(inverse(ExponentT{}));} 
+	template<SimpleScalar ExponentT> requires (!requires(){exponent_string(ExponentT{});} && requires(){exponent_string(inverse(ExponentT{}));})
 	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, auto> const& pow){
 		return out<<exponent_string(inverse(pow.exponent))<<"√("<<pow.operand<<")";
 	}

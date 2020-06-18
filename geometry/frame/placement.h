@@ -29,10 +29,10 @@ namespace godefv::math::geometry{
 	}
 
 	//apply geometric tranformations
-	auto constexpr apply(Translation const& transform, placement_t<auto,auto> const& operand){
+	auto constexpr apply(Translation auto const& transform, placement_t<auto,auto> const& operand){
 		return placement_t{transform(operand.position), operand.orientation};
 	}
-	auto constexpr apply(point_transform_t<Point,VectorTransform> const& transform, placement_t<auto,auto> const& operand){
+	auto constexpr apply(point_transform_t<Point auto,VectorTransform auto> const& transform, placement_t<auto,auto> const& operand){
 		return placement_t{transform(operand.position), transform.vector_transform(operand.orientation)};
 	}
 

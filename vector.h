@@ -27,15 +27,15 @@ namespace godefv::math{
 		return integer<1>;
 	}
 	template<class DirectionT, Vector<DirectionT> VectorT>
-	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,Scalar,VectorT> const& vector){
+	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,Scalar auto,VectorT> const& vector){
 		return vector.first*coordinate(d, vector.second);
 	}
 	template<class DirectionT>
-	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,Vector<DirectionT>,Scalar> const& vector){
+	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,Vector<DirectionT> auto,Scalar auto> const& vector){
 		return coordinate(d, vector.first)*vector.second;
 	}
 	template<class DirectionT, Vector<DirectionT> VectorT>
-	auto constexpr coordinate(DirectionT d, group::generated_power_t<add_operation_t,Scalar,VectorT> const& vector){
+	auto constexpr coordinate(DirectionT d, group::generated_power_t<add_operation_t,Scalar auto,VectorT> const& vector){
 		return vector.exponent*coordinate(d, vector.operand);
 	}
 	template<class DirectionT, Vector<DirectionT> Vector1, Vector<DirectionT> Vector2>

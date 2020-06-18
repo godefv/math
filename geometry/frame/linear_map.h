@@ -82,10 +82,10 @@ namespace godefv::math::geometry{
 	}
 
 	template<MultiVector OperandT, class DirectionMapT>
-		requires static_cast<bool>(hana::is_subset(
-			get_reference_frame(OperandT{}), hana::to_set(hana::keys(DirectionMapT{}))
-		))
-			//TODO: allow partial frame change. For example, (X,Y)->(e1,e2) can be used to transform e3+X. Or do not allow it ?
+	requires (static_cast<bool>(hana::is_subset(
+		get_reference_frame(OperandT{}), hana::to_set(hana::keys(DirectionMapT{}))
+	)))
+	//TODO: allow partial frame change. For example, (X,Y)->(e1,e2) can be used to transform e3+X. Or do not allow it ?
 	auto constexpr change_reference_frame(OperandT const& operand, linear_map_t<DirectionMapT> const& old_reference){
 		return internal::apply_direction_map(operand, old_reference.vectors);
 	}
@@ -112,7 +112,7 @@ namespace godefv::math::geometry{
 		return transformed_point_t{operand.origin, change_reference_frame(operand.transform, old_reference)};
 	}
 
-	auto constexpr apply(VectorRotation const& transform, linear_map_t<auto> const& operand){
+	auto constexpr apply(VectorRotation auto const& transform, linear_map_t<auto> const& operand){
 		return linear_map_t{hana::to_map(hana::zip_with(hana::make_pair
 			,hana::keys(operand.vectors)
 			,hana::values(operand.vectors)|hana::transform_with(transform)

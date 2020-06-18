@@ -29,7 +29,7 @@ namespace godefv::math{
 	auto constexpr zero=zero_t{};
 
 	//inverse
-	template<class T> requires !group::Generated<T,add_operation_t>
+	template<class T> requires (!group::Generated<T,add_operation_t>)
 	auto constexpr inverse(add_operation_t, T const& a){
 		return -a;
 	}
@@ -39,7 +39,7 @@ namespace godefv::math{
 	using minus_t=group::generated_power_t<add_operation_t, integer_t<-1>, T>;
 
 	//by default, use group operations
-	auto constexpr operator-(NonSimpleScalarExpression const& a){
+	auto constexpr operator-(NonSimpleScalarExpression auto const& a){
 		return group::inverse(add_operation_t{}, a);
 	}
 	template<class A, class B> concept OperatorPlusNotDefinedOutsideAdditionOperation=!(
@@ -52,35 +52,36 @@ namespace godefv::math{
 	auto constexpr operator+(A const& a, B const& b){
 		return group::operation(add_operation_t{},a,b);
 	}
-   	template<Expression A, Expression B> requires !(SimpleScalar<A> && SimpleScalar<B>)
+   	template<Expression A, Expression B> requires (NonSimpleScalar<A> || NonSimpleScalar<B>)
 	auto constexpr operator-(A const& a, B const& b){
 		return a+(-b);
 	}
 
    	//commutation rule
    	template<Expression A, Expression B>
-   		requires OperatorPlusNotDefinedOutsideAdditionOperation<A,B>
-		      && !std::is_same<A,B>::value 
-		      && !group::Operation<A,add_operation_t>
-		      && !group::Operation<B,add_operation_t>
-   		      && static_compare(add_operation_t{}, A{},B{})<0
+	requires (OperatorPlusNotDefinedOutsideAdditionOperation<A,B>
+			&& !std::is_same<A,B>::value 
+			&& !group::Operation<A,add_operation_t>
+			&& !group::Operation<B,add_operation_t>
+			&& static_compare(add_operation_t{}, A{},B{})<0
+	)
    	auto constexpr operator+(A const& a, B const& b){
    		return b+a;
    	}
 	//collapse ka+klb as k(a+lb) if a+lb can be processed
 	template<class A, class B, Symbol ExponentA, Symbol ExponentB> 
-		requires !std::is_same<decltype(A{}+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))
+		requires (!std::is_same<decltype(A{}+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))
 		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))>
-							  >::value 
+							  >::value)
 	auto constexpr operator+(group::generated_power_t<add_operation_t,ExponentA,A> const& ka, group::generated_power_t<add_operation_t,ExponentB,B> const& kb){
 		return group::power(add_operation_t{}, ExponentA{}, ka.operand+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, kb.operand));
 	}
 
 	//collapse ka+b as k(a+b/k) if a+b/k can be processed
 	template<class A, Expression B, Symbol K> 
-		requires !std::is_same<decltype(A{}+group::power(add_operation_t{}, integer<1>/K{}, B{}))
+		requires (!std::is_same<decltype(A{}+group::power(add_operation_t{}, integer<1>/K{}, B{}))
 		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>
-							  >::value 
+							  >::value)
 	auto constexpr operator+(group::generated_power_t<add_operation_t,K,A> const& ka, B const& b){
 		return group::power(add_operation_t{}, ka.exponent, ka.operand+group::power(add_operation_t{}, integer<1>/ka.exponent, b));
 	}
@@ -94,11 +95,11 @@ namespace godefv::math{
 
 	//formatting
 	namespace detail{
-		template<class T> requires !group::Generated<T,add_operation_t>
+		template<class T> requires (!group::Generated<T,add_operation_t>)
 		std::ostream& format_addition_left_operand(std::ostream& out, T const& operand){
 			return out<<"("<<operand<<")";
 		}
-		std::ostream& format_addition_left_operand(std::ostream& out, group::Generated<add_operation_t> const& operand){
+		std::ostream& format_addition_left_operand(std::ostream& out, group::Generated<add_operation_t> auto const& operand){
 			return out<<operand;
 		}
 		std::ostream& format_addition_right_operand(std::ostream& out, auto const& operand){
@@ -107,7 +108,7 @@ namespace godefv::math{
 		std::ostream& format_addition_right_operand(std::ostream& out, minus_t<auto> const& operand){
 			return out<<" - ("<<operand.operand<<")";
 		}
-		std::ostream& format_addition_right_operand(std::ostream& out, group::generated_power_t<add_operation_t, Scalar, auto> const& operand){
+		std::ostream& format_addition_right_operand(std::ostream& out, group::generated_power_t<add_operation_t, Scalar auto, auto> const& operand){
 			return out<<" + "<<operand;
 		}
 	}
@@ -117,7 +118,7 @@ namespace godefv::math{
 		return out;
 	}
 
-	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, Scalar, auto> const& kx){
+	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, Scalar auto, auto> const& kx){
 		return out<<kx.exponent<<"*("<<kx.operand<<")";
 	}
 	std::ostream& operator<<(std::ostream& out, minus_t<auto> const& kx){

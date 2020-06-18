@@ -12,7 +12,7 @@ namespace godefv::math::geometry{
 	template<class T> concept Scaling=is_scaling<T>::value;
 
 	//apply
-	auto constexpr apply(Scaling const& scaling, Vector const& operand){
+	auto constexpr apply(Scaling auto const& scaling, Vector auto const& operand){
 		return scaling.factor*operand;
 	}
 

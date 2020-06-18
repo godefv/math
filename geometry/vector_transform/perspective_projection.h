@@ -14,7 +14,7 @@ namespace godefv::math::geometry{
 	template<class T> concept PerspectiveProjection=is_perspective_projection<T>::value;
 
 	//apply
-	auto constexpr apply(PerspectiveProjection const& projection, Vector const& operand){
+	auto constexpr apply(PerspectiveProjection auto const& projection, Vector auto const& operand){
 		auto depth=operand|inverse(projection.direction);
 		//auto projected_orthographic=operand-depth*projection.direction;
 		auto projected_orthographic=project((operand^inverse(projection.direction))*projection.direction, grades(operand));

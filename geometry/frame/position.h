@@ -42,11 +42,11 @@ namespace godefv::math::geometry{
 		return transformed_point_t{old_reference.value.origin, (old_reference.value.transform,operand.transform)};
 	}
 
-	auto constexpr apply(PointTransform const& transform, position_t<auto,auto> const& operand){
+	auto constexpr apply(PointTransform auto const& transform, position_t<auto,auto> const& operand){
 		return position_t{operand.key, transform(operand.value)};
 	}
 	template<class Name>
-	auto constexpr apply(point_transform_t<point_t<Name>,VectorTransform> const&, position_t<Name,auto> const& operand){
+	auto constexpr apply(point_transform_t<point_t<Name>,VectorTransform auto> const&, position_t<Name,auto> const& operand){
 		return operand;
 	}
 }

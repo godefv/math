@@ -2,14 +2,14 @@
 #define HANA_PIPE_H 
 
 #include<boost/hana.hpp>
-#include"cpp20_concepts.h"
 #include"cpp20_array.h"
 #include<type_traits>
+#include<concepts>
 
 namespace boost::hana{
 	//default pipe operator
 	template<class T>
-	inline auto constexpr operator|(T const& input, Invocable<T> function){
+	inline auto constexpr operator|(T const& input, std::invocable<T> auto function){
 		return function(input);
 	}
 
@@ -17,7 +17,7 @@ namespace boost::hana{
 	template <typename Xs, typename = typename std::enable_if<
 		detail::monad_operators<typename hana::tag_of<Xs>::type>::value
 	>::type>
-	constexpr auto operator|(Xs&& input, Invocable<Xs>&& function){
+	constexpr auto operator|(Xs&& input, std::invocable<Xs> auto&& function){
 		return function(input);
 	}
 

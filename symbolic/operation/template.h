@@ -39,19 +39,17 @@ namespace godefv::math{
 	template<class T> concept Operation=is_operation<T>::value;
 
 	//comparisons
-	Operation{Operation2}
-	auto constexpr operator==(Operation const& a, Operation2 const& b){
+	auto constexpr operator==(Operation auto const& a, Operation auto const& b){
 		return a.operands==b.operands;
 	}
-	Operation{OperationT}
+	template<Operation OperationT>
 	auto constexpr operator==(OperationT const& a, OperationT const& b){
 		return a.operands==b.operands;
 	}
-	Operation{Operation2}
-	auto constexpr operator!=(Operation const& a, Operation2 const& b){
+	auto constexpr operator!=(Operation auto const& a, Operation auto const& b){
 		return !(a.operands==b.operands);
 	}
-	Operation{OperationT}
+	template<Operation OperationT>
 	auto constexpr check_equal(OperationT const& a, OperationT const& b){
 		using ::check_equal;
 		std::cout<<"checking "<<a<<" equals "<<b<<" : ";
@@ -60,8 +58,7 @@ namespace godefv::math{
 
 	//ordering for commutation
 	auto constexpr sort_operation_operand_as(auto, auto const& a){return a;}
-	Operation{Operation2}
-	constexpr int static_compare(auto op, Operation const& a, Operation2 const& b){
+	constexpr int static_compare(auto op, Operation auto const& a, Operation auto const& b){
 		if(index(b.operation)==index(a.operation)){
 			return static_compare(op
 				,sort_operation_operand_as(a.operation, a.operand())

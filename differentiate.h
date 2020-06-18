@@ -11,7 +11,7 @@ namespace godefv::math{
 		return integer<1>;
 	}
 
-	auto constexpr differentiate(symbol_t<auto>, SimpleScalar){
+	auto constexpr differentiate(symbol_t<auto>, SimpleScalar auto){
 		return integer<0>;
 	}
 	auto constexpr differentiate(symbol_t<auto>, symbol_t<auto>){

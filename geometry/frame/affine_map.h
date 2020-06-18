@@ -34,28 +34,28 @@ namespace godefv::math::geometry{
 	}
 
 	//change_reference_frame
-	auto constexpr change_reference_frame(Point const& operand, affine_map_t<auto,auto> const& frame_map){
+	auto constexpr change_reference_frame(Point auto const& operand, affine_map_t<auto,auto> const& frame_map){
 		return change_reference_frame(change_reference_frame(operand, frame_map.directions_map), frame_map.origin_map);
 	}
 	auto constexpr change_reference_frame(translation_t<auto> const& operand, affine_map_t<auto,auto> const& frame_map){
 		return translation_t{change_reference_frame(operand.transform, frame_map.directions_map)};
 	}
-	auto constexpr change_reference_frame(point_transform_t<Point,VectorTransform> const& operand, affine_map_t<auto,auto> const& frame_map){
+	auto constexpr change_reference_frame(point_transform_t<Point auto,VectorTransform auto> const& operand, affine_map_t<auto,auto> const& frame_map){
 		return make_point_transform(
 			 change_reference_frame(operand.center, frame_map.origin_map)
 			,change_reference_frame(operand.vector_transform, frame_map.directions_map)
 		);
 	}
 	auto constexpr change_reference_frame_endomorphism=group::endomorphism(compose_operation_t{}, [](auto const& a, auto const & ref){return change_reference_frame(a, ref);});
-	auto constexpr change_reference_frame(group::Generated<compose_operation_t> const& operand, affine_map_t<auto,auto> const& frame_map){
+	auto constexpr change_reference_frame(group::Generated<compose_operation_t> auto const& operand, affine_map_t<auto,auto> const& frame_map){
 		return change_reference_frame_endomorphism(operand, frame_map);
 	}
 
 	//apply geometric tranformations
-	auto constexpr apply(Translation const& transform, affine_map_t<auto,auto> const& operand){
+	auto constexpr apply(Translation auto const& transform, affine_map_t<auto,auto> const& operand){
 		return affine_map_t{transform(operand.origin_map), operand.directions_map};
 	}
-	auto constexpr apply(point_transform_t<Point,VectorTransform> const& transform, affine_map_t<auto,auto> const& operand){
+	auto constexpr apply(point_transform_t<Point auto,VectorTransform auto> const& transform, affine_map_t<auto,auto> const& operand){
 		return affine_map_t{transform(operand.origin_map), transform.vector_transform(operand.directions_map)};
 	}
 

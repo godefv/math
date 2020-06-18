@@ -14,10 +14,10 @@ namespace godefv::math::geometry{
 	namespace hana=boost::hana;
 
 	template<class DirectionsT, class ReferenceDirectionsT, VectorRotation RotationT>
-		requires static_cast<bool>(hana::size(DirectionsT{})==hana::size(ReferenceDirectionsT{}))
-		&& static_cast<bool>(hana::is_subset(
-			get_reference_frame(RotationT{}.rotor()), hana::to_set(ReferenceDirectionsT{})
-		))
+	requires (static_cast<bool>(hana::size(DirectionsT{})==hana::size(ReferenceDirectionsT{}))
+	&& static_cast<bool>(hana::is_subset(
+		get_reference_frame(RotationT{}.rotor()), hana::to_set(ReferenceDirectionsT{})
+	)))
 	struct orientation_t{
 		DirectionsT frame;
 		ReferenceDirectionsT reference_frame;
@@ -39,10 +39,10 @@ namespace godefv::math::geometry{
 	}
 
 	//apply geometric tranformations
-	auto constexpr apply(VectorRotation const& transform, orientation_t<auto,auto,auto> const& operand){
+	auto constexpr apply(VectorRotation auto const& transform, orientation_t<auto,auto,auto> const& operand){
 		return orientation_t{operand.frame, operand.reference_frame, (operand.rotation_from_reference,transform)};
 	}
-	template<VectorTransform VectorTransformT> requires !VectorRotation<VectorTransformT>
+	template<VectorTransform VectorTransformT> requires (!VectorRotation<VectorTransformT>)
 	auto constexpr apply(VectorTransformT const& transform, orientation_t<auto,auto,auto> const& operand){
 		return operand;
 	}

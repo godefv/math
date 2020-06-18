@@ -10,7 +10,7 @@ namespace godefv::math{
 		      +group::power(add_operation_t{}, exponent, ab.second);
 	}
 	//rationals
-	auto constexpr generated_power(add_operation_t, auto exponent, SimpleScalar scalar){
+	auto constexpr generated_power(add_operation_t, auto exponent, SimpleScalar auto scalar){
 		return exponent*scalar;
 	}
 	//(x^n)^m=x^(nm) even for non integral n,m 

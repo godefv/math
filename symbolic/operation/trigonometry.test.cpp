@@ -3,7 +3,7 @@
 
 using namespace godefv::math;
 
-auto f(Symbol){}
+auto f(Symbol auto){}
 auto constexpr theta="θ"_symbol;
 using theta_t=std::decay_t<decltype(theta)>;
 namespace godefv::math{
@@ -31,7 +31,7 @@ int main(){
 	check_equal(Angle<integer_t<3>>, false);
 	check_equal(Angle<double>, false);
 
-	//first quadrant exact values
+	std::cout<<"First quadrant exact values"<<std::endl;
 	check_equal(sin(ratio<0,2>*half_turn), integer<0>);
 	check_equal(sin(ratio<1,2>*half_turn), integer<1>);
 	check_equal(sin(ratio<2,2>*half_turn), integer<0>);

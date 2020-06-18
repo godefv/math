@@ -12,17 +12,17 @@ namespace godefv::math{
 	int constexpr sort_index(OperatorT, group::identity_t<OperatorT> const&){
 		return 0;
 	}
-	int constexpr sort_index(auto, SimpleScalar const&){
+	int constexpr sort_index(auto, SimpleScalar auto const&){
 		return 10;
 	}
-	template<Scalar ScalarT> requires !SimpleScalar<ScalarT>
+	template<Scalar ScalarT> requires (!SimpleScalar<ScalarT>)
 	int constexpr sort_index(auto, ScalarT const&){
 		return 20;
 	}
 	int constexpr sort_index(auto, symbol_t<auto> const&){
 		return 30;
 	}
-	template<class Operator1, class Operator2> requires !std::is_same<Operator1,Operator2>::value
+	template<class Operator1, class Operator2> requires (!std::is_same<Operator1,Operator2>::value)
 	int constexpr sort_index(Operator1, group::generated_by_operation_t<Operator2, auto,auto> const&){
 		return 100;
 	}
@@ -36,7 +36,7 @@ namespace godefv::math{
 		return a;
 	}
 	template<class OperatorT>
-	auto constexpr sort_as(OperatorT op, group::generated_power_t<OperatorT, SimpleScalar, auto> const& pow){
+	auto constexpr sort_as(OperatorT op, group::generated_power_t<OperatorT, SimpleScalar auto, auto> const& pow){
 		return sort_as(op, pow.operand);
 	}
 
@@ -45,8 +45,9 @@ namespace godefv::math{
 		return sort_index(op, b)-sort_index(op, a);
 	}
 	template<class OperatorT, class T1, class T2>
-		requires !std::is_same<decltype(sort_as(OperatorT{},std::declval<T1>())), T1>::value
-		      || !std::is_same<decltype(sort_as(OperatorT{},std::declval<T2>())), T2>::value
+	requires (!std::is_same<decltype(sort_as(OperatorT{},std::declval<T1>())), T1>::value
+	       || !std::is_same<decltype(sort_as(OperatorT{},std::declval<T2>())), T2>::value
+	)
 	int constexpr static_compare(OperatorT op, T1 const& a, T2 const& b){
 		return static_compare(op, sort_as(op, a), sort_as(op, b));
 	}
@@ -80,7 +81,7 @@ namespace godefv::math{
 
 	//powers
 	template<class OperatorT, Ratio Exponent2>
-	int constexpr static_compare(auto op, group::generated_power_t<OperatorT, Ratio, auto> const& a, group::generated_power_t<OperatorT, Exponent2, auto> const& b){
+	int constexpr static_compare(auto op, group::generated_power_t<OperatorT, Ratio auto, auto> const& a, group::generated_power_t<OperatorT, Exponent2, auto> const& b){
 		auto operand_order=static_compare(op, a.operand, b.operand);
 		if(operand_order!=0){
 		   return operand_order;
@@ -88,7 +89,7 @@ namespace godefv::math{
 			return (b.exponent-a.exponent).numerator();
 		}
 	}
-	int constexpr static_compare(auto op, group::generated_power_t<auto, Ratio, auto> const& a, auto const& b){
+	int constexpr static_compare(auto op, group::generated_power_t<auto, Ratio auto, auto> const& a, auto const& b){
 		auto operand_order=static_compare(op, a.operand, b);
 		if(operand_order!=0){
 		   return operand_order;
@@ -96,8 +97,8 @@ namespace godefv::math{
 			return (-a.exponent).numerator();
 		}
 	}
-	template<class A> requires !group::GeneratedPower<A>
-	int constexpr static_compare(auto op, A const& a, group::generated_power_t<auto, Ratio, auto> const& b){
+	template<class A> requires (!group::GeneratedPower<A>)
+	int constexpr static_compare(auto op, A const& a, group::generated_power_t<auto, Ratio auto, auto> const& b){
 		return -static_compare(op,b,a);
 	}
 

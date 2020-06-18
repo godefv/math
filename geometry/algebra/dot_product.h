@@ -22,7 +22,7 @@ namespace godefv::math::geometry{
 	}
 	//extand operation by bilinearity
 	template<MultiVector A, MultiVector B> 
-		requires !(Blade<A> && Blade<B>)
+		requires (!(Blade<A> && Blade<B>))
 	auto constexpr operator|(A const& a, B const& b){
 		return bilinear_operation_t<dot_operation_t>::apply(a,b);
 	}

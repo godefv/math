@@ -10,7 +10,7 @@
 namespace godefv::math::geometry{
 	namespace hana=boost::hana;
 
-	template<Symbol VariableT> requires MultiVector<VariableT> && static_cast<bool>(grades(VariableT{})==grades<1>())
+	template<Symbol VariableT> requires (MultiVector<VariableT> && static_cast<bool>(grades(VariableT{})==grades<1>()))
 	struct nabla_t{
 		VariableT variable;
 	};
