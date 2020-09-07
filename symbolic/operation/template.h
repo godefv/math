@@ -9,6 +9,7 @@
 #include<boost/hana.hpp>
 #include<iostream>
 #include<type_traits>
+#include<concepts>
 
 namespace godefv::math{
 	template<class OperationT, class... OperandsT>
@@ -40,11 +41,7 @@ namespace godefv::math{
 
 	//comparisons
 	auto constexpr operator==(Operation auto const& a, Operation auto const& b){
-		return a.operands==b.operands;
-	}
-	template<Operation OperationT>
-	auto constexpr operator==(OperationT const& a, OperationT const& b){
-		return a.operands==b.operands;
+		return std::same_as<decltype(a.operation), decltype(b.operation)> && a.operands==b.operands;
 	}
 	auto constexpr operator!=(Operation auto const& a, Operation auto const& b){
 		return !(a.operands==b.operands);
