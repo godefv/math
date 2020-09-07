@@ -1,6 +1,9 @@
 #ifndef GEOMETRY_EXPORT_COORDINATES_H
 #define GEOMETRY_EXPORT_COORDINATES_H 
 
+#include<iostream>
+#include<vector>
+
 namespace godefv::math::geometry{
 	namespace hana=boost::hana;
 
