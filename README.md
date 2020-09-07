@@ -4,7 +4,7 @@
 * [Requirements](#requirements)
 
 # What is it ?
-This is a C++ math library, with a focus on geometry. It provides :
+This is a C++20 math library, with a focus on geometry. It provides :
 
 * **abstract mathematical objects**
 
@@ -58,7 +58,7 @@ It is small because it exploits work from mathematicians. They have put many con
 ## metaprogramming, expression templates
 The library takes care of returning the best types in terms of memory and geometric signification for every math operation or function. An important example is the composition of geometric transformations : any composition of rotations will produce a rotation (and be stored internally as a quaternion), a composition of any number of rotations with any number of translations in any order will generate a type storing a single rotation followed by a single translation (stored internally as a quaternion and a vector), and similar simplifications are made automatically if you add homothecies in the mix, always generating the simplest possible type, which will also limit the number of different C++ types in the whole program. 
 
-The library uses C++17 with concepts, which provides human friendly template programming.
+The library uses C++ concepts, which provides human friendly template programming.
 
 The metaprogramming is implemented by overloading functions, not by specializing types. This technique is inspired from the boost::hana metaprogramming library, see https://boostorg.github.io/hana/#tutorial-quadrants-about for a detailed explanation of why metaprogramming should be implemented like that.
 
@@ -134,8 +134,7 @@ auto transform=(translation,rotation1,homothecy,rotation3); //converted to an ho
 auto transformed_C=transform(C); //the homothecy is applied (no op), then the rotation is applied (only the x and y components of C are affected, the t component is still a compile-time value at this point, minimal amount of computation is done), then the translation is applied (x,y,z components are computed and stored in 3 double, t component is still a compile-time value (the transformation operates in the (x,y,z) space, except for a dilation with a compile-time factor))
 ```
 # Requirements
-* C++17
-* C++-concepts
+* C++20
 * Boost.Hana
 * CMake
 
