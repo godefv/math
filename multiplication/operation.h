@@ -11,31 +11,26 @@ namespace godefv::math{
 	//!Template for bilinear operations.
 	template<class DerivedOperatorT>
 	struct bilinear_operation_t{
-		//by default, use DerivedOperatorT
-		static auto constexpr apply(auto const& a, auto const& b){
-			return group::operation(DerivedOperatorT{},a,b);
-		}
-		//operation with zero
-		static auto constexpr apply(Zero auto, auto const&){return zero;}
-		static auto constexpr apply(auto const&, Zero auto){return zero;}
-		//operation with scalar
-		//TODO: one line should be enough
-		template<NonZeroScalar ScalarT, class A>
-		requires (!group::Generated<ScalarT,DerivedOperatorT>
-		      && (!Symbol<ScalarT> || SimpleScalar<ScalarT>)
-		      && !Zero<A>
-		)
-		static auto constexpr apply(ScalarT k, A const& a){
-			return group::power(add_operation_t{}, k, a);
-		}
-		template<NonZeroScalar ScalarT, class A>
-		requires (!group::Generated<ScalarT,DerivedOperatorT>
-		      && (!Symbol<ScalarT> || SimpleScalar<ScalarT>)
-		      && !Zero<A>
-		      && (!Scalar<A> || group::Generated<A,DerivedOperatorT>)
-		)
-		static auto constexpr apply(A const& a, ScalarT k){
-			return group::power(add_operation_t{}, k, a);
+		template<class A, class B>
+		static auto constexpr apply(A const& a, B const& b){
+			//operation with zero
+			if constexpr(Zero<A> || Zero<B>){
+				return zero;
+			//operation with scalar (left)
+			}else if constexpr(Scalar<A>
+			      && (!Symbol<A> || SimpleScalar<A>)
+			      && !group::Generated<A,DerivedOperatorT>
+			){
+				return group::power(add_operation_t{}, a, b);
+			//operation with scalar (right)
+			}else if constexpr(Scalar<B>
+			      && (!Symbol<B> || SimpleScalar<B>)
+			      && !group::Generated<B,DerivedOperatorT>
+			){
+				return group::power(add_operation_t{}, b, a);
+			}else{
+				return group::operation(DerivedOperatorT{},a,b);
+			}
 		}
 
 		//factor addition power out (ka)*b=k(a*b)

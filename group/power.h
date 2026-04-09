@@ -43,35 +43,32 @@ namespace godefv::math::group{
 		return generated_power_t{op,exponent,operand};
 	}
 
-	//default power function
-	template<class OperandT>
-	auto constexpr power(auto op, auto const& exponent, OperandT const& operand){
-		return generated_power(op,exponent,operand);
-	}
-	//1^n=1
-	template<class OperatorT> requires true //gives priority to this overload
-	auto constexpr power(OperatorT, auto, identity_t<OperatorT> const& identity){
-		return identity;
-	}
-	//x^0=1
-	template<class OperatorT, class OperandT> requires (!std::is_same<OperandT,identity_t<OperatorT>>::value)
-	auto constexpr power(OperatorT op, integer_t<0>, OperandT const&){
-		return identity(op);
-	}
-	//x^1=x
-	template<class OperatorT, class OperandT> requires (!std::is_same<OperandT,identity_t<OperatorT>>::value)
-	auto constexpr power(OperatorT, integer_t<1>, OperandT const& operand){
-		return operand;
+	template<class OperatorT, class ExponentT, class X>
+	auto constexpr power(OperatorT op, ExponentT const& exponent, X const& operand)
+	{
+		//1^n=1
+		if constexpr(std::is_same_v<X,identity_t<OperatorT>>){
+			return operand;
+		//x^0=1
+		}else if constexpr(std::is_same_v<ExponentT,integer_t<0>>){
+			return identity(op);
+		//x^1=x
+		}else if constexpr(std::is_same_v<ExponentT,integer_t<1>>){
+			return operand;
+		//default power function
+		}else{
+			return generated_power(op,exponent,operand);
+		}
 	}
 	//(x^n)^m=x^(nm) !! n,m need to be integers sqrt((x)²)=abs(x)≠x
 	template<class OperatorT, Integer OuterExponentT, Integer InnerExponentT, class X>
 	requires (!std::is_same<OuterExponentT,integer_t<1>>::value)
-	auto constexpr power(OperatorT op, OuterExponentT m, generated_power_t<OperatorT,InnerExponentT,X> const& x_pow_n){
+	auto constexpr power(OperatorT op, OuterExponentT const& m, generated_power_t<OperatorT,InnerExponentT,X> const& x_pow_n){
 		return power(op, m*x_pow_n.exponent, x_pow_n.operand);
 	}
 	//StaticInteger powers of SimpleScalar can be processed immediatly
 	template<class OperatorT, StaticInteger ExponentT, SimpleScalar OperandT> requires (ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value)
-	auto constexpr power(OperatorT op, ExponentT, OperandT const& operand){
+	auto constexpr power(OperatorT op, ExponentT const&, OperandT const& operand){
 		return OperatorT::apply(power(op, integer_t<ExponentT::num-1>{}, operand), operand);
 	}
 	//some operand are cyclic
