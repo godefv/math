@@ -138,7 +138,7 @@ auto transformed_C=transform(C); //the homothecy is applied (no op), then the ro
 * Boost.Hana
 * CMake
 
-Only tested on Linux with GCC.
+Only tested on Linux with GCC (15.2.1).
 
 # Bugs and feature requests
 
