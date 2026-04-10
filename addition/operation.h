@@ -69,21 +69,19 @@ namespace godefv::math{
    		return b+a;
    	}
 	//collapse ka+klb as k(a+lb) if a+lb can be processed
-	template<class A, class B, Symbol ExponentA, Symbol ExponentB> 
+	template<class A, class B, Symbol ExponentA, Symbol ExponentB>
 		requires (!std::is_same<decltype(A{}+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))
-		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))>
-							  >::value)
+		                      ,group::generated_by_operation_t<add_operation_t,A,decltype(group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))>>::value)
 	auto constexpr operator+(group::generated_power_t<add_operation_t,ExponentA,A> const& ka, group::generated_power_t<add_operation_t,ExponentB,B> const& kb){
 		return group::power(add_operation_t{}, ExponentA{}, ka.operand+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, kb.operand));
 	}
 
 	//collapse ka+b as k(a+b/k) if a+b/k can be processed
-	template<class A, Expression B, Symbol K> 
-		requires (!std::is_same<decltype(A{}+group::power(add_operation_t{}, integer<1>/K{}, B{}))
-		                      ,group::generated_by_operation_t<add_operation_t,decltype(A{}),decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>
-							  >::value)
+	template<class A, Expression B, Symbol K>
+		requires (!std::is_same<decltype(group::operation(add_operation_t{},A{},group::power(add_operation_t{}, integer<1>/K{}, B{})))
+		                      ,group::generated_by_operation_t<add_operation_t,A,decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>>::value)
 	auto constexpr operator+(group::generated_power_t<add_operation_t,K,A> const& ka, B const& b){
-		return group::power(add_operation_t{}, ka.exponent, ka.operand+group::power(add_operation_t{}, integer<1>/ka.exponent, b));
+		return group::power(add_operation_t{}, ka.exponent, group::operation(add_operation_t{}, ka.operand, group::power(add_operation_t{}, integer<1>/ka.exponent, b)));
 	}
 
 	//a+b>=0 if a,b>=0
