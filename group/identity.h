@@ -18,8 +18,8 @@ namespace godefv::math::group{
 	using identity_t=decltype(identity(OperatorT{}));
 
 	template<class ElementT, class IdentityT, class OperatorT>
-	concept AbsorbsIdentityElement=std::is_same<decltype(OperatorT::apply(ElementT{},IdentityT{})), ElementT>::value
-	                                 && std::is_same<decltype(OperatorT::apply(IdentityT{},ElementT{})), ElementT>::value
+	concept AbsorbsIdentityElement=std::is_same_v<decltype(OperatorT::apply(ElementT{},IdentityT{})), ElementT>
+	                                 && std::is_same_v<decltype(OperatorT::apply(IdentityT{},ElementT{})), ElementT>
 									;
 
 	template<class Operator>

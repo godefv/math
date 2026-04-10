@@ -101,7 +101,7 @@ namespace godefv::math{
    	//commutation rule
    	template<Expression A, Expression B>
    	requires((!SimpleScalar<A> || !SimpleScalar<B>) //avoid negating a boolean expression inside constraints, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67070
-   	      && !std::is_same<A,B>::value 
+   	      && !std::is_same_v<A,B> 
 	      && !group::Operation<A,mult_operation_t>
 	      && !group::Operation<B,mult_operation_t>
    	      && static_compare(mult_operation_t{}, A{},B{})<0
@@ -113,8 +113,8 @@ namespace godefv::math{
 
 	//contract ab+ac=a(b+c) if (b+c) can be processed
 	template<Symbol A, class B, class C> 
-	requires(!std::is_same<decltype(B{}+C{}), group::generated_by_operation_t<add_operation_t,B,C>>::value 
-	      && !(Symbol<B> && std::is_same<B,C>::value) //else we have ab+ab=2ab
+	requires(!std::is_same_v<decltype(B{}+C{}), group::generated_by_operation_t<add_operation_t,B,C>> 
+	      && !(Symbol<B> && std::is_same_v<B,C>) //else we have ab+ab=2ab
 	)
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,B> const& ab, group::generated_by_operation_t<mult_operation_t, A,C> const& ac){
 		using ::operator+;
@@ -122,8 +122,8 @@ namespace godefv::math{
 	}
 	//contract ac+bc=(a+b)c if (a+b) can be processed
 	template<class A, class B, Symbol C> 
-	requires(!std::is_same<decltype(A{}+B{}), group::generated_by_operation_t<add_operation_t,A,B>>::value 
-	      && !(Symbol<B> && std::is_same<A,B>::value) //else we have ac+ac=2ac
+	requires(!std::is_same_v<decltype(A{}+B{}), group::generated_by_operation_t<add_operation_t,A,B>> 
+	      && !(Symbol<B> && std::is_same_v<A,B>) //else we have ac+ac=2ac
 	)
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_by_operation_t<mult_operation_t, B,C> const& bc){
 		using ::operator+;
@@ -131,8 +131,8 @@ namespace godefv::math{
 	}
 	//contract ab+kac=a(b+kc) if (b+kc) can be processed
 	template<Symbol A, class B, class C, class K> 
-	requires(!std::is_same<decltype(B{}+K{}*C{}), group::generated_by_operation_t<add_operation_t,B,group::generated_power_t<add_operation_t,K,C>>>::value 
-	      && !(Symbol<B> && std::is_same<B,C>::value) //else we have ab+kab=(1+k)ab
+	requires(!std::is_same_v<decltype(B{}+K{}*C{}), group::generated_by_operation_t<add_operation_t,B,group::generated_power_t<add_operation_t,K,C>>> 
+	      && !(Symbol<B> && std::is_same_v<B,C>) //else we have ab+kab=(1+k)ab
 	)
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,B> const& ab, group::generated_power_t<add_operation_t, K, group::generated_by_operation_t<mult_operation_t, A,C>> const& kac){
 		using ::operator+;
@@ -140,8 +140,8 @@ namespace godefv::math{
 	}
 	//contract ac+kbc=(a+kb)c if (a+kb) can be processed
 	template<class A, class B, Symbol C, class K> 
-	requires(!std::is_same<decltype(A{}+K{}*B{}), group::generated_by_operation_t<add_operation_t,A,group::generated_power_t<add_operation_t,K,B>>>::value 
-	      && !(Symbol<B> && std::is_same<A,B>::value) //else we have ac+kac=(1+k)ac
+	requires(!std::is_same_v<decltype(A{}+K{}*B{}), group::generated_by_operation_t<add_operation_t,A,group::generated_power_t<add_operation_t,K,B>>> 
+	      && !(Symbol<B> && std::is_same_v<A,B>) //else we have ac+kac=(1+k)ac
 	)
 	static auto constexpr operator+(group::generated_by_operation_t<mult_operation_t, A,C> const& ac, group::generated_power_t<add_operation_t, K, group::generated_by_operation_t<mult_operation_t, B,C>> const& kbc){
 		using ::operator+;

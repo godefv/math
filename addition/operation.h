@@ -60,7 +60,7 @@ namespace godefv::math{
    	//commutation rule
    	template<Expression A, Expression B>
 	requires (OperatorPlusNotDefinedOutsideAdditionOperation<A,B>
-			&& !std::is_same<A,B>::value 
+			&& !std::is_same_v<A,B> 
 			&& !group::Operation<A,add_operation_t>
 			&& !group::Operation<B,add_operation_t>
 			&& static_compare(add_operation_t{}, A{},B{})<0
@@ -70,16 +70,16 @@ namespace godefv::math{
    	}
 	//collapse ka+klb as k(a+lb) if a+lb can be processed
 	template<class A, class B, Symbol ExponentA, Symbol ExponentB>
-		requires (!std::is_same<decltype(A{}+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))
-		                      ,group::generated_by_operation_t<add_operation_t,A,decltype(group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))>>::value)
+		requires (!std::is_same_v<decltype(A{}+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))
+		                      ,group::generated_by_operation_t<add_operation_t,A,decltype(group::power(add_operation_t{}, ExponentB{}/ExponentA{}, B{}))>>)
 	auto constexpr operator+(group::generated_power_t<add_operation_t,ExponentA,A> const& ka, group::generated_power_t<add_operation_t,ExponentB,B> const& kb){
 		return group::power(add_operation_t{}, ExponentA{}, ka.operand+group::power(add_operation_t{}, ExponentB{}/ExponentA{}, kb.operand));
 	}
 
 	//collapse ka+b as k(a+b/k) if a+b/k can be processed
 	template<class A, Expression B, Symbol K>
-		requires (!std::is_same<decltype(group::operation(add_operation_t{},A{},group::power(add_operation_t{}, integer<1>/K{}, B{})))
-		                      ,group::generated_by_operation_t<add_operation_t,A,decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>>::value)
+		requires (!std::is_same_v<decltype(group::operation(add_operation_t{},A{},group::power(add_operation_t{}, integer<1>/K{}, B{})))
+		                      ,group::generated_by_operation_t<add_operation_t,A,decltype(group::power(add_operation_t{}, integer<1>/K{}, B{}))>>)
 	auto constexpr operator+(group::generated_power_t<add_operation_t,K,A> const& ka, B const& b){
 		return group::power(add_operation_t{}, ka.exponent, group::operation(add_operation_t{}, ka.operand, group::power(add_operation_t{}, integer<1>/ka.exponent, b)));
 	}

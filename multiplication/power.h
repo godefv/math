@@ -56,7 +56,7 @@ namespace godefv::math{
 	}
 
 	//exact roots of rationals
-	template<SimpleScalar ExponentT, Ratio RatioT> requires (ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same<RatioT,integer_t<1>>::value)
+	template<SimpleScalar ExponentT, Ratio RatioT> requires (ExponentT::num==1 && ExponentT::den>1 && RatioT::num>0 && !std::is_same_v<RatioT,integer_t<1>>)
 	auto constexpr generated_power(mult_operation_t, ExponentT, RatioT){
 		return static_sqrt<ExponentT::den>(integer<RatioT::num>)/static_sqrt<ExponentT::den>(integer<RatioT::den>);
 	}

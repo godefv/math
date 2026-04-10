@@ -42,7 +42,7 @@ void check_equal(auto const& a, auto const& b){
 	std::cerr<<"≠ "<<b<<std::endl;
 	std::exit(1);
 }
-template<class A, class B> requires std::is_same<A,B>::value || (is_hana_set<A>::value && is_hana_set<B>::value)
+template<class A, class B> requires std::is_same_v<A,B> || (is_hana_set<A>::value && is_hana_set<B>::value)
 void check_equal(A const& a, B const& b){
 	if(a==b){
 		std::cerr<<a<<" == "<<b<<std::endl;

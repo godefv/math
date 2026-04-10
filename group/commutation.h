@@ -18,7 +18,7 @@ namespace godefv::math{
 	int constexpr sort_index(OperatorT, symbol_t<Name> const&){
 		return 30;
 	}
-	template<class Operator1, class Operator2, class A, class B> requires (!std::is_same<Operator1,Operator2>::value)
+	template<class Operator1, class Operator2, class A, class B> requires (!std::is_same_v<Operator1,Operator2>)
 	int constexpr sort_index(Operator1, group::generated_by_operation_t<Operator2, A,B> const&){
 		return 100;
 	}
@@ -41,8 +41,8 @@ namespace godefv::math{
 		return sort_index(op, b)-sort_index(op, a);
 	}
 	template<class OperatorT, class T1, class T2>
-	requires (!std::is_same<decltype(sort_as(OperatorT{},std::declval<T1>())), T1>::value
-	       || !std::is_same<decltype(sort_as(OperatorT{},std::declval<T2>())), T2>::value
+	requires (!std::is_same_v<decltype(sort_as(OperatorT{},std::declval<T1>())), T1>
+	       || !std::is_same_v<decltype(sort_as(OperatorT{},std::declval<T2>())), T2>
 	)
 	int constexpr static_compare(OperatorT op, T1 const& a, T2 const& b){
 		return static_compare(op, sort_as(op, a), sort_as(op, b));

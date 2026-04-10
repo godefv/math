@@ -62,12 +62,12 @@ namespace godefv::math::group{
 	}
 	//(x^n)^m=x^(nm) !! n,m need to be integers sqrt((x)²)=abs(x)≠x
 	template<class OperatorT, Integer OuterExponentT, Integer InnerExponentT, class X>
-	requires (!std::is_same<OuterExponentT,integer_t<1>>::value)
+	requires (!std::is_same_v<OuterExponentT,integer_t<1>>)
 	auto constexpr power(OperatorT op, OuterExponentT const& m, generated_power_t<OperatorT,InnerExponentT,X> const& x_pow_n){
 		return power(op, m*x_pow_n.exponent, x_pow_n.operand);
 	}
 	//StaticInteger powers of SimpleScalar can be processed immediatly
-	template<class OperatorT, StaticInteger ExponentT, SimpleScalar OperandT> requires (ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value)
+	template<class OperatorT, StaticInteger ExponentT, SimpleScalar OperandT> requires (ExponentT::num>1 && !std::is_same_v<OperandT,identity_t<OperatorT>>)
 	auto constexpr power(OperatorT op, ExponentT const&, OperandT const& operand){
 		return OperatorT::apply(power(op, integer_t<ExponentT::num-1>{}, operand), operand);
 	}
