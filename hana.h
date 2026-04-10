@@ -14,10 +14,10 @@ namespace boost::hana{
 	}
 
 	//overload to take precedence over the operator defined for monads
-	template <typename Xs, typename = typename std::enable_if<
-		detail::monad_operators<typename hana::tag_of<Xs>::type>::value
+	template <typename Xs, std::invocable<Xs> F, typename = typename std::enable_if<
+		boost::hana::detail::monad_operators<typename boost::hana::tag_of<Xs>::type>::value
 	>::type>
-	constexpr auto operator|(Xs&& input, std::invocable<Xs> auto&& function){
+	constexpr auto operator|(Xs&& input, F&& function){
 		return function(input);
 	}
 
@@ -25,7 +25,7 @@ namespace boost::hana{
 	struct transform_with_t{
 		F f;
 		auto constexpr operator()(auto const& operand) const{
-			return transform(operand,f);
+			return boost::hana::transform(operand,f);
 		}
 	};
 
@@ -34,22 +34,22 @@ namespace boost::hana{
 		return transform_with_t<F>{std::forward<F>(f)};
 	}
 	inline auto constexpr fold_with(auto const& f){
-		return [&](auto const& x){return fold(x,f);};
+		return [&](auto const& x){return boost::hana::fold(x,f);};
 	}
 
 	//get by type in tuple
 	template <typename T, typename Searchable>
 	auto get(Searchable&& xs)
 	{
-		return *hana::find_if(std::forward<Searchable>(xs), [](auto const& x){
-			return hana::equal(hana::decltype_(x), hana::type_c<const T>);
+		return *boost::hana::find_if(std::forward<Searchable>(xs), [](auto const& x){
+			return boost::hana::equal(boost::hana::decltype_(x), boost::hana::type_c<const T>);
 		});
 	}
 
 	//to_array, like to_tuple
 	template<class T>
 	auto constexpr to_array=[](auto const& xs){
-		return hana::unpack(xs, [](auto const&... x){return std20::make_array(static_cast<T>(x)...);});
+		return boost::hana::unpack(xs, [](auto const&... x){return std20::make_array(static_cast<T>(x)...);});
 	};
 
 }
