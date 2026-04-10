@@ -11,11 +11,13 @@ namespace godefv::math::geometry{
 	auto constexpr grade(Scalar auto){return 0;}
 	auto constexpr grade(Direction auto){return 1;}
 	//grade is a morphism from * to +
-	auto constexpr grade(group::generated_by_operation_t<mult_operation_t, Blade auto,Blade auto> const& a){
-		return grade(a.first)+grade(a.second);
+	template<Blade A, Blade B> 
+	auto constexpr grade(group::generated_by_operation_t<mult_operation_t, A,B> const& ab){
+		return grade(ab.first)+grade(ab.second);
 	}
-	auto constexpr grade(group::generated_power_t<add_operation_t, Scalar auto, Blade auto> const& a){
-		return grade(a.operand);
+	template<Scalar K, Blade X>
+	auto constexpr grade(group::generated_power_t<add_operation_t, K, X> const& kx){
+		return grade(kx.operand);
 	}
 
 	namespace hana=boost::hana;

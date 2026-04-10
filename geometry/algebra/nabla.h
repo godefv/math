@@ -21,20 +21,25 @@ namespace godefv::math::geometry{
 	template<Symbol VariableT> struct is_blade<nabla_t<VariableT>>: std::true_type{};
 
 	//grade
-	auto constexpr grade(nabla_t<auto> const&){return 1;}
+	template<class X>
+	auto constexpr grade(nabla_t<X> const&){return 1;}
 
 	//operators
-	std::ostream& operator<<(std::ostream& out, nabla_t<auto> const& nabla){
+	template<class X>
+	std::ostream& operator<<(std::ostream& out, nabla_t<X> const& nabla){
 		return out<<"nabla{"<<nabla.variable<<"}";
 	}
-	bool constexpr operator==(nabla_t<auto> const& a, nabla_t<auto> const& b){
+	template<class X, class Y>
+	bool constexpr operator==(nabla_t<X> const& a, nabla_t<Y> const& b){
 		return a.variable==b.variable;
 	}
-	bool constexpr operator!=(nabla_t<auto> const& a, nabla_t<auto> const& b){
+	template<class X, class Y>
+	bool constexpr operator!=(nabla_t<X> const& a, nabla_t<Y> const& b){
 		return !(a==b);
 	}
 
-	auto constexpr operator*(nabla_t<auto> nabla, auto const& operand){
+	template<class VariableT, class X>
+	auto constexpr operator*(nabla_t<VariableT> nabla, X const& operand){
 		auto constexpr frame=get_reference_frame(nabla.variable);
 		auto constexpr reciprocal_frame=frame|hana::to_tuple|hana::transform_with([&](auto const& direction){return inverse(direction);});
 		auto constexpr coordinates=reciprocal_frame|hana::transform_with([&](auto const& direction){return (nabla.variable|direction);});

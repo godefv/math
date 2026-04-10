@@ -53,7 +53,8 @@ namespace godefv::math::geometry{
 	}
 
 	//differentiate
-	auto constexpr differentiate(symbol_t<auto>, Direction auto){
+	template<class Name>
+	auto constexpr differentiate(symbol_t<Name>, Direction auto){
 		return integer<0>;
 	}
 }

@@ -66,8 +66,8 @@ namespace godefv::math{
 		return group::power(mult_operation_t{}, -exponent, inverse(operand));
 	}
 	//power of addition powers (ka)^n = (k^n)(a^n) because k is a scalar
-	template<Scalar Exponent1, Scalar Exponent2>
-	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<add_operation_t, Exponent2, auto> const& pow_ab){
+	template<Scalar Exponent1, Scalar Exponent2, class X>
+	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<add_operation_t, Exponent2, X> const& pow_ab){
 		using group::power;
 		return power(add_operation_t{}, power(mult_operation_t{}, exponent, pow_ab.exponent), power(mult_operation_t{}, exponent, pow_ab.operand));
 	}
@@ -89,7 +89,8 @@ namespace godefv::math{
 		return a*group::power(mult_operation_t{}, exponent-integer<1>, a);
 	}
 	//(ka+lb)² =(ka)²+(lb)²+(kl)(ab+ba), factoring (kl) gives a chance to simplify (ab+ba), which is not always possible if (kl) is a runtime value
-	auto constexpr generated_power(mult_operation_t, integer_t<2>, group::generated_by_operation_t<add_operation_t, auto, auto> const& ka_plus_lb){
+	template<class KA, class LB>
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, group::generated_by_operation_t<add_operation_t, KA, LB> const& ka_plus_lb){
 		return square(ka_plus_lb.first)+square(ka_plus_lb.second)+anticommutator(ka_plus_lb.first, ka_plus_lb.second);
 	}
 	//powers of runtime values
@@ -97,17 +98,17 @@ namespace godefv::math{
 		return std::pow(operand, eval(exponent));
 	}
 	//(x^n)^m=x^(nm) even for non integral n,m if x>0
-	template<Scalar Exponent1, NonZeroScalar Exponent2, PositiveScalar OperandT> 
-	auto constexpr generated_power(mult_operation_t, Exponent1 exponent, group::generated_power_t<mult_operation_t,Exponent2,OperandT> const& operand){
-		return group::power(mult_operation_t{}, exponent*operand.exponent, operand.operand);
+	template<Scalar OuterExponentT, NonZeroScalar InnerExponentT, PositiveScalar X>
+	auto constexpr generated_power(mult_operation_t, OuterExponentT m, group::generated_power_t<mult_operation_t,InnerExponentT,X> const& x_pow_n){
+		return group::power(mult_operation_t{}, m*x_pow_n.exponent, x_pow_n.operand);
 	} 
 	//(x^(2n))^(m/2)=abs(x)^(nm) for n,m integer and x scalar
-	template<Integer Exponent1, NonZeroRatio Exponent2, Scalar OperandT> 
-	requires(Integer<decltype(Exponent1{}/integer<2>)>
-		&& !PositiveScalar<OperandT> //use (x^n)^m=x^(nm) in this case
+	template<NonZeroRatio OuterExponentT, Integer InnerExponentT, Scalar X>
+	requires(Integer<decltype(InnerExponentT{}/integer<2>)>
+		&& !PositiveScalar<X> //use (x^n)^m=x^(nm) in this case
 	)
-	auto constexpr generated_power(mult_operation_t, Exponent2 exponent, group::generated_power_t<mult_operation_t,Exponent1,OperandT> const& operand){
-		return group::power(mult_operation_t{}, exponent*operand.exponent, abs(operand.operand));
+	auto constexpr generated_power(mult_operation_t, OuterExponentT half_m, group::generated_power_t<mult_operation_t,InnerExponentT,X> const& x_pow_2n){
+		return group::power(mult_operation_t{}, half_m*x_pow_2n.exponent, abs(x_pow_2n.operand));
 	}
 
 	//x^(2n)>0 for x scalar
@@ -115,23 +116,25 @@ namespace godefv::math{
 	auto constexpr operator>=(group::generated_power_t<mult_operation_t,ExponentT,OperandT>,zero_t){return std::true_type{};}
 
 	//eval
-	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,auto,auto> const& pow, auto const& eval_data){
+	template<class ExponentT, class OperandT>
+	auto constexpr eval_with_data(group::generated_power_t<mult_operation_t,ExponentT,OperandT> const& pow, auto const& eval_data){
 		return std::pow(eval_with_data(pow.operand, eval_data), eval_with_data(pow.exponent, eval_data));
 	}
 
 	//formatting
-	inline std::ostream& operator<<(std::ostream& out, power_t<SimpleScalar auto,auto> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}
+	template<SimpleScalar ExponentT, class OperandT>
+	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT,OperandT> const& pow){return out<<pow.exponent<<" th power("<<pow.operand<<")";}
 
 	using namespace std::string_view_literals;
 	std::string_view constexpr exponent_string(integer_t<2>){return "²"sv;}
 	std::string_view constexpr exponent_string(integer_t<3>){return "³"sv;}
 	std::string_view constexpr exponent_string(integer_t<4>){return "⁴"sv;}
-	template<SimpleScalar ExponentT> requires requires(){exponent_string(ExponentT{});}
-	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, auto> const& pow){
+	template<SimpleScalar ExponentT, class OperandT> requires requires(){exponent_string(ExponentT{});}
+	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, OperandT> const& pow){
 		return out<<"("<<pow.operand<<")"<<exponent_string(pow.exponent);
 	}
-	template<SimpleScalar ExponentT> requires (!requires(){exponent_string(ExponentT{});} && requires(){exponent_string(inverse(ExponentT{}));})
-	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, auto> const& pow){
+	template<SimpleScalar ExponentT, class OperandT> requires (!requires(){exponent_string(ExponentT{});} && requires(){exponent_string(inverse(ExponentT{}));})
+	inline std::ostream& operator<<(std::ostream& out, power_t<ExponentT, OperandT> const& pow){
 		return out<<exponent_string(inverse(pow.exponent))<<"√("<<pow.operand<<")";
 	}
 }

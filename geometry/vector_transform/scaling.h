@@ -29,14 +29,17 @@ namespace godefv::math::geometry{
 
 	template<class ScalarT> struct is_scaling<scaling_t<ScalarT>>:std::true_type{};
 
-	std::ostream& operator<<(std::ostream& out, scaling_t<auto> const& t){
+	template<class ScalarT>
+	std::ostream& operator<<(std::ostream& out, scaling_t<ScalarT> const& t){
 		return out<<"scaling{"<<t.factor<<"}";
 	}
 
-	bool constexpr operator==(scaling_t<auto> const& a, scaling_t<auto> const& b){
+	template<class Scalar1, class Scalar2>
+	bool constexpr operator==(scaling_t<Scalar1> const& a, scaling_t<Scalar2> const& b){
 		return a.factor==b.factor;
 	}
-	bool constexpr operator!=(scaling_t<auto> const& a, scaling_t<auto> const& b){
+	template<class Scalar1, class Scalar2>
+	bool constexpr operator!=(scaling_t<Scalar1> const& a, scaling_t<Scalar2> const& b){
 		return !(a==b);
 	}
 	//std::strong_equality operator<=>(scaling_t const&, scaling_t const&) = default;

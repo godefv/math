@@ -28,27 +28,32 @@ namespace godefv::math::geometry{
 	->orientation_t<hana::tuple<DirectionTs...>, hana::tuple<ReferenceDirectionTs...>, RotationT>;
 
 	//operators
-	auto constexpr operator==(orientation_t<auto,auto,auto> const& a, orientation_t<auto,auto,auto> const& b){
+	template<class Directions1, class ReferenceDirections1, class Rotation1, class Directions2, class ReferenceDirections2, class Rotation2>
+	auto constexpr operator==(orientation_t<Directions1,ReferenceDirections1,Rotation1> const& a, orientation_t<Directions2,ReferenceDirections2,Rotation2> const& b){
 		return a.reference_frame==b.reference_frame && a.frame==b.frame && a.rotation_from_reference==b.rotation_from_reference;
 	}
-	auto constexpr operator!=(orientation_t<auto,auto,auto> const& a, orientation_t<auto,auto,auto> const& b){
+	template<class Directions1, class ReferenceDirections1, class Rotation1, class Directions2, class ReferenceDirections2, class Rotation2>
+	auto constexpr operator!=(orientation_t<Directions1,ReferenceDirections1,Rotation1> const& a, orientation_t<Directions2,ReferenceDirections2,Rotation2> const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, orientation_t<auto,auto,auto> const& operand){
+	template<class DirectionsT, class ReferenceDirectionsT, class RotationT>
+	std::ostream& operator<<(std::ostream& out, orientation_t<DirectionsT,ReferenceDirectionsT,RotationT> const& operand){
 		return out<<"orientation{"<<operand.frame<<":="<<operand.rotation_from_reference<<"("<<operand.reference_frame<<")";
 	}
 
 	//apply geometric tranformations
-	auto constexpr apply(VectorRotation auto const& transform, orientation_t<auto,auto,auto> const& operand){
+	template<class DirectionsT, class ReferenceDirectionsT, class RotationT>
+	auto constexpr apply(VectorRotation auto const& transform, orientation_t<DirectionsT,ReferenceDirectionsT,RotationT> const& operand){
 		return orientation_t{operand.frame, operand.reference_frame, (operand.rotation_from_reference,transform)};
 	}
-	template<VectorTransform VectorTransformT> requires (!VectorRotation<VectorTransformT>)
-	auto constexpr apply(VectorTransformT const& transform, orientation_t<auto,auto,auto> const& operand){
+	template<VectorTransform VectorTransformT, class DirectionsT, class ReferenceDirectionsT, class RotationT> requires (!VectorRotation<VectorTransformT>)
+	auto constexpr apply(VectorTransformT const& transform, orientation_t<DirectionsT,ReferenceDirectionsT,RotationT> const& operand){
 		return operand;
 	}
 
 	//to_linear_map
-	auto constexpr to_linear_map(orientation_t<auto,auto,auto> const& operand){
+	template<class DirectionsT, class ReferenceDirectionsT, class RotationT>
+	auto constexpr to_linear_map(orientation_t<DirectionsT,ReferenceDirectionsT,RotationT> const& operand){
 		return linear_map_t{boost::hana::to_map(hana::zip_with(hana::make_pair
 			,operand.frame
 			,hana::transform(operand.reference_frame, operand.rotation_from_reference)
@@ -56,7 +61,8 @@ namespace godefv::math::geometry{
 	}
 
 	//inverse
-	auto constexpr inverse(orientation_t<auto,auto,auto> const& operand){
+	template<class DirectionsT, class ReferenceDirectionsT, class RotationT>
+	auto constexpr inverse(orientation_t<DirectionsT,ReferenceDirectionsT,RotationT> const& operand){
 		return orientation_t{operand.reference_frame, operand.frame, change_reference_frame(
 			inverse(operand.rotation_from_reference)
 			,linear_map_t{hana::to_map(hana::zip_with(hana::make_pair

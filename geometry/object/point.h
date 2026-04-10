@@ -22,13 +22,16 @@ namespace godefv::math::geometry{
 	default_origin_t default_origin;
 
 	//operators
-	bool constexpr operator==(point_t<auto> const& a, point_t<auto> const& b){
+	template<class Name1, class Name2>
+	bool constexpr operator==(point_t<Name1> const& a, point_t<Name2> const& b){
 		return a.name==b.name;
 	}
-	bool constexpr operator!=(point_t<auto> const& a, point_t<auto> const& b){
+	template<class Name1, class Name2>
+	bool constexpr operator!=(point_t<Name1> const& a, point_t<Name2> const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, point_t<auto> const& operand){
+	template<class Name>
+	std::ostream& operator<<(std::ostream& out, point_t<Name> const& operand){
 		return out<<operand.name;
 	}
 
@@ -53,13 +56,16 @@ namespace godefv::math::geometry{
 	struct is_point<transformed_point_t<Name,PointTransformT>>:std::true_type{};
 
 	//operators
-	bool constexpr operator==(transformed_point_t<auto,auto> const& a, transformed_point_t<auto,auto> const& b){
+	template<class Name1, class PointTransform1, class Name2, class PointTransform2>
+	bool constexpr operator==(transformed_point_t<Name1,PointTransform1> const& a, transformed_point_t<Name2,PointTransform2> const& b){
 		return a.origin==b.origin && a.transform==b.transform;
 	}
-	bool constexpr operator!=(transformed_point_t<auto,auto> const& a, transformed_point_t<auto,auto> const& b){
+	template<class Name1, class PointTransform1, class Name2, class PointTransform2>
+	bool constexpr operator!=(transformed_point_t<Name1,PointTransform1> const& a, transformed_point_t<Name2,PointTransform2> const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, transformed_point_t<auto,auto> const& operand){
+	template<class Name, class PointTransformT>
+	std::ostream& operator<<(std::ostream& out, transformed_point_t<Name,PointTransformT> const& operand){
 		return out<<"point{"<<operand.origin.name<<","<<operand.transform<<"}";
 	}
 }

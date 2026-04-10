@@ -62,13 +62,16 @@ namespace godefv::math::geometry{
 	linear_map_t(DirectionMapT const&)->linear_map_t<DirectionMapT>;
 
 	//operators
-	auto constexpr operator==(linear_map_t<auto> const& a, linear_map_t<auto> const& b){
+	template<class DirectionMap1, class DirectionMap2>
+	auto constexpr operator==(linear_map_t<DirectionMap1> const& a, linear_map_t<DirectionMap2> const& b){
 		return a.vectors==b.vectors;
 	}
-	auto constexpr operator!=(linear_map_t<auto> const& a, linear_map_t<auto> const& b){
+	template<class DirectionMap1, class DirectionMap2>
+	auto constexpr operator!=(linear_map_t<DirectionMap1> const& a, linear_map_t<DirectionMap2> const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, linear_map_t<auto> const& operand){
+	template<class DirectionMapT>
+	std::ostream& operator<<(std::ostream& out, linear_map_t<DirectionMapT> const& operand){
 		out<<"linear_map{";
 		hana::for_each(hana::to_tuple(operand.vectors), [&](auto const& key_value){
 			out<<hana::first(key_value)<<":="<<hana::second(key_value)<<" ; ";
@@ -77,7 +80,8 @@ namespace godefv::math::geometry{
 	}
 
 	//
-	auto constexpr inverse(linear_map_t<auto> const& orientation){
+	template<class DirectionMapT>
+	auto constexpr inverse(linear_map_t<DirectionMapT> const& orientation){
 		return linear_map_t{internal::transpose(orientation.vectors)};
 	}
 
@@ -90,29 +94,33 @@ namespace godefv::math::geometry{
 		return internal::apply_direction_map(operand, old_reference.vectors);
 	}
 
-	template<class Name>
-	auto constexpr change_reference_frame(point_t<Name> const& operand, linear_map_t<auto> const&){
+	template<class Name, class DirectionMapT>
+	auto constexpr change_reference_frame(point_t<Name> const& operand, linear_map_t<DirectionMapT> const&){
 		return operand;
 	}
-	auto constexpr change_reference_frame(translation_t<auto> const& operand, linear_map_t<auto> const& old_reference){
+	template<class VectorT, class DirectionMapT>
+	auto constexpr change_reference_frame(translation_t<VectorT> const& operand, linear_map_t<DirectionMapT> const& old_reference){
 		return translation_t{change_reference_frame(operand.vector, old_reference)};
 	}
-	template<Vector... DirectionTypes>
-	auto constexpr change_reference_frame(slice_t<DirectionTypes...> const& operand, linear_map_t<auto> const& old_reference){
+	template<Vector... DirectionTypes, class DirectionMapT>
+	auto constexpr change_reference_frame(slice_t<DirectionTypes...> const& operand, linear_map_t<DirectionMapT> const& old_reference){
 		return slice_t{change_reference_frame(boost::hana::get<DirectionTypes>(operand.directions), old_reference)...};
 	}
-	auto constexpr change_reference_frame(simple_rotation_t<auto,auto,auto> const& operand, linear_map_t<auto> const& old_reference){
+	template<class Direction1, class Direction2, class AngleT, class DirectionMapT>
+	auto constexpr change_reference_frame(simple_rotation_t<Direction1,Direction2,AngleT> const& operand, linear_map_t<DirectionMapT> const& old_reference){
 		return simple_rotation_t{change_reference_frame(operand.plane, old_reference), operand.angle};
 	}
-	auto constexpr change_reference_frame(rotation_t<auto> const& operand, linear_map_t<auto> const& old_reference){
+	template<class RotorT, class DirectionMapT>
+	auto constexpr change_reference_frame(rotation_t<RotorT> const& operand, linear_map_t<DirectionMapT> const& old_reference){
 		return rotation_t{change_reference_frame(operand.rotor(), old_reference)};
 	}
-	template<class Name>
-	auto constexpr change_reference_frame(transformed_point_t<Name,translation_t<auto>> const& operand, linear_map_t<auto> const& old_reference){
+	template<class Name, class VectorT, class DirectionMapT>
+	auto constexpr change_reference_frame(transformed_point_t<Name,translation_t<VectorT>> const& operand, linear_map_t<DirectionMapT> const& old_reference){
 		return transformed_point_t{operand.origin, change_reference_frame(operand.transform, old_reference)};
 	}
 
-	auto constexpr apply(VectorRotation auto const& transform, linear_map_t<auto> const& operand){
+	template<class DirectionMapT>
+	auto constexpr apply(VectorRotation auto const& transform, linear_map_t<DirectionMapT> const& operand){
 		return linear_map_t{hana::to_map(hana::zip_with(hana::make_pair
 			,hana::keys(operand.vectors)
 			,hana::values(operand.vectors)|hana::transform_with(transform)

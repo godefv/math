@@ -105,24 +105,29 @@ namespace godefv::math{
 		std::ostream& format_addition_right_operand(std::ostream& out, auto const& operand){
 			return out<<" + ("<<operand<<")";
 		}
-		std::ostream& format_addition_right_operand(std::ostream& out, minus_t<auto> const& operand){
+		template<class OperandT>
+		std::ostream& format_addition_right_operand(std::ostream& out, minus_t<OperandT> const& operand){
 			return out<<" - ("<<operand.operand<<")";
 		}
-		std::ostream& format_addition_right_operand(std::ostream& out, group::generated_power_t<add_operation_t, Scalar auto, auto> const& operand){
-			return out<<" + "<<operand;
+		template<Scalar K, class B>
+		std::ostream& format_addition_right_operand(std::ostream& out, group::generated_power_t<add_operation_t, K, B> const& kb){
+			return out<<" + "<<kb;
 		}
 	}
-	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<add_operation_t, auto, auto> const& ab){
+	template<class A, class B>
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<add_operation_t, A, B> const& ab){
 		detail::format_addition_left_operand(out, ab.first);
 		detail::format_addition_right_operand(out, ab.second);
 		return out;
 	}
 
-	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, Scalar auto, auto> const& kx){
+	template<Scalar K, class X>
+	std::ostream& operator<<(std::ostream& out, group::generated_power_t<add_operation_t, K, X> const& kx){
 		return out<<kx.exponent<<"*("<<kx.operand<<")";
 	}
-	std::ostream& operator<<(std::ostream& out, minus_t<auto> const& kx){
-		return out<<"-("<<kx.operand<<")";
+	template<class X>
+	std::ostream& operator<<(std::ostream& out, minus_t<X> const& x){
+		return out<<"-("<<x.operand<<")";
 	}
 
 }

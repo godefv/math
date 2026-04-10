@@ -50,14 +50,17 @@ namespace godefv::math::geometry{
 
 	template<class SliceT, class DepthT> struct is_perspective_projection<perspective_projection_t<SliceT,DepthT>>:std::true_type{};
 
-	std::ostream& operator<<(std::ostream& out, perspective_projection_t<auto,auto> const& p){
+	template<class DirectionT, class ClipDistanceT>
+	std::ostream& operator<<(std::ostream& out, perspective_projection_t<DirectionT,ClipDistanceT> const& p){
 		return out<<"perspective{"<<p.slice<<"}";
 	}
 
-	bool constexpr operator==(perspective_projection_t<auto,auto> const& a, perspective_projection_t<auto,auto> const& b){
+	template<class Direction1, class ClipDistance1, class Direction2, class ClipDistance2>
+	bool constexpr operator==(perspective_projection_t<Direction1,ClipDistance1> const& a, perspective_projection_t<Direction2,ClipDistance2> const& b){
 		return a.slice==b.slice;
 	}
-	bool constexpr operator!=(perspective_projection_t<auto,auto> const& a, perspective_projection_t<auto,auto> const& b){
+	template<class Direction1, class ClipDistance1, class Direction2, class ClipDistance2>
+	bool constexpr operator!=(perspective_projection_t<Direction1,ClipDistance1> const& a, perspective_projection_t<Direction2,ClipDistance2> const& b){
 		return !(a==b);
 	}
 }

@@ -57,7 +57,8 @@ namespace godefv::math{
 	auto constexpr sin(Angle auto const& angle){
 		return cos(angle_t<ratio_t<1,2>>{}-angle);
 	}
-	auto constexpr sort_operation_operand_as(cos_t, group::generated_by_operation_t<add_operation_t,angle_t<ratio_t<1,2>>,auto> const& a){
+	template<class X>
+	auto constexpr sort_operation_operand_as(cos_t, group::generated_by_operation_t<add_operation_t,angle_t<ratio_t<1,2>>,X> const& a){
 		return -a.second;
 	}
 

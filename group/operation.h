@@ -21,19 +21,22 @@ namespace godefv::math::group{
 	bool operator==(generated_by_operation_t<OperatorT, A,B> const& a, generated_by_operation_t<OperatorT, A,B> const& b){
 		return a.first==b.first && a.second==b.second;
 	}
-	bool operator==(generated_by_operation_t<auto, auto,auto> const& a, generated_by_operation_t<auto, auto,auto> const& b){
+	template<class Operator1, class X1, class Y1, class Operator2, class X2, class Y2>
+	bool operator==(generated_by_operation_t<Operator1, X1,Y1> const& a, generated_by_operation_t<Operator2, X2,Y2> const& b){
 		return false;
 	}
-	bool operator!=(generated_by_operation_t<auto, auto,auto> const& a, generated_by_operation_t<auto, auto,auto> const& b){
+	template<class Operator1, class X1, class Y1, class Operator2, class X2, class Y2>
+	bool operator!=(generated_by_operation_t<Operator1, X1,Y1> const& a, generated_by_operation_t<Operator2, X2,Y2> const& b){
 		return !(a==b);
 	}
 
-	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<auto, auto, auto> const& ab){
+	template<class OperatorT, class A, class B>
+	std::ostream& operator<<(std::ostream& out, group::generated_by_operation_t<OperatorT, A, B> const& ab){
 		return out<<typeid(ab.operation).name()<<"("<<ab.first<<", "<<ab.second<<")";
 	}
 
-	template<class OperatorT>
-	auto constexpr eval_with_data(generated_by_operation_t<OperatorT,auto,auto> const& ab, auto const& eval_data){
+	template<class OperatorT, class A, class B>
+	auto constexpr eval_with_data(generated_by_operation_t<OperatorT,A,B> const& ab, auto const& eval_data){
 		using godefv::math::eval_with_data;
 		return OperatorT::apply(eval_with_data(ab.first, eval_data), eval_with_data(ab.second, eval_data));
 	}
@@ -71,8 +74,8 @@ namespace godefv::math::group{
 	)
 	auto constexpr operation(OperatorT, A const& a, B const& b){return generated_by_operation_t{OperatorT{},a,b};}
 	//operations with identity
-	template<class OperatorT> 
-	auto constexpr operation(OperatorT, identity_t<OperatorT> const&, auto const& a){return a;}
+	template<class OperatorT, class A>
+	auto constexpr operation(OperatorT, identity_t<OperatorT> const&, A const& a){return a;}
 	template<class OperatorT, class A> requires (!std::is_same<A,identity_t<OperatorT>>::value)
 	auto constexpr operation(OperatorT, A const& a, identity_t<OperatorT> const&){return a;}
 	//associativity	//put everything in normalized from ((AB)C)D...
@@ -117,12 +120,12 @@ namespace godefv::math::group{
 	}
 
 	//number of terms in operation
-	template<class OperatorT> 
-	int constexpr number_of_terms(auto const& a){
+	template<class OperatorT, class A>
+	int constexpr number_of_terms(A const& a){
 		return 1;
 	}
-	template<class OperatorT> 
-	int constexpr number_of_terms(generated_by_operation_t<OperatorT,auto,auto> const& ab){
+	template<class OperatorT, class A, class B>
+	int constexpr number_of_terms(generated_by_operation_t<OperatorT,A,B> const& ab){
 		return number_of_terms<OperatorT>(ab.first)+number_of_terms<OperatorT>(ab.second);
 	}
 

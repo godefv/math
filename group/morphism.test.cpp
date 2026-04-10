@@ -1,24 +1,27 @@
 #include"morphism.h"
 #include"unit_test.h"
 
-template<class T> struct f_t{T operand;};
-template<class T> f_t(T)->f_t<T>;
+template<class X> struct f_t{X operand;};
+template<class X> f_t(X)->f_t<X>;
 
 namespace godefv::math{
 template<Symbol SymbolT> struct is_symbol<f_t<SymbolT>>:std::true_type{};
 }
 
-bool operator==(f_t<auto> const& a, f_t<auto> const& b){
+template<class X1, class X2>
+bool operator==(f_t<X1> const& a, f_t<X2> const& b){
 	return false;
 }
-template<class T>
-bool operator==(f_t<T> const& a, f_t<T> const& b){
+template<class X>
+bool operator==(f_t<X> const& a, f_t<X> const& b){
 	return a.operand==b.operand;
 }
-bool operator!=(f_t<auto> const& a, f_t<auto> const& b){
+template<class X1, class X2>
+bool operator!=(f_t<X1> const& a, f_t<X2> const& b){
 	return !(a==b);
 }
-std::ostream& operator<<(std::ostream& out, f_t<auto> const& a){
+template<class X>
+std::ostream& operator<<(std::ostream& out, f_t<X> const& a){
 	return out<<"f("<<a.operand<<")";
 }
 

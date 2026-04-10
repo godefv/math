@@ -28,14 +28,17 @@ namespace godefv::math::geometry{
 
 	template<class SliceT> struct is_orthographic_projection<projection_t<SliceT>>:std::true_type{};
 
-	std::ostream& operator<<(std::ostream& out, projection_t<auto> const& p){
+	template<class SliceT>
+	std::ostream& operator<<(std::ostream& out, projection_t<SliceT> const& p){
 		return out<<"projection{"<<p.slice<<"}";
 	}
 
-	bool constexpr operator==(projection_t<auto> const& a, projection_t<auto> const& b){
+	template<class Slice1, class Slice2>
+	bool constexpr operator==(projection_t<Slice1> const& a, projection_t<Slice2> const& b){
 		return a.slice==b.slice;
 	}
-	bool constexpr operator!=(projection_t<auto> const& a, projection_t<auto> const& b){
+	template<class Slice1, class Slice2>
+	bool constexpr operator!=(projection_t<Slice1> const& a, projection_t<Slice2> const& b){
 		return !(a==b);
 	}
 }

@@ -40,7 +40,8 @@ namespace godefv::math::geometry{
 	template<Vector Direction1, Vector Direction2, class AngleT>
 	struct is_rotation<simple_rotation_t<Direction1,Direction2,AngleT>>:std::true_type{};
 
-	std::ostream& operator<<(std::ostream& out, simple_rotation_t<auto,auto,auto> const& r){
+	template<class Direction1, class Direction2, class AngleT>
+	std::ostream& operator<<(std::ostream& out, simple_rotation_t<Direction1,Direction2,AngleT> const& r){
 		return out<<"rotation{"<<r.plane<<" ; "<<r.angle<<"}";
 	}
 
@@ -59,15 +60,18 @@ namespace godefv::math::geometry{
 	template<class RotorT>
 	struct is_rotation<rotation_t<RotorT>>:std::true_type{};
 
-	std::ostream& operator<<(std::ostream& out, rotation_t<auto> const& r){
+	template<class RotorT>
+	std::ostream& operator<<(std::ostream& out, rotation_t<RotorT> const& r){
 		return out<<"rotation{"<<r.rotor()<<"}";
 	}
 
 	//inverse
-	auto constexpr inverse(simple_rotation_t<auto,auto,auto> const& a){
+	template<class Direction1, class Direction2, class AngleT>
+	auto constexpr inverse(simple_rotation_t<Direction1,Direction2,AngleT> const& a){
 		return simple_rotation_t{a.plane, -a.angle};
 	}
-	auto constexpr inverse(rotation_t<auto> const& a){
+	template<class RotorT>
+	auto constexpr inverse(rotation_t<RotorT> const& a){
 		return rotation_t{reverse(a.rotor())};
 	}
 

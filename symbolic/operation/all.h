@@ -13,7 +13,7 @@ namespace godefv::math{
 	struct op##_t{}; \
 	inline std::ostream& operator<<(std::ostream& out, op##_t const){return out<<#op;} \
 	template<class... OperandsT> requires op_constraint auto constexpr op(OperandsT const&... operands){return operation_t{op##_t{}, operands...};} \
-	auto constexpr eval_with_data(operation_t<op##_t, auto> const& operand, auto const& eval_data){using std::op; return op(eval_with_data(operand.operand(), eval_data));} \
+	template<class T> auto constexpr eval_with_data(operation_t<op##_t, T> const& operand, auto const& eval_data){using std::op; return op(eval_with_data(operand.operand(), eval_data));} \
 	std::intmax_t constexpr index(op##_t){return op_index;}
 	DEFINE_OPERATION(exp  , 0, true)
 	DEFINE_OPERATION(log  , 1, true)
@@ -44,10 +44,12 @@ namespace godefv::math{
 		return abs_endomorphism(a);
 	}
 	//abs is not an endomorphism over + because abs(-x)!=-abs(x)
-	auto constexpr abs(group::generated_power_t<add_operation_t,auto,auto> const& pow){
+	template<class ExponentT, class X>
+	auto constexpr abs(group::generated_power_t<add_operation_t,ExponentT,X> const& pow){
 		return abs(pow.exponent)*abs(pow.operand);
 	}
-	auto constexpr abs(group::generated_by_operation_t<add_operation_t,auto,auto> const& ab){
+	template<class A, class B>
+	auto constexpr abs(group::generated_by_operation_t<add_operation_t,A,B> const& ab){
 		return abs(ab.first)+abs(ab.second);
 	}
 	auto constexpr abs(zero_t){
@@ -59,30 +61,38 @@ namespace godefv::math{
 		return group::power(mult_operation_t{}, exponent, abs_x.operand());
 	}
 	//abs(x)>0
-	auto constexpr operator>=(operation_t<abs_t,auto>, integer_t<0>){return std::true_type{};}
+	template<class X>
+	auto constexpr operator>=(operation_t<abs_t,X>, integer_t<0>){return std::true_type{};}
 
 	//reverse
-	auto constexpr reverse(operation_t<exp_t,auto> const& op){
+	template<class X>
+	auto constexpr reverse(operation_t<exp_t,X> const& op){
 		return exp(reverse(op.operand()));
 	}
 
 	//differentiate
-	auto constexpr differentiate(symbol_t<auto> variable, operation_t<exp_t,auto> const& op){
+	template<class Name, class X>
+	auto constexpr differentiate(symbol_t<Name> variable, operation_t<exp_t,X> const& op){
 		return differentiate(variable, op.operand())*op;
 	}
-	auto constexpr differentiate(symbol_t<auto> variable, operation_t<log_t,auto> const& op){
+	template<class Name, class X>
+	auto constexpr differentiate(symbol_t<Name> variable, operation_t<log_t,X> const& op){
 		return differentiate(variable, op.operand())/op.operand();
 	}
-	auto constexpr differentiate(symbol_t<auto> variable, operation_t<cos_t,auto> const& op){
+	template<class Name, class X>
+	auto constexpr differentiate(symbol_t<Name> variable, operation_t<cos_t,X> const& op){
 		return -differentiate(variable, op.operand())*sin(op.operand());
 	}
-	auto constexpr differentiate(symbol_t<auto> variable, operation_t<sin_t,auto> const& op){
+	template<class Name, class X>
+	auto constexpr differentiate(symbol_t<Name> variable, operation_t<sin_t,X> const& op){
 		return differentiate(variable, op.operand())*cos(op.operand());
 	}
-	auto constexpr differentiate(symbol_t<auto> variable, operation_t<cosh_t,auto> const& op){
+	template<class Name, class X>
+	auto constexpr differentiate(symbol_t<Name> variable, operation_t<cosh_t,X> const& op){
 		return differentiate(variable, op.operand())*sinh(op.operand());
 	}
-	auto constexpr differentiate(symbol_t<auto> variable, operation_t<sinh_t,auto> const& op){
+	template<class Name, class X>
+	auto constexpr differentiate(symbol_t<Name> variable, operation_t<sinh_t,X> const& op){
 		return differentiate(variable, op.operand())*cosh(op.operand());
 	}
 }

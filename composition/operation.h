@@ -58,7 +58,8 @@ namespace godefv::math::geometry{
 		return out<<"identity";
 	}
 
-	std::ostream& operator<<(std::ostream& out, generated_by_composition_t<auto,auto> const& ab){
+	template<class A, class B>
+	std::ostream& operator<<(std::ostream& out, generated_by_composition_t<A,B> const& ab){
 		return out<<ab.first<<" then "<<ab.second;
 	}
 }

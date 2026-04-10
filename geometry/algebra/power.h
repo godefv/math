@@ -6,20 +6,25 @@
 
 namespace godefv::math::geometry{
 	//cyclic order
-	auto constexpr cycle_order(mult_operation_t, direction_positive_t<auto>){
+	template<class Name>
+	auto constexpr cycle_order(mult_operation_t, direction_positive_t<Name>){
 		return 2;
 	}
-	auto constexpr cycle_order(mult_operation_t, direction_negative_t<auto>){
+	template<class Name>
+	auto constexpr cycle_order(mult_operation_t, direction_negative_t<Name>){
 		return 4;
 	}
 
-	auto constexpr generated_power(mult_operation_t, integer_t<2>, direction_negative_t<auto> const&){
+	template<class Name>
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, direction_negative_t<Name> const&){
 		return -one;
 	}
-	auto constexpr generated_power(mult_operation_t, integer_t<3>, direction_negative_t<auto> const& ei){
+	template<class Name>
+	auto constexpr generated_power(mult_operation_t, integer_t<3>, direction_negative_t<Name> const& ei){
 		return -ei;
 	}
-	auto constexpr generated_power(mult_operation_t, integer_t<2>, direction_null_t<auto> const&){
+	template<class Name>
+	auto constexpr generated_power(mult_operation_t, integer_t<2>, direction_null_t<Name> const&){
 		return zero;
 	}
 	template<MultiVector MultiVectorT> 

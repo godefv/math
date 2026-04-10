@@ -18,26 +18,28 @@ namespace godefv::math::group{
 	generated_power_t(OperatorT,ExponentT,OperandT)->generated_power_t<OperatorT,ExponentT,OperandT>;
 
 	//comparison of powers
-	template<class OperatorT, class OperandT>
-	bool operator==(generated_power_t<OperatorT,Scalar auto, OperandT> const& a, generated_power_t<OperatorT,Scalar auto, OperandT> const& b){
+	template<class OperatorT, Scalar Exponent1, Scalar Exponent2, class OperandT>
+	bool operator==(generated_power_t<OperatorT,Exponent1, OperandT> const& a, generated_power_t<OperatorT,Exponent2, OperandT> const& b){
 		return a.exponent==b.exponent && a.operand==b.operand;
 	}
-	template<class OperatorT>
-	bool operator==(generated_power_t<OperatorT,Scalar auto, auto> const&, generated_power_t<OperatorT,Scalar auto, auto> const&){
+	template<class OperatorT, Scalar Exponent1, class Operand1, Scalar Exponent2, class Operand2>
+	bool operator==(generated_power_t<OperatorT,Exponent1, Operand1> const&, generated_power_t<OperatorT,Exponent2, Operand2> const&){
 		return false;
 	}
-	template<class OperatorT>
-	bool operator!=(generated_power_t<OperatorT,Scalar auto, auto> const& a, generated_power_t<OperatorT,Scalar auto, auto> const& b){
+	template<class OperatorT, Scalar Exponent1, class Operand1, Scalar Exponent2, class Operand2>
+	bool operator!=(generated_power_t<OperatorT,Exponent1, Operand1> const& a, generated_power_t<OperatorT,Exponent2, Operand2> const& b){
 		return !(a==b);
 	}
 
 	//formatting
-	std::ostream& operator<<(std::ostream& out, generated_power_t<auto, Scalar auto, auto> const& pow){
+	template<class OperandT, Scalar ExponentT, class X>
+	std::ostream& operator<<(std::ostream& out, generated_power_t<OperandT, ExponentT, X> const& pow){
 		return out<<typeid(pow.operator_).name()<<" "<<pow.exponent<<" th power ("<<pow.operand<<")";
 	}
 
 	//overloadable constructor. Typically, x**2=-1
-	auto constexpr generated_power(auto op, auto exponent, auto const& operand){
+	template<class OperatorT, class ExponentT, class X>
+	auto constexpr generated_power(OperatorT op, ExponentT exponent, X const& operand){
 		return generated_power_t{op,exponent,operand};
 	}
 
@@ -62,11 +64,11 @@ namespace godefv::math::group{
 		return operand;
 	}
 	//(x^n)^m=x^(nm) !! n,m need to be integers sqrt((x)²)=abs(x)≠x
-	template<class OperatorT, Integer Exponent1, Integer Exponent2> 
-	requires (!std::is_same<Exponent1,integer_t<1>>::value)
-	auto constexpr power(OperatorT op, Exponent1 exponent, generated_power_t<OperatorT,Exponent2,auto> const& operand){
-		return power(op, exponent*operand.exponent, operand.operand);
-	} 
+	template<class OperatorT, Integer OuterExponentT, Integer InnerExponentT, class X>
+	requires (!std::is_same<OuterExponentT,integer_t<1>>::value)
+	auto constexpr power(OperatorT op, OuterExponentT m, generated_power_t<OperatorT,InnerExponentT,X> const& x_pow_n){
+		return power(op, m*x_pow_n.exponent, x_pow_n.operand);
+	}
 	//StaticInteger powers of SimpleScalar can be processed immediatly
 	template<class OperatorT, StaticInteger ExponentT, SimpleScalar OperandT> requires (ExponentT::num>1 && !std::is_same<OperandT,identity_t<OperatorT>>::value)
 	auto constexpr power(OperatorT op, ExponentT, OperandT const& operand){
@@ -84,8 +86,8 @@ namespace godefv::math::group{
 	}
 
 	//inverse
-	template<class OperatorT>
-	auto constexpr inverse(OperatorT, generated_power_t<OperatorT,SimpleScalar auto,auto> const& pow){
+	template<class OperatorT, SimpleScalar Exponent, class OperandT>
+	auto constexpr inverse(OperatorT, generated_power_t<OperatorT,Exponent,OperandT> const& pow){
 		return power(pow.operator_, -pow.exponent, pow.operand);
 	}
 

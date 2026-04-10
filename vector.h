@@ -26,16 +26,16 @@ namespace godefv::math{
 	auto constexpr coordinate(DirectionT, DirectionT){
 		return integer<1>;
 	}
-	template<class DirectionT, Vector<DirectionT> VectorT>
-	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,Scalar auto,VectorT> const& vector){
+	template<class DirectionT, Scalar ScalarT, Vector<DirectionT> VectorT>
+	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,ScalarT,VectorT> const& vector){
 		return vector.first*coordinate(d, vector.second);
 	}
-	template<class DirectionT>
-	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,Vector<DirectionT> auto,Scalar auto> const& vector){
+	template<class DirectionT, Vector<DirectionT> VectorT, Scalar ScalarT>
+	auto constexpr coordinate(DirectionT d, group::generated_by_operation_t<mult_operation_t,VectorT,ScalarT> const& vector){
 		return coordinate(d, vector.first)*vector.second;
 	}
-	template<class DirectionT, Vector<DirectionT> VectorT>
-	auto constexpr coordinate(DirectionT d, group::generated_power_t<add_operation_t,Scalar auto,VectorT> const& vector){
+	template<class DirectionT, Scalar ExponentT, Vector<DirectionT> VectorT>
+	auto constexpr coordinate(DirectionT d, group::generated_power_t<add_operation_t,ExponentT,VectorT> const& vector){
 		return vector.exponent*coordinate(d, vector.operand);
 	}
 	template<class DirectionT, Vector<DirectionT> Vector1, Vector<DirectionT> Vector2>

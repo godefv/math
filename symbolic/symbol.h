@@ -26,10 +26,12 @@ namespace godefv::math{
 	template<Symbol Name> struct is_symbol<symbol_t<Name>>: std::true_type{};
 
 	//operators
-	template<class NameT>
-	bool operator==(symbol_t<NameT>,symbol_t<NameT>){return true;}
-	bool operator==(symbol_t<auto>  ,symbol_t<auto>  ){return false;}
-	bool operator!=(symbol_t<auto> a,symbol_t<auto> b){return !(a==b);}
+	template<class Name>
+	bool operator==(symbol_t<Name>,symbol_t<Name>){return true;}
+	template<class Name1, class Name2>
+	bool operator==(symbol_t<Name1>  ,symbol_t<Name2>  ){return false;}
+	template<class Name1, class Name2>
+	bool operator!=(symbol_t<Name1> a,symbol_t<Name2> b){return !(a==b);}
 
 	template<char... letters>
 	auto constexpr symbol=symbol_t<name_t<letters...>>{};
@@ -39,13 +41,14 @@ namespace godefv::math{
 		auto constexpr operator""_symbol(){return symbol<letters...>;}
 	}
 
-	std::ostream& operator<<(std::ostream& out,symbol_t<auto> const& symbol){
+	template<class Name>
+	std::ostream& operator<<(std::ostream& out,symbol_t<Name> const& symbol){
 		return out<<symbol.name;
 	}
 
 	//eval
-	template<class NameT, class EvaluatorT> requires std::invocable<EvaluatorT, symbol_t<NameT>>
-	auto constexpr eval_with_data(symbol_t<NameT> symbol, EvaluatorT const& evaluator){return evaluator(symbol);}
+	template<class Name, class EvaluatorT> requires std::invocable<EvaluatorT, symbol_t<Name>>
+	auto constexpr eval_with_data(symbol_t<Name> symbol, EvaluatorT const& evaluator){return evaluator(symbol);}
 }
 
 #endif /* SYMBOLIC_SYMBOL_H */

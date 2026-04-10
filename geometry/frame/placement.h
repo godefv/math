@@ -18,26 +18,32 @@ namespace godefv::math::geometry{
 	placement_t(PositionT const&, OrientationT const&)->placement_t<PositionT,OrientationT>;
 
 	//operators
-	auto constexpr operator==(placement_t<auto,auto> const& a, placement_t<auto,auto> const& b){
+	template<class Position1, class Orientation1, class Position2, class Orientation2>
+	auto constexpr operator==(placement_t<Position1,Orientation1> const& a, placement_t<Position2,Orientation2> const& b){
 		return a.position==b.position && a.orientation==b.orientation;
 	}
-	auto constexpr operator!=(placement_t<auto,auto> const& a, placement_t<auto,auto> const& b){
+	template<class Position1, class Orientation1, class Position2, class Orientation2>
+	auto constexpr operator!=(placement_t<Position1,Orientation1> const& a, placement_t<Position2,Orientation2> const& b){
 		return !(a==b);
 	}
-	std::ostream& operator<<(std::ostream& out, placement_t<auto,auto> const& operand){
+	template<class PositionT, class OrientationT>
+	std::ostream& operator<<(std::ostream& out, placement_t<PositionT,OrientationT> const& operand){
 		return out<<"placement{"<<operand.position<<" ; "<<operand.orientation<<"}";
 	}
 
 	//apply geometric tranformations
-	auto constexpr apply(Translation auto const& transform, placement_t<auto,auto> const& operand){
+	template<class PositionT, class OrientationT>
+	auto constexpr apply(Translation auto const& transform, placement_t<PositionT,OrientationT> const& operand){
 		return placement_t{transform(operand.position), operand.orientation};
 	}
-	auto constexpr apply(point_transform_t<Point auto,VectorTransform auto> const& transform, placement_t<auto,auto> const& operand){
+	template<Point CenterT, VectorTransform TransformT, class PositionT, class OrientationT>
+	auto constexpr apply(point_transform_t<CenterT,TransformT> const& transform, placement_t<PositionT,OrientationT> const& operand){
 		return placement_t{transform(operand.position), transform.vector_transform(operand.orientation)};
 	}
 
 	//inverse
-	auto constexpr inverse(placement_t<auto,auto> const& operand){
+	template<class PositionT, class OrientationT>
+	auto constexpr inverse(placement_t<PositionT,OrientationT> const& operand){
 		auto inverse_orientation=inverse(operand.orientation);
 		auto inverse_position=inverse(operand.position);
 		return placement_t{
@@ -47,7 +53,8 @@ namespace godefv::math::geometry{
 	}
 
 	//to_affine_map
-	auto constexpr to_affine_map(placement_t<auto,auto> const& operand){
+	template<class PositionT, class OrientationT>
+	auto constexpr to_affine_map(placement_t<PositionT,OrientationT> const& operand){
 		return affine_map_t{operand.position, to_linear_map(operand.orientation)};
 	}
 

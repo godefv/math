@@ -3,7 +3,7 @@ project(math CXX)
 
 if(NOT CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10.1)
 	if(DISABLE_COMPILER_CHECK)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a" ) 
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20" )
 	else()
 		message(FATAL_ERROR "Require at least g++-10.1.0")
 	endif()

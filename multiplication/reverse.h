@@ -4,17 +4,21 @@
 #include"operation.h"
 
 namespace godefv::math{
-	constexpr auto reverse(auto const& a){
+	template<class A>
+	constexpr auto reverse(A const& a){
 		return a;
 	}
-	constexpr auto reverse(group::generated_by_operation_t<mult_operation_t, auto,auto> const& ab){
+	template<class A, class B>
+	constexpr auto reverse(group::generated_by_operation_t<mult_operation_t, A,B> const& ab){
 		return reverse(ab.second)*reverse(ab.first);
 	}
 	//linear rules
-	constexpr auto reverse(group::generated_by_operation_t<add_operation_t, auto,auto> const& ab){
+	template<class A, class B>
+	constexpr auto reverse(group::generated_by_operation_t<add_operation_t, A,B> const& ab){
 		return reverse(ab.first)+reverse(ab.second);
 	}
-	constexpr auto reverse(group::generated_power_t<add_operation_t, SimpleScalar auto, auto> const& kx){
+	template<SimpleScalar K, class X>
+	constexpr auto reverse(group::generated_power_t<add_operation_t, K, X> const& kx){
 		return kx.exponent*reverse(kx.operand);
 	}
 }

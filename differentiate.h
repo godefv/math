@@ -11,10 +11,12 @@ namespace godefv::math{
 		return integer<1>;
 	}
 
-	auto constexpr differentiate(symbol_t<auto>, SimpleScalar auto){
+	template<class Name>
+	auto constexpr differentiate(symbol_t<Name>, SimpleScalar auto){
 		return integer<0>;
 	}
-	auto constexpr differentiate(symbol_t<auto>, symbol_t<auto>){
+	template<class Name1, class Name2>
+	auto constexpr differentiate(symbol_t<Name1>, symbol_t<Name2>){
 		return integer<0>;
 	}
 }

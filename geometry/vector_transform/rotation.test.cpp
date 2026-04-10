@@ -1,7 +1,8 @@
 #include"rotation.h"
 #include"../algebra/unit_test.h"
 
-auto test_bivector(math::geometry::simple_rotation_t<auto,auto,auto> const& rotation){
+template<class Direction1, class Direction2, class AngleT>
+auto test_bivector(math::geometry::simple_rotation_t<Direction1,Direction2,AngleT> const& rotation){
 	auto B=rotation.bivector();
 
 	std::cout<<"grade of bivector(): ";
@@ -16,7 +17,8 @@ auto test_bivector(math::geometry::simple_rotation_t<auto,auto,auto> const& rota
 	std::cout<<std::endl;
 }
 
-auto test_rotor(math::geometry::simple_rotation_t<auto,auto,auto> const& rotation){
+template<class Direction1, class Direction2, class AngleT>
+auto test_rotor(math::geometry::simple_rotation_t<Direction1,Direction2,AngleT> const& rotation){
 	auto B=rotation.bivector();
 
 	auto half_B=math::ratio<1,2>*B;
@@ -34,7 +36,8 @@ auto test_rotor(math::geometry::simple_rotation_t<auto,auto,auto> const& rotatio
 	std::cout<<std::endl;
 }
 
-auto test_rotation(math::geometry::simple_rotation_t<auto,auto,auto> const& rotation){
+template<class Direction1, class Direction2, class AngleT>
+auto test_rotation(math::geometry::simple_rotation_t<Direction1,Direction2,AngleT> const& rotation){
 	using namespace boost::hana::literals;
 	std::cout<<"rotation plane is invariant: ";
 	auto plane=(rotation.plane.directions[1_c]^rotation.plane.directions[0_c]);

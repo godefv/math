@@ -16,8 +16,8 @@ namespace boost::hana{
 }
 
 namespace std{
-	template<long unsigned N>
-	std::ostream& operator<<(std::ostream& out, std::array<auto,N> const& a){
+	template<class T, long unsigned N>
+	std::ostream& operator<<(std::ostream& out, std::array<T,N> const& a){
 		out<<"{";
 		for(auto const& x:a) {
 			out<<x<<", ";

@@ -23,14 +23,17 @@ namespace godefv::math::geometry{
 	struct is_point_transform<generated_by_composition_t<PointTransform1,PointTransform2>>:std::true_type{};
 
 
-	std::ostream& operator<<(std::ostream& out, translation_t<auto> const& t){
+	template<class VectorT>
+	std::ostream& operator<<(std::ostream& out, translation_t<VectorT> const& t){
 		return out<<"translation{"<<t.vector<<"}";
 	}
 
-	bool constexpr operator==(translation_t<auto> const& a, translation_t<auto> const& b){
+	template<class Vector1, class Vector2>
+	bool constexpr operator==(translation_t<Vector1> const& a, translation_t<Vector2> const& b){
 		return a.vector==b.vector;
 	}
-	bool constexpr operator!=(translation_t<auto> const& a, translation_t<auto> const& b){
+	template<class Vector1, class Vector2>
+	bool constexpr operator!=(translation_t<Vector1> const& a, translation_t<Vector2> const& b){
 		return !(a==b);
 	}
 	//std::strong_equality operator<=>(translation_t const&, translation_t const&) = default;
@@ -42,7 +45,8 @@ namespace godefv::math::geometry{
 	template<class T> concept Translation=is_translation<T>::value;
 
 	//inverse
-	auto constexpr inverse(translation_t<auto> const& operand){
+	template<class VectorT>
+	auto constexpr inverse(translation_t<VectorT> const& operand){
 		return translation_t{-operand.vector};
 	}
 
@@ -52,10 +56,12 @@ namespace godefv::math::geometry{
 	}
 
 	//apply
-	auto constexpr apply(translation_t<auto> const& transform, point_t<auto> const& point){
+	template<class VectorT, class Name>
+	auto constexpr apply(translation_t<VectorT> const& transform, point_t<Name> const& point){
 		return transformed_point_t{point, transform};
 	}
-	auto constexpr apply(translation_t<auto> const& transform, transformed_point_t<auto,auto> const& point){
+	template<class VectorT, class Name, class PointTransformT>
+	auto constexpr apply(translation_t<VectorT> const& transform, transformed_point_t<Name,PointTransformT> const& point){
 		return transformed_point_t{point.origin, (point.transform,transform)};
 	}
 
