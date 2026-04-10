@@ -33,10 +33,18 @@ namespace godefv::math::geometry{
 	struct is_multivector<group::generated_power_t<add_operation_t,ExponentT,MultiVectorT>>: std::true_type{};
 
 	//ordering for commutation
-	template<class Name1, class Name2>
-	constexpr int static_compare(auto, direction_positive_t<Name1> const&, direction_negative_t<Name2> const&){return -1;}
-	template<class Name1, class Name2>
-	constexpr int static_compare(auto, direction_negative_t<Name1> const&, direction_positive_t<Name2> const&){return 1;}
+	template<class Name> int consteval sort_index(direction_negative_t<Name>){ return 0; }
+	template<class Name> int consteval sort_index(direction_positive_t<Name>){ return 1; }
+	template<class Name> int consteval sort_index(direction_null_t    <Name>){ return 2; }
+
+	template<class OperatorT, Direction Direction1, Direction Direction2>
+	int consteval static_compare(OperatorT op, Direction1 const& d1, Direction2 const& d2){
+		if constexpr(auto constexpr result=sort_index(Direction2{})-sort_index(Direction1{}); result!=0){
+			return result;
+		}else{
+			return static_compare(op, d1.name, d2.name);
+		}
+	}
 
 	//anticommutation rule : directions are assumed to be orthogonal
 	template<Direction A, Direction B> requires (static_compare(mult_operation_t{}, A{},B{})<0)

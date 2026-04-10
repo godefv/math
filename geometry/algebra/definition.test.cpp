@@ -13,8 +13,10 @@ int main(){
 	//powers
 	check_equal(square(e1), one);
 	check_equal(square(e2), one);
+	check_equal(square(z1), zero);
 	check_equal(square(e1*e2), -one);
 	check_equal(square(e1*n1), one);
+	check_equal(square(e1*z1), zero);
 	check_equal(square((e1+n1)*e2), zero);
 	check_equal(square(1.2*e1*e2), -1.2*1.2);
 	check_equal(square(1.2*e1*n1), 1.2*1.2);
