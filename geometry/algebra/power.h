@@ -28,11 +28,14 @@ namespace godefv::math::geometry{
 		return zero;
 	}
 	template<MultiVector MultiVectorT> 
-	requires (NonZeroScalar<decltype(square(MultiVectorT{}))> //user is responsible for division by zero errors
-			&& !group::Power<MultiVectorT,add_operation_t> //handled by multiplication/power.h
+	requires (!group::Power<MultiVectorT,add_operation_t> //handled by multiplication/power.h
 	)
 	auto constexpr generated_power(mult_operation_t, integer_t<-1>, MultiVectorT const& operand){
-		return operand/project(square(operand), grades<0>());
+		if constexpr(NonZeroScalar<decltype(square(MultiVectorT{}))>){
+			return operand/project(square(operand), grades<0>());
+		}else{
+			group::generated_power(mult_operation_t{}, integer_t<-1>{}, operand);
+		}
 	}
 }
 
